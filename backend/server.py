@@ -227,35 +227,37 @@ async def send_email(to_email: str, subject: str, body: str):
     """Send real email via Gmail SMTP"""
     try:
         # Get SMTP configuration from environment
-        smtp_email = os.getenv("SMTP_EMAIL", "auditx@sanchezcya.com")
+        smtp_email = os.getenv("SMTP_EMAIL")  # Email para autenticación (nelson@sanchezcya.com)
+        smtp_from_email = os.getenv("SMTP_FROM_EMAIL", smtp_email)  # Email que aparecerá como remitente (auditx@sanchezcya.com)
+        smtp_from_name = os.getenv("SMTP_FROM_NAME", "AuditX")
         smtp_password = os.getenv("SMTP_PASSWORD")
         smtp_server = os.getenv("SMTP_SERVER", "smtp.gmail.com")
         smtp_port = int(os.getenv("SMTP_PORT", 587))
         
-        if not smtp_password:
-            logging.error("SMTP_PASSWORD not configured")
+        if not smtp_password or not smtp_email:
+            logging.error("SMTP_PASSWORD or SMTP_EMAIL not configured")
             return
         
         # Create message
         message = MIMEMultipart()
-        message["From"] = f"AuditX <{smtp_email}>"
+        message["From"] = f"{smtp_from_name} <{smtp_from_email}>"
         message["To"] = to_email
         message["Subject"] = subject
         
         # Add body
         message.attach(MIMEText(body, "plain"))
         
-        # Send email
+        # Send email using the main account for authentication
         await aiosmtplib.send(
             message,
             hostname=smtp_server,
             port=smtp_port,
             start_tls=True,
-            username=smtp_email,
+            username=smtp_email,  # Autenticación con cuenta principal
             password=smtp_password,
         )
         
-        logging.info(f"Email sent successfully to {to_email}")
+        logging.info(f"Email sent successfully to {to_email} from {smtp_from_email}")
         
     except Exception as e:
         logging.error(f"Error sending email to {to_email}: {str(e)}")
