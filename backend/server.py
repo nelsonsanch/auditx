@@ -274,6 +274,7 @@ async def register(user_data: UserCreate):
         admin_name=user_data.admin_name,
         address=user_data.address,
         phone=user_data.phone,
+        logo_url=user_data.logo_url,
         is_active=False
     )
     
