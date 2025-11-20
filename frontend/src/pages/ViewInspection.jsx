@@ -20,6 +20,7 @@ const ViewInspection = () => {
   const [inspection, setInspection] = useState(null);
   const [standards, setStandards] = useState([]);
   const [analysis, setAnalysis] = useState(null);
+  const [historicalInspections, setHistoricalInspections] = useState([]);
   const [loading, setLoading] = useState(true);
   const [analyzing, setAnalyzing] = useState(false);
   const [editMode, setEditMode] = useState(false);
