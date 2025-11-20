@@ -162,17 +162,17 @@ const ViewInspection = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
       <nav className="bg-white shadow-md border-b sticky top-0 z-10">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            <div className="flex items-center space-x-3">
-              <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center" data-testid="view-inspection-logo">
-                <Shield className="w-6 h-6 text-white" />
+        <div className="max-w-7xl mx-auto px-2 sm:px-4 lg:px-8">
+          <div className="flex justify-between items-center h-16 gap-2">
+            <div className="flex items-center space-x-2 min-w-0">
+              <div className="w-8 h-8 sm:w-10 sm:h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center flex-shrink-0" data-testid="view-inspection-logo">
+                <Shield className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
               </div>
-              <h1 className="text-2xl font-bold" style={{ fontFamily: 'Space Grotesk' }}>Detalle de Inspección</h1>
+              <h1 className="text-base sm:text-xl lg:text-2xl font-bold truncate" style={{ fontFamily: 'Space Grotesk' }}>Detalle</h1>
             </div>
-            <Button onClick={() => navigate("/client/dashboard")} variant="outline" data-testid="back-button">
-              <ArrowLeft className="mr-2 h-4 w-4" />
-              Volver
+            <Button onClick={() => navigate("/client/dashboard")} variant="outline" size="sm" data-testid="back-button" className="text-xs sm:text-sm flex-shrink-0">
+              <ArrowLeft className="h-4 w-4 sm:mr-2" />
+              <span className="hidden sm:inline">Volver</span>
             </Button>
           </div>
         </div>
