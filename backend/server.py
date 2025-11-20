@@ -391,6 +391,16 @@ async def deactivate_company(company_id: str, current_user: dict = Depends(get_c
     return {"message": "Empresa desactivada"}
 
 # ====================
+# COMPANY ENDPOINTS
+# ====================
+
+@api_router.get("/my-companies")
+async def get_my_companies(current_user: dict = Depends(get_current_user)):
+    """Get companies for the current user"""
+    companies = await db.companies.find({"user_id": current_user['id']}, {"_id": 0}).to_list(1000)
+    return companies
+
+# ====================
 # STANDARDS ENDPOINTS
 # ====================
 
