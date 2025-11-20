@@ -3,6 +3,7 @@ import "@/App.css";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Login from "@/pages/Login";
 import Register from "@/pages/Register";
+import ResetPassword from "@/pages/ResetPassword";
 import SuperAdminDashboard from "@/pages/SuperAdminDashboard";
 import ClientDashboard from "@/pages/ClientDashboard";
 import CreateInspection from "@/pages/CreateInspection";
