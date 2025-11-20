@@ -335,7 +335,7 @@ async def register(user_data: UserCreate):
     
     # Send mock email to superadmin
     superadmin_email = os.getenv("SUPERADMIN_EMAIL", "nelson@sanchezcya.com")
-    await mock_send_email(
+    await send_email(
         to_email=superadmin_email,
         subject="Nuevo Registro de Cliente - Pendiente Activación",
         body=f"""Se ha registrado un nuevo cliente:
@@ -413,7 +413,7 @@ async def forgot_password(request: PasswordResetRequest):
     
     # Send mock email with reset link
     reset_link = f"https://auditx.sanchezcya.com/reset-password?token={reset_token}"
-    await mock_send_email(
+    await send_email(
         to_email=user['email'],
         subject="Restablecer Contraseña - AuditX",
         body=f"""Ha solicitado restablecer su contraseña.
@@ -537,7 +537,7 @@ async def activate_company(company_id: str, current_user: dict = Depends(get_cur
     # Get user email
     user = await db.users.find_one({"id": company['user_id']}, {"_id": 0})
     if user:
-        await mock_send_email(
+        await send_email(
             to_email=user['email'],
             subject="Cuenta Activada",
             body="Su cuenta ha sido activada. Ya puede ingresar al sistema para crear inspecciones de seguridad."
