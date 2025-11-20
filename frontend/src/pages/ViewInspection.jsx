@@ -37,13 +37,20 @@ const ViewInspection = () => {
       const token = localStorage.getItem("token");
       const headers = { Authorization: `Bearer ${token}` };
 
-      const [inspectionRes, standardsRes] = await Promise.all([
+      const [inspectionRes, standardsRes, allInspectionsRes] = await Promise.all([
         axios.get(`${API}/inspections/${id}`, { headers }),
-        axios.get(`${API}/standards`, { headers })
+        axios.get(`${API}/standards`, { headers }),
+        axios.get(`${API}/inspections`, { headers })
       ]);
 
       setInspection(inspectionRes.data);
       setStandards(standardsRes.data);
+      
+      // Filter historical inspections for the same company
+      const companyInspections = allInspectionsRes.data
+        .filter(insp => insp.company_id === inspectionRes.data.company_id)
+        .sort((a, b) => new Date(a.created_at) - new Date(b.created_at));
+      setHistoricalInspections(companyInspections);
 
       // Try to fetch existing analysis
       try {
