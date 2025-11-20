@@ -109,6 +109,13 @@ class AIAnalysis(BaseModel):
     report: str
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 
+class PasswordResetRequest(BaseModel):
+    email: EmailStr
+
+class PasswordReset(BaseModel):
+    token: str
+    new_password: str
+
 # ====================
 # STANDARDS DATA
 # ====================
