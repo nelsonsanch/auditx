@@ -151,7 +151,7 @@ const Register = () => {
               <Building2 className="w-10 h-10 text-white" />
             </div>
           </div>
-          <CardTitle className="text-3xl font-bold" style={{ fontFamily: 'Space Grotesk' }}>Registro de Empresa</CardTitle>
+          <CardTitle className="text-3xl font-bold" style={{ fontFamily: 'Space Grotesk' }}>AuditX - Registro</CardTitle>
           <CardDescription className="text-base">Complete los datos para registrar su empresa</CardDescription>
         </CardHeader>
         <CardContent>
