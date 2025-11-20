@@ -89,6 +89,46 @@ const SuperAdminDashboard = () => {
     navigate("/login");
   };
 
+  const handlePasswordChange = async (e) => {
+    e.preventDefault();
+
+    if (passwordData.new_password !== passwordData.confirm_password) {
+      toast.error("Las contraseñas no coinciden");
+      return;
+    }
+
+    if (passwordData.new_password.length < 8) {
+      toast.error("La nueva contraseña debe tener al menos 8 caracteres");
+      return;
+    }
+
+    setChangingPassword(true);
+
+    try {
+      const token = localStorage.getItem("token");
+      await axios.post(
+        `${API}/auth/change-password`,
+        {
+          current_password: passwordData.current_password,
+          new_password: passwordData.new_password
+        },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+
+      toast.success("Contraseña actualizada exitosamente");
+      setChangePasswordOpen(false);
+      setPasswordData({
+        current_password: "",
+        new_password: "",
+        confirm_password: ""
+      });
+    } catch (error) {
+      toast.error(error.response?.data?.detail || "Error al cambiar contraseña");
+    } finally {
+      setChangingPassword(false);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
       <nav className="bg-white shadow-md border-b">
