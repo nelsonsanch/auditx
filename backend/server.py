@@ -867,6 +867,9 @@ async def create_superadmin():
 # INCLUDE ROUTER
 # ====================
 
+# Mount static files for uploads
+app.mount("/uploads", StaticFiles(directory="/app/backend/uploads"), name="uploads")
+
 app.include_router(api_router)
 
 app.add_middleware(
