@@ -223,9 +223,43 @@ async def get_current_user(credentials: HTTPAuthorizationCredentials = Depends(s
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Usuario no encontrado")
     return user
 
-async def mock_send_email(to_email: str, subject: str, body: str):
-    """Mock email sending - logs to console"""
-    logging.info(f"\n{'='*50}\nMOCK EMAIL\nTo: {to_email}\nSubject: {subject}\nBody: {body}\n{'='*50}\n")
+async def send_email(to_email: str, subject: str, body: str):
+    """Send real email via Gmail SMTP"""
+    try:
+        # Get SMTP configuration from environment
+        smtp_email = os.getenv("SMTP_EMAIL", "auditx@sanchezcya.com")
+        smtp_password = os.getenv("SMTP_PASSWORD")
+        smtp_server = os.getenv("SMTP_SERVER", "smtp.gmail.com")
+        smtp_port = int(os.getenv("SMTP_PORT", 587))
+        
+        if not smtp_password:
+            logging.error("SMTP_PASSWORD not configured")
+            return
+        
+        # Create message
+        message = MIMEMultipart()
+        message["From"] = f"AuditX <{smtp_email}>"
+        message["To"] = to_email
+        message["Subject"] = subject
+        
+        # Add body
+        message.attach(MIMEText(body, "plain"))
+        
+        # Send email
+        await aiosmtplib.send(
+            message,
+            hostname=smtp_server,
+            port=smtp_port,
+            start_tls=True,
+            username=smtp_email,
+            password=smtp_password,
+        )
+        
+        logging.info(f"Email sent successfully to {to_email}")
+        
+    except Exception as e:
+        logging.error(f"Error sending email to {to_email}: {str(e)}")
+        # Log error but don't raise exception to avoid breaking the flow
 
 # ====================
 # UPLOAD ENDPOINTS
