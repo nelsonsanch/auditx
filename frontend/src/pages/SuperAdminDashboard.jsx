@@ -143,9 +143,9 @@ const SuperAdminDashboard = () => {
             <div className="flex items-center space-x-1 sm:space-x-2 flex-shrink-0">
               <Dialog open={changePasswordOpen} onOpenChange={setChangePasswordOpen}>
                 <DialogTrigger asChild>
-                  <Button variant="outline" data-testid="change-password-button">
-                    <Key className="mr-2 h-4 w-4" />
-                    Cambiar Contraseña
+                  <Button variant="outline" size="sm" data-testid="change-password-button" className="text-xs sm:text-sm">
+                    <Key className="h-4 w-4 sm:mr-2" />
+                    <span className="hidden sm:inline">Cambiar Contraseña</span>
                   </Button>
                 </DialogTrigger>
                 <DialogContent data-testid="change-password-modal">
