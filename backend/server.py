@@ -405,7 +405,7 @@ async def activate_company(company_id: str, current_user: dict = Depends(get_cur
         await mock_send_email(
             to_email=user['email'],
             subject="Cuenta Activada",
-            body=f"Su cuenta ha sido activada. Ya puede ingresar al sistema para crear inspecciones de seguridad."
+            body="Su cuenta ha sido activada. Ya puede ingresar al sistema para crear inspecciones de seguridad."
         )
     
     return {"message": "Empresa activada exitosamente"}
