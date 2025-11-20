@@ -140,10 +140,118 @@ const SuperAdminDashboard = () => {
               </div>
               <h1 className="text-2xl font-bold" style={{ fontFamily: 'Space Grotesk' }}>Panel de Administrador</h1>
             </div>
-            <Button onClick={handleLogout} variant="outline" data-testid="logout-button">
-              <LogOut className="mr-2 h-4 w-4" />
-              Cerrar Sesión
-            </Button>
+            <div className="flex items-center space-x-4">
+              <Dialog open={changePasswordOpen} onOpenChange={setChangePasswordOpen}>
+                <DialogTrigger asChild>
+                  <Button variant="outline" data-testid="change-password-button">
+                    <Key className="mr-2 h-4 w-4" />
+                    Cambiar Contraseña
+                  </Button>
+                </DialogTrigger>
+                <DialogContent data-testid="change-password-modal">
+                  <DialogHeader>
+                    <DialogTitle>Cambiar Contraseña</DialogTitle>
+                    <DialogDescription>
+                      Ingresa tu contraseña actual y la nueva contraseña
+                    </DialogDescription>
+                  </DialogHeader>
+                  <form onSubmit={handlePasswordChange} className="space-y-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="current-password">Contraseña Actual *</Label>
+                      <div className="relative">
+                        <Input
+                          id="current-password"
+                          type={showCurrentPassword ? "text" : "password"}
+                          value={passwordData.current_password}
+                          onChange={(e) => setPasswordData({ ...passwordData, current_password: e.target.value })}
+                          required
+                          data-testid="current-password-input"
+                          className="pr-10"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => setShowCurrentPassword(!showCurrentPassword)}
+                          className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                        >
+                          {showCurrentPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                        </button>
+                      </div>
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="new-password">Nueva Contraseña *</Label>
+                      <div className="relative">
+                        <Input
+                          id="new-password"
+                          type={showNewPassword ? "text" : "password"}
+                          value={passwordData.new_password}
+                          onChange={(e) => setPasswordData({ ...passwordData, new_password: e.target.value })}
+                          required
+                          minLength={8}
+                          data-testid="new-password-input"
+                          className="pr-10"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => setShowNewPassword(!showNewPassword)}
+                          className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                        >
+                          {showNewPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                        </button>
+                      </div>
+                      <p className="text-xs text-gray-500">Mínimo 8 caracteres</p>
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="confirm-new-password">Confirmar Nueva Contraseña *</Label>
+                      <div className="relative">
+                        <Input
+                          id="confirm-new-password"
+                          type={showConfirmPassword ? "text" : "password"}
+                          value={passwordData.confirm_password}
+                          onChange={(e) => setPasswordData({ ...passwordData, confirm_password: e.target.value })}
+                          required
+                          minLength={8}
+                          data-testid="confirm-new-password-input"
+                          className={`pr-10 ${passwordData.confirm_password && passwordData.new_password !== passwordData.confirm_password ? "border-red-500" : ""}`}
+                        />
+                        <button
+                          type="button"
+                          onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                          className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                        >
+                          {showConfirmPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                        </button>
+                      </div>
+                      {passwordData.confirm_password && passwordData.new_password !== passwordData.confirm_password && (
+                        <p className="text-xs text-red-500">Las contraseñas no coinciden</p>
+                      )}
+                    </div>
+
+                    <Button 
+                      type="submit" 
+                      className="w-full" 
+                      disabled={changingPassword}
+                      data-testid="submit-change-password"
+                    >
+                      {changingPassword ? (
+                        <>
+                          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                          Cambiando...
+                        </>
+                      ) : (
+                        "Cambiar Contraseña"
+                      )}
+                    </Button>
+                  </form>
+                </DialogContent>
+              </Dialog>
+
+              <Button onClick={handleLogout} variant="outline" data-testid="logout-button">
+                <LogOut className="mr-2 h-4 w-4" />
+                Cerrar Sesión
+              </Button>
+            </div>
           </div>
         </div>
       </nav>
