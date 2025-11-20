@@ -511,8 +511,27 @@ async def analyze_inspection(request: AIAnalysisRequest, current_user: dict = De
     
     company = await db.companies.find_one({"id": inspection['company_id']}, {"_id": 0})
     
-    # Build analysis prompt
+    # Calculate statistics by phase
+    phase_stats = {}
+    for resp in inspection['responses']:
+        standard = next((s for s in STANDARDS if s['id'] == resp['standard_id']), None)
+        if standard:
+            phase = standard['category'].split(' - ')[0]  # Get phase (I. PLANEAR, II. HACER, etc.)
+            if phase not in phase_stats:
+                phase_stats[phase] = {'total': 0, 'obtained': 0, 'count': 0}
+            phase_stats[phase]['total'] += standard['weight']
+            phase_stats[phase]['obtained'] += resp['score']
+            phase_stats[phase]['count'] += 1
+    
+    phase_percentages = {}
+    for phase, stats in phase_stats.items():
+        phase_percentages[phase] = (stats['obtained'] / stats['total'] * 100) if stats['total'] > 0 else 0
+    
+    # Build detailed responses text
     responses_text = ""
+    critical_items = []
+    partial_items = []
+    
     for resp in inspection['responses']:
         standard = next((s for s in STANDARDS if s['id'] == resp['standard_id']), None)
         if standard:
@@ -522,23 +541,55 @@ async def analyze_inspection(request: AIAnalysisRequest, current_user: dict = De
             responses_text += f"Respuesta: {resp['response']}\n"
             responses_text += f"Observaciones: {resp['observations']}\n"
             responses_text += f"Puntaje obtenido: {resp['score']}/{standard['weight']}\n"
+            
+            if resp['response'] == 'no_cumple':
+                critical_items.append(f"{standard['id']} - {standard['title']}")
+            elif resp['response'] == 'cumple_parcial':
+                partial_items.append(f"{standard['id']} - {standard['title']}")
     
-    prompt = f"""Eres un experto en Seguridad y Salud en el Trabajo en Colombia. Analiza la siguiente inspección basada en la Resolución 0312 de 2019.
+    prompt = f"""Eres un experto consultor en Seguridad y Salud en el Trabajo en Colombia, especializado en la Resolución 0312 de 2019.
 
+INFORMACIÓN DE LA EMPRESA:
 Empresa: {company['company_name']}
 Puntaje Total: {inspection['total_score']:.2f}%
 
-RESPUESTAS A LOS ESTÁNDARES:
+DESGLOSE POR FASES:
+{chr(10).join([f"- {phase}: {pct:.1f}%" for phase, pct in phase_percentages.items()])}
+
+ESTÁNDARES CRÍTICOS (No Cumple): {len(critical_items)}
+ESTÁNDARES PARCIALES (Cumple Parcial): {len(partial_items)}
+
+RESPUESTAS DETALLADAS A LOS ESTÁNDARES:
 {responses_text}
 
-Por favor, proporciona:
-1. Un análisis detallado del cumplimiento general del SG-SST
-2. Identificación de las principales fortalezas
-3. Identificación de las principales debilidades y áreas críticas de mejora
-4. Recomendaciones específicas y priorizadas para mejorar el cumplimiento
-5. Plan de acción sugerido con pasos concretos
+Por favor, proporciona un análisis profesional y estructurado con:
 
-El análisis debe ser profesional, técnico y orientado a la acción."""
+1. **RESUMEN EJECUTIVO**
+   - Nivel de cumplimiento global y clasificación (Crítico <60%, Moderado 60-84%, Excelente ≥85%)
+   - Principales hallazgos en 3-4 puntos clave
+   - Riesgo general identificado
+
+2. **ANÁLISIS POR FASES (PHVA)**
+   - Planear: Análisis del {phase_percentages.get('I. PLANEAR', 0):.1f}% obtenido
+   - Hacer: Análisis del {phase_percentages.get('II. HACER', 0):.1f}% obtenido
+   - Verificar: Análisis del {phase_percentages.get('III. VERIFICAR', 0):.1f}% obtenido
+   - Actuar: Análisis del {phase_percentages.get('IV. ACTUAR', 0):.1f}% obtenido
+
+3. **FORTALEZAS IDENTIFICADAS**
+   - Listar estándares con cumplimiento total
+   - Destacar buenas prácticas observadas
+
+4. **BRECHAS Y OPORTUNIDADES DE MEJORA**
+   - Análisis de los {len(critical_items)} estándares críticos (no cumple)
+   - Análisis de los {len(partial_items)} estándares parciales
+   - Identificar patrones comunes en los incumplimientos
+
+5. **ANÁLISIS DE RIESGOS**
+   - Riesgos asociados a los incumplimientos críticos
+   - Impacto potencial en la seguridad de los trabajadores
+   - Exposición legal y sanciones posibles
+
+El análisis debe ser profesional, técnico, orientado a la acción y fácil de entender para la gerencia."""
     
     # Call OpenAI via Emergent Integration
     try:
