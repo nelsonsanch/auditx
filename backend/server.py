@@ -352,6 +352,97 @@ async def get_me(current_user: dict = Depends(get_current_user)):
         "is_active": current_user.get('is_active', False)
     }
 
+@api_router.post("/auth/forgot-password")
+async def forgot_password(request: PasswordResetRequest):
+    """Request password reset"""
+    user = await db.users.find_one({"email": request.email}, {"_id": 0})
+    if not user:
+        # Don't reveal if user exists or not for security
+        return {"message": "Si el correo existe, recibirá un enlace para restablecer su contraseña"}
+    
+    # Generate reset token
+    reset_token = str(uuid.uuid4())
+    expiration = datetime.now(timezone.utc) + timedelta(hours=1)
+    
+    # Save token to database
+    await db.password_resets.insert_one({
+        "token": reset_token,
+        "user_id": user['id'],
+        "email": user['email'],
+        "expires_at": expiration.isoformat(),
+        "used": False,
+        "created_at": datetime.now(timezone.utc).isoformat()
+    })
+    
+    # Send mock email with reset link
+    reset_link = f"https://auditx.sanchezcya.com/reset-password?token={reset_token}"
+    await mock_send_email(
+        to_email=user['email'],
+        subject="Restablecer Contraseña - AuditX",
+        body=f"""Ha solicitado restablecer su contraseña.
+        
+Haga clic en el siguiente enlace para crear una nueva contraseña:
+{reset_link}
+
+Este enlace expirará en 1 hora.
+
+Si no solicitó este cambio, puede ignorar este correo.
+
+Saludos,
+Equipo AuditX"""
+    )
+    
+    return {"message": "Si el correo existe, recibirá un enlace para restablecer su contraseña"}
+
+@api_router.post("/auth/reset-password")
+async def reset_password(request: PasswordReset):
+    """Reset password with token"""
+    # Find valid token
+    reset_request = await db.password_resets.find_one({
+        "token": request.token,
+        "used": False
+    }, {"_id": 0})
+    
+    if not reset_request:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Token inválido o expirado")
+    
+    # Check expiration
+    expires_at = datetime.fromisoformat(reset_request['expires_at'])
+    if datetime.now(timezone.utc) > expires_at:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="El token ha expirado")
+    
+    # Update password
+    new_hashed_password = hash_password(request.new_password)
+    await db.users.update_one(
+        {"id": reset_request['user_id']},
+        {"$set": {"password": new_hashed_password}}
+    )
+    
+    # Mark token as used
+    await db.password_resets.update_one(
+        {"token": request.token},
+        {"$set": {"used": True}}
+    )
+    
+    return {"message": "Contraseña restablecida exitosamente"}
+
+@api_router.get("/auth/verify-reset-token/{token}")
+async def verify_reset_token(token: str):
+    """Verify if reset token is valid"""
+    reset_request = await db.password_resets.find_one({
+        "token": token,
+        "used": False
+    }, {"_id": 0})
+    
+    if not reset_request:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Token inválido")
+    
+    expires_at = datetime.fromisoformat(reset_request['expires_at'])
+    if datetime.now(timezone.utc) > expires_at:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="El token ha expirado")
+    
+    return {"valid": True, "email": reset_request['email']}
+
 # ====================
 # ADMIN ENDPOINTS
 # ====================
