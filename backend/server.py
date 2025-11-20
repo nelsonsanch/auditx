@@ -51,6 +51,7 @@ class UserCreate(BaseModel):
     admin_name: str
     address: str
     phone: str
+    logo_url: Optional[str] = None
 
 class UserLogin(BaseModel):
     email: EmailStr
