@@ -602,37 +602,89 @@ El análisis debe ser profesional, técnico, orientado a la acción y fácil de 
         user_message = UserMessage(text=prompt)
         analysis_result = await chat.send_message(user_message)
         
-        # Generate editable report
-        report_prompt = f"""Basándote en el análisis anterior, genera un informe ejecutivo profesional y editable para la empresa {company['company_name']}.
+        # Generate editable report with action plan
+        report_prompt = f"""Basándote en el análisis anterior, genera un informe ejecutivo profesional con plan de acción detallado para {company['company_name']}.
 
 El informe debe incluir:
 
-1. PORTADA con:
+1. **PORTADA**
    - Título: "INFORME DE EVALUACIÓN DEL SISTEMA DE GESTIÓN DE SEGURIDAD Y SALUD EN EL TRABAJO"
-   - Nombre de la empresa: {company['company_name']}
-   - NIT o identificación: [A completar]
-   - Fecha de evaluación: {datetime.now(timezone.utc).strftime('%d/%m/%Y')}
+   - Empresa: {company['company_name']}
+   - NIT/Identificación: [Pendiente de completar]
+   - Fecha de evaluación: {datetime.now(timezone.utc).strftime('%d de %B de %Y')}
    - Responsable: {company['admin_name']}
+   - Dirección: {company['address']}
+   - Teléfono: {company['phone']}
 
-2. RESUMEN EJECUTIVO
-   - Puntaje global obtenido: {inspection['total_score']:.2f}%
-   - Nivel de cumplimiento (crítico/bajo/moderado/alto/excelente)
-   - Principales hallazgos
+2. **RESUMEN EJECUTIVO**
+   - Puntaje global: {inspection['total_score']:.2f}%
+   - Clasificación: [Crítico/Moderado/Excelente según puntaje]
+   - Desglose por fases PHVA
+   - Principales hallazgos (3-4 bullets)
+   - Recomendación principal
 
-3. ANÁLISIS DETALLADO POR FASES (Planear, Hacer, Verificar, Actuar)
+3. **RESULTADOS POR FASE**
+   - **I. PLANEAR ({phase_percentages.get('I. PLANEAR', 0):.1f}%)**: Análisis y hallazgos
+   - **II. HACER ({phase_percentages.get('II. HACER', 0):.1f}%)**: Análisis y hallazgos
+   - **III. VERIFICAR ({phase_percentages.get('III. VERIFICAR', 0):.1f}%)**: Análisis y hallazgos
+   - **IV. ACTUAR ({phase_percentages.get('IV. ACTUAR', 0):.1f}%)**: Análisis y hallazgos
 
-4. FORTALEZAS IDENTIFICADAS
+4. **FORTALEZAS IDENTIFICADAS**
+   - Listar estándares que cumplen al 100%
+   - Destacar buenas prácticas
 
-5. BRECHAS Y OPORTUNIDADES DE MEJORA
+5. **BRECHAS CRÍTICAS Y OPORTUNIDADES**
+   - {len(critical_items)} estándares críticos sin cumplir
+   - {len(partial_items)} estándares con cumplimiento parcial
+   - Análisis de patrones e impacto
 
-6. PLAN DE ACCIÓN RECOMENDADO
-   - Acciones inmediatas (críticas)
-   - Acciones a corto plazo (3 meses)
-   - Acciones a mediano plazo (6-12 meses)
+6. **ANÁLISIS DE RIESGOS ASOCIADOS**
+   - Riesgos de seguridad identificados
+   - Exposición legal y sanciones potenciales
+   - Impacto en operaciones
 
-7. CONCLUSIONES Y RECOMENDACIONES FINALES
+7. **PLAN DE ACCIÓN PRIORIZADO**
 
-El informe debe ser formal, profesional y estar listo para presentar a la gerencia."""
+   **A. ACCIONES INMEDIATAS (0-30 días) - PRIORIDAD CRÍTICA**
+   Para cada acción incluir:
+   - Nombre de la acción
+   - Estándar(es) relacionado(s)
+   - Descripción detallada
+   - Responsable sugerido
+   - Recursos estimados
+   - Resultado esperado
+   
+   **B. ACCIONES A CORTO PLAZO (1-3 meses) - PRIORIDAD ALTA**
+   Para cada acción incluir mismo formato anterior
+   
+   **C. ACCIONES A MEDIANO PLAZO (3-12 meses) - PRIORIDAD MEDIA**
+   Para cada acción incluir mismo formato anterior
+
+8. **CRONOGRAMA SUGERIDO**
+   Tabla mensual con actividades priorizadas
+
+9. **ESTIMACIÓN DE RECURSOS**
+   - Recursos humanos necesarios
+   - Recursos tecnológicos
+   - Presupuesto estimado
+   - Capacitaciones requeridas
+
+10. **INDICADORES DE SEGUIMIENTO**
+    - KPIs para medir progreso
+    - Frecuencia de medición
+    - Responsables
+
+11. **CONCLUSIONES Y RECOMENDACIONES**
+    - Síntesis de situación actual
+    - Ruta crítica para cumplimiento
+    - Beneficios esperados de implementar el plan
+
+12. **ANEXOS SUGERIDOS**
+    - Lista de estándares no conformes
+    - Normatividad aplicable
+    - Formatos recomendados
+
+El informe debe ser formal, accionable y listo para presentar a gerencia. Usa formato markdown con títulos, subtítulos, listas y tablas."""
         
         report_message = UserMessage(text=report_prompt)
         report_result = await chat.send_message(report_message)
