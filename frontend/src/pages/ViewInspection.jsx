@@ -182,17 +182,27 @@ const ViewInspection = () => {
         <Card className="mb-6 shadow-xl" data-testid="inspection-summary-card">
           <CardHeader>
             <div className="flex justify-between items-start">
-              <div>
-                <CardTitle className="text-3xl mb-2" style={{ fontFamily: 'Space Grotesk' }}>
-                  {inspection.company.company_name}
-                </CardTitle>
-                <CardDescription className="text-base">
-                  Fecha: {new Date(inspection.created_at).toLocaleDateString('es-ES', { 
-                    year: 'numeric', 
-                    month: 'long', 
-                    day: 'numeric' 
-                  })}
-                </CardDescription>
+              <div className="flex items-start gap-4">
+                {inspection.company.logo_url && (
+                  <img 
+                    src={`${BACKEND_URL}${inspection.company.logo_url}`}
+                    alt={`${inspection.company.company_name} logo`}
+                    className="w-16 h-16 object-contain rounded-lg border-2 border-gray-200"
+                    data-testid="company-logo"
+                  />
+                )}
+                <div>
+                  <CardTitle className="text-3xl mb-2" style={{ fontFamily: 'Space Grotesk' }}>
+                    {inspection.company.company_name}
+                  </CardTitle>
+                  <CardDescription className="text-base">
+                    Fecha: {new Date(inspection.created_at).toLocaleDateString('es-ES', { 
+                      year: 'numeric', 
+                      month: 'long', 
+                      day: 'numeric' 
+                    })}
+                  </CardDescription>
+                </div>
               </div>
               <div className="text-right">
                 <div className={`text-5xl font-bold ${getScoreColor(inspection.total_score)} mb-2`} data-testid="inspection-score">
