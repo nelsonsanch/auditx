@@ -218,6 +218,35 @@ async def mock_send_email(to_email: str, subject: str, body: str):
     logging.info(f"\n{'='*50}\nMOCK EMAIL\nTo: {to_email}\nSubject: {subject}\nBody: {body}\n{'='*50}\n")
 
 # ====================
+# UPLOAD ENDPOINTS
+# ====================
+
+@api_router.post("/upload-logo")
+async def upload_logo(file: UploadFile = File(...)):
+    """Upload company logo"""
+    try:
+        # Validate file type
+        allowed_types = ["image/jpeg", "image/png", "image/jpg", "image/webp"]
+        if file.content_type not in allowed_types:
+            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Solo se permiten imágenes (JPG, PNG, WEBP)")
+        
+        # Generate unique filename
+        file_extension = file.filename.split('.')[-1]
+        unique_filename = f"{uuid.uuid4()}.{file_extension}"
+        file_path = Path("/app/backend/uploads/logos") / unique_filename
+        
+        # Save file
+        with open(file_path, "wb") as buffer:
+            shutil.copyfileobj(file.file, buffer)
+        
+        # Return URL
+        logo_url = f"/uploads/logos/{unique_filename}"
+        return {"logo_url": logo_url}
+        
+    except Exception as e:
+        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=f"Error al subir imagen: {str(e)}")
+
+# ====================
 # AUTH ENDPOINTS
 # ====================
 
