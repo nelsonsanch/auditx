@@ -55,7 +55,7 @@ const Login = () => {
               <Shield className="w-10 h-10 text-white" />
             </div>
           </div>
-          <CardTitle className="text-3xl font-bold" style={{ fontFamily: 'Space Grotesk' }}>SG-SST Inspector</CardTitle>
+          <CardTitle className="text-3xl font-bold" style={{ fontFamily: 'Space Grotesk' }}>AuditX</CardTitle>
           <CardDescription className="text-base">Sistema de Gestión de Seguridad y Salud en el Trabajo</CardDescription>
         </CardHeader>
         <CardContent>
