@@ -486,6 +486,31 @@ async def verify_reset_token(token: str):
     
     return {"valid": True, "email": reset_request['email']}
 
+@api_router.post("/auth/change-password")
+async def change_password(request: ChangePassword, current_user: dict = Depends(get_current_user)):
+    """Change password for logged in user"""
+    # Get user from database
+    user = await db.users.find_one({"id": current_user['id']}, {"_id": 0})
+    if not user:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Usuario no encontrado")
+    
+    # Verify current password
+    if not verify_password(request.current_password, user['password']):
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Contraseña actual incorrecta")
+    
+    # Validate new password
+    if len(request.new_password) < 8:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="La nueva contraseña debe tener al menos 8 caracteres")
+    
+    # Update password
+    new_hashed_password = hash_password(request.new_password)
+    await db.users.update_one(
+        {"id": current_user['id']},
+        {"$set": {"password": new_hashed_password}}
+    )
+    
+    return {"message": "Contraseña actualizada exitosamente"}
+
 # ====================
 # ADMIN ENDPOINTS
 # ====================
