@@ -221,11 +221,23 @@ const ViewInspection = () => {
           </CardContent>
         </Card>
 
-        <Tabs defaultValue="results" className="space-y-6" data-testid="inspection-tabs">
-          <TabsList className="grid w-full grid-cols-2">
-            <TabsTrigger value="results" data-testid="results-tab">Resultados por Estándar</TabsTrigger>
-            <TabsTrigger value="analysis" data-testid="analysis-tab">Análisis IA</TabsTrigger>
+        <Tabs defaultValue="charts" className="space-y-6" data-testid="inspection-tabs">
+          <TabsList className="grid w-full grid-cols-3">
+            <TabsTrigger value="charts" data-testid="charts-tab">
+              <BarChart3 className="mr-2 h-4 w-4" />
+              Gráficos y Análisis
+            </TabsTrigger>
+            <TabsTrigger value="results" data-testid="results-tab">Resultados Detallados</TabsTrigger>
+            <TabsTrigger value="analysis" data-testid="analysis-tab">Informe con IA</TabsTrigger>
           </TabsList>
+
+          <TabsContent value="charts" className="space-y-6" data-testid="charts-content">
+            <InspectionCharts 
+              inspection={inspection} 
+              standards={standards}
+              historicalData={historicalInspections}
+            />
+          </TabsContent>
 
           <TabsContent value="results" className="space-y-4" data-testid="results-content">
             {inspection.responses.map((resp) => {
