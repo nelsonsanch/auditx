@@ -536,7 +536,7 @@ El análisis debe ser profesional, técnico y orientado a la acción."""
             api_key=os.getenv("EMERGENT_LLM_KEY"),
             session_id=f"inspection_{request.inspection_id}",
             system_message="Eres un experto consultor en Seguridad y Salud en el Trabajo en Colombia, especializado en la Resolución 0312 de 2019."
-        ).with_model("openai", "gpt-5.1")
+        ).with_model("openai", "gpt-4o")
         
         user_message = UserMessage(text=prompt)
         analysis_result = await chat.send_message(user_message)
