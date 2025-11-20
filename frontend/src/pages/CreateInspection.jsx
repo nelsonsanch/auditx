@@ -34,14 +34,13 @@ const CreateInspection = () => {
 
       const [standardsRes, companiesRes] = await Promise.all([
         axios.get(`${API}/standards`, { headers }),
-        axios.get(`${API}/admin/companies`, { headers })
+        axios.get(`${API}/my-companies`, { headers })
       ]);
 
       setStandards(standardsRes.data);
       
-      // Filter companies for current user
-      const userId = localStorage.getItem("userId");
-      const userCompanies = companiesRes.data.filter(c => c.user_id === userId && c.is_active);
+      // Filter active companies
+      const userCompanies = companiesRes.data.filter(c => c.is_active);
       setCompanies(userCompanies);
       
       if (userCompanies.length > 0) {
