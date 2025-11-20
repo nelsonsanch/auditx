@@ -119,6 +119,10 @@ class PasswordReset(BaseModel):
     token: str
     new_password: str
 
+class ChangePassword(BaseModel):
+    current_password: str
+    new_password: str
+
 # ====================
 # STANDARDS DATA
 # ====================
