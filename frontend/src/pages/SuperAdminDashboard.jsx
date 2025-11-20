@@ -247,9 +247,9 @@ const SuperAdminDashboard = () => {
                 </DialogContent>
               </Dialog>
 
-              <Button onClick={handleLogout} variant="outline" data-testid="logout-button">
-                <LogOut className="mr-2 h-4 w-4" />
-                Cerrar Sesión
+              <Button onClick={handleLogout} variant="outline" size="sm" data-testid="logout-button" className="text-xs sm:text-sm">
+                <LogOut className="h-4 w-4 sm:mr-2" />
+                <span className="hidden sm:inline">Cerrar Sesión</span>
               </Button>
             </div>
           </div>
