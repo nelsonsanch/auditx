@@ -5,8 +5,9 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { toast } from "sonner";
-import { Shield, Loader2 } from "lucide-react";
+import { Shield, Loader2, Eye, EyeOff } from "lucide-react";
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API = `${BACKEND_URL}/api`;
@@ -14,7 +15,11 @@ const API = `${BACKEND_URL}/api`;
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [forgotPasswordOpen, setForgotPasswordOpen] = useState(false);
+  const [resetEmail, setResetEmail] = useState("");
+  const [sendingReset, setSendingReset] = useState(false);
   const navigate = useNavigate();
 
   const handleLogin = async (e) => {
@@ -46,6 +51,31 @@ const Login = () => {
     }
   };
 
+  const handleForgotPassword = async (e) => {
+    e.preventDefault();
+    
+    if (!resetEmail) {
+      toast.error("Por favor ingrese su correo electrónico");
+      return;
+    }
+
+    setSendingReset(true);
+
+    try {
+      await axios.post(`${API}/auth/forgot-password`, {
+        email: resetEmail
+      });
+
+      toast.success("Si el correo existe, recibirá un enlace para restablecer su contraseña");
+      setForgotPasswordOpen(false);
+      setResetEmail("");
+    } catch (error) {
+      toast.error("Error al enviar enlace de recuperación");
+    } finally {
+      setSendingReset(false);
+    }
+  };
+
   return (
     <div className="min-h-screen flex items-center justify-center p-4" style={{ background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)' }}>
       <Card className="w-full max-w-md shadow-2xl" data-testid="login-card">
@@ -74,16 +104,79 @@ const Login = () => {
             </div>
             <div className="space-y-2">
               <Label htmlFor="password">Contraseña</Label>
-              <Input
-                id="password"
-                type="password"
-                placeholder="••••••••"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-                data-testid="password-input"
-              />
+              <div className="relative">
+                <Input
+                  id="password"
+                  type={showPassword ? "text" : "password"}
+                  placeholder="••••••••"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                  data-testid="password-input"
+                  className="pr-10"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                  data-testid="toggle-password-button"
+                >
+                  {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                </button>
+              </div>
             </div>
+            
+            <div className="flex justify-end">
+              <Dialog open={forgotPasswordOpen} onOpenChange={setForgotPasswordOpen}>
+                <DialogTrigger asChild>
+                  <button 
+                    type="button" 
+                    className="text-sm text-blue-600 hover:text-blue-800 font-medium"
+                    data-testid="forgot-password-link"
+                  >
+                    ¿Olvidó su contraseña?
+                  </button>
+                </DialogTrigger>
+                <DialogContent data-testid="forgot-password-modal">
+                  <DialogHeader>
+                    <DialogTitle>Recuperar Contraseña</DialogTitle>
+                    <DialogDescription>
+                      Ingrese su correo electrónico y le enviaremos un enlace para restablecer su contraseña.
+                    </DialogDescription>
+                  </DialogHeader>
+                  <form onSubmit={handleForgotPassword} className="space-y-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="reset-email">Correo Electrónico</Label>
+                      <Input
+                        id="reset-email"
+                        type="email"
+                        placeholder="usuario@ejemplo.com"
+                        value={resetEmail}
+                        onChange={(e) => setResetEmail(e.target.value)}
+                        required
+                        data-testid="reset-email-input"
+                      />
+                    </div>
+                    <Button 
+                      type="submit" 
+                      className="w-full" 
+                      disabled={sendingReset}
+                      data-testid="send-reset-link-button"
+                    >
+                      {sendingReset ? (
+                        <>
+                          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                          Enviando...
+                        </>
+                      ) : (
+                        "Enviar Enlace de Recuperación"
+                      )}
+                    </Button>
+                  </form>
+                </DialogContent>
+              </Dialog>
+            </div>
+
             <Button 
               type="submit" 
               className="w-full" 
