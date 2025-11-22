@@ -21,8 +21,19 @@ const Register = () => {
     admin_name: "",
     address: "",
     phone: "",
-    logo_url: ""
+    logo_url: "",
+    // Nuevos campos de caracterización
+    nit: "",
+    representante_legal: "",
+    arl_afiliada: "",
+    nivel_riesgo: "",
+    codigo_ciiu: "",
+    subdivision_ciiu: "",
+    descripcion_actividad: "Según definición establecida en el CIIU",
+    numero_trabajadores: "",
+    numero_sedes: "1"
   });
+  const [sedesAdicionales, setSedesAdicionales] = useState([]);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [logoFile, setLogoFile] = useState(null);
