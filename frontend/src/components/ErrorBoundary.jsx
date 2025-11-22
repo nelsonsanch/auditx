@@ -14,6 +14,13 @@ class ErrorBoundary extends React.Component {
   }
 
   componentDidCatch(error, errorInfo) {
+    // Ignore specific DOM errors from Emergent scripts
+    if (error && error.message && error.message.includes('removeChild')) {
+      console.warn('Ignoring removeChild error from external script:', error);
+      // Reset state to continue rendering
+      this.setState({ hasError: false, error: null });
+      return;
+    }
     console.error('ErrorBoundary caught an error:', error, errorInfo);
   }
 
