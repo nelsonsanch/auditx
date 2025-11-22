@@ -100,6 +100,17 @@ class Company(BaseModel):
     logo_url: Optional[str] = None
     is_active: bool = False
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    # Nuevos campos de caracterización
+    nit: Optional[str] = None
+    representante_legal: Optional[str] = None
+    arl_afiliada: Optional[str] = None
+    nivel_riesgo: Optional[str] = None  # 1 dígito (1-5)
+    codigo_ciiu: Optional[str] = None  # 4 dígitos
+    subdivision_ciiu: Optional[str] = None  # 2 dígitos
+    descripcion_actividad: Optional[str] = "Según definición establecida en el CIIU"
+    numero_trabajadores: Optional[int] = None
+    numero_sedes: Optional[int] = 1
+    sedes_adicionales: Optional[List[Dict[str, Any]]] = []
 
 class StandardResponse(BaseModel):
     standard_id: str
