@@ -391,6 +391,227 @@ const Register = () => {
                 data-testid="phone-input"
               />
             </div>
+
+            {/* Sección de Caracterización Extendida */}
+            <div className="border-t pt-4 mt-6">
+              <h3 className="text-lg font-semibold mb-4">Caracterización de la Empresa</h3>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="nit">NIT *</Label>
+                  <Input
+                    id="nit"
+                    name="nit"
+                    type="text"
+                    placeholder="900123456-7"
+                    value={formData.nit}
+                    onChange={handleChange}
+                    required
+                  />
+                </div>
+                
+                <div className="space-y-2">
+                  <Label htmlFor="representante_legal">Representante Legal *</Label>
+                  <Input
+                    id="representante_legal"
+                    name="representante_legal"
+                    type="text"
+                    placeholder="Nombre completo"
+                    value={formData.representante_legal}
+                    onChange={handleChange}
+                    required
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                <div className="space-y-2">
+                  <Label htmlFor="arl_afiliada">ARL Afiliada *</Label>
+                  <Input
+                    id="arl_afiliada"
+                    name="arl_afiliada"
+                    type="text"
+                    placeholder="Nombre de la ARL"
+                    value={formData.arl_afiliada}
+                    onChange={handleChange}
+                    required
+                  />
+                </div>
+                
+                <div className="space-y-2">
+                  <Label htmlFor="numero_trabajadores">Número de Trabajadores (Sede Principal) *</Label>
+                  <Input
+                    id="numero_trabajadores"
+                    name="numero_trabajadores"
+                    type="number"
+                    min="1"
+                    placeholder="50"
+                    value={formData.numero_trabajadores}
+                    onChange={handleChange}
+                    required
+                  />
+                </div>
+              </div>
+
+              {/* Código de Actividad Económica */}
+              <div className="mt-4 space-y-2">
+                <Label>Código de Actividad Económica (Decreto 768/2022) *</Label>
+                <div className="grid grid-cols-3 gap-2">
+                  <div>
+                    <Label htmlFor="nivel_riesgo" className="text-xs text-gray-600">Nivel de Riesgo (1 dígito)</Label>
+                    <Input
+                      id="nivel_riesgo"
+                      name="nivel_riesgo"
+                      type="text"
+                      maxLength="1"
+                      pattern="[1-5]"
+                      placeholder="1-5"
+                      value={formData.nivel_riesgo}
+                      onChange={handleChange}
+                      required
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="codigo_ciiu" className="text-xs text-gray-600">CIIU (4 dígitos)</Label>
+                    <Input
+                      id="codigo_ciiu"
+                      name="codigo_ciiu"
+                      type="text"
+                      maxLength="4"
+                      pattern="[0-9]{4}"
+                      placeholder="0161"
+                      value={formData.codigo_ciiu}
+                      onChange={handleChange}
+                      required
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="subdivision_ciiu" className="text-xs text-gray-600">Subdivisión (2 dígitos)</Label>
+                    <Input
+                      id="subdivision_ciiu"
+                      name="subdivision_ciiu"
+                      type="text"
+                      maxLength="2"
+                      pattern="[0-9]{2}"
+                      placeholder="01"
+                      value={formData.subdivision_ciiu}
+                      onChange={handleChange}
+                      required
+                    />
+                  </div>
+                </div>
+                <p className="text-xs text-gray-500 mt-1">Ejemplo: Riesgo=2, CIIU=0161, Subdivisión=01</p>
+              </div>
+
+              <div className="mt-4 space-y-2">
+                <Label htmlFor="numero_sedes">Número Total de Sedes *</Label>
+                <Input
+                  id="numero_sedes"
+                  name="numero_sedes"
+                  type="number"
+                  min="1"
+                  placeholder="1"
+                  value={formData.numero_sedes}
+                  onChange={(e) => {
+                    handleChange(e);
+                    const numSedes = parseInt(e.target.value) || 1;
+                    if (numSedes === 1) {
+                      setSedesAdicionales([]);
+                    }
+                  }}
+                  required
+                />
+              </div>
+
+              {/* Sedes Adicionales */}
+              {parseInt(formData.numero_sedes) > 1 && (
+                <div className="mt-4 space-y-4">
+                  <div className="flex justify-between items-center">
+                    <Label className="text-base">Sedes Adicionales</Label>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      onClick={handleAddSede}
+                    >
+                      + Agregar Sede
+                    </Button>
+                  </div>
+                  
+                  {sedesAdicionales.map((sede, index) => (
+                    <div key={index} className="border p-4 rounded-lg bg-gray-50 relative">
+                      <button
+                        type="button"
+                        onClick={() => handleRemoveSede(index)}
+                        className="absolute top-2 right-2 text-red-500 hover:text-red-700"
+                      >
+                        <X className="w-4 h-4" />
+                      </button>
+                      
+                      <h4 className="font-medium mb-3">Sede {index + 2}</h4>
+                      
+                      <div className="space-y-3">
+                        <div>
+                          <Label className="text-xs">Dirección *</Label>
+                          <Input
+                            type="text"
+                            placeholder="Dirección de la sede"
+                            value={sede.direccion}
+                            onChange={(e) => handleSedeChange(index, 'direccion', e.target.value)}
+                            required
+                          />
+                        </div>
+                        
+                        <div>
+                          <Label className="text-xs">Número de Trabajadores *</Label>
+                          <Input
+                            type="number"
+                            min="1"
+                            placeholder="20"
+                            value={sede.numero_trabajadores}
+                            onChange={(e) => handleSedeChange(index, 'numero_trabajadores', e.target.value)}
+                            required
+                          />
+                        </div>
+                        
+                        <div>
+                          <Label className="text-xs">Código de Actividad Económica *</Label>
+                          <div className="grid grid-cols-3 gap-2">
+                            <Input
+                              type="text"
+                              maxLength="1"
+                              pattern="[1-5]"
+                              placeholder="Riesgo"
+                              value={sede.nivel_riesgo}
+                              onChange={(e) => handleSedeChange(index, 'nivel_riesgo', e.target.value)}
+                              required
+                            />
+                            <Input
+                              type="text"
+                              maxLength="4"
+                              pattern="[0-9]{4}"
+                              placeholder="CIIU"
+                              value={sede.codigo_ciiu}
+                              onChange={(e) => handleSedeChange(index, 'codigo_ciiu', e.target.value)}
+                              required
+                            />
+                            <Input
+                              type="text"
+                              maxLength="2"
+                              pattern="[0-9]{2}"
+                              placeholder="Subdiv"
+                              value={sede.subdivision_ciiu}
+                              onChange={(e) => handleSedeChange(index, 'subdivision_ciiu', e.target.value)}
+                              required
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
             
             <Button 
               type="submit" 
