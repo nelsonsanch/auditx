@@ -1,0 +1,171 @@
+<analysis>**original_problem_statement:**
+El usuario solicitó una aplicación web multi-cliente para realizar inspecciones de Seguridad y Salud en el Trabajo (SST) basadas en la resolución 0312 de 2019 de Colombia.
+
+**Requisitos iniciales:**
+1.  Registro de clientes con aprobación de un superadministrador ().
+2.  Panel de cliente para crear inspecciones basadas en 60 estándares (proporcionados en un archivo Excel).
+3.  Cada estándar debe tener opciones de Cumple, Cumple Parcial, No Cumple y un campo de novedades.
+4.  Cálculo de puntaje porcentual.
+5.  Integración con IA (OpenAI GPT-5, luego cambiado a GPT-4o) para analizar los resultados y generar un informe editable y descargable en PDF.
+6.  Sistema de autenticación con recuperación de contraseña.
+7.  Personalización de marca (logo de la empresa).
+8.  La aplicación debe llamarse AuditX y funcionar en el dominio personalizado .
+
+**PRODUCT REQUIREMENTS (Última solicitud):**
+El usuario, un experto en SST, necesita una versión MVP mejorada de la aplicación en 10 días para usarla en una auditoría real para una empresa del sector salud. Este MVP debe incluir:
+1.  Una caracterización más detallada de la empresa en el registro.
+2.  Enriquecer los 60 estándares actuales con campos de fundamento legal y guía de verificación para que sus auxiliares sepan qué solicitar.
+3.  Una interfaz de auditoría que muestre esta nueva información.
+4.  Actualizar el informe PDF para incluir los nuevos datos.
+
+**User's preferred language**: Spanish
+
+**what currently exists?**
+Una aplicación full-stack completamente funcional llamada AuditX, desplegada y accesible en .
+- **Backend (FastAPI):** Gestiona usuarios, empresas, inspecciones y autenticación JWT. Se integra con OpenAI para análisis y con Gmail (SMTP) para el envío real de correos electrónicos.
+- **Frontend (React):** Permite el registro de empresas, inicio de sesión, un panel de superadministrador para activar clientes, y un panel de cliente. Los clientes pueden crear inspecciones, ver resultados, visualizar gráficos de análisis (radar, barras), generar análisis con IA y descargar informes en PDF.
+- **Funcionalidades Clave Implementadas:** Flujo multi-cliente, creación de inspecciones, análisis por IA, reportes en PDF, gráficos de datos, subida de logos, recuperación de contraseña por email, cambio de contraseña en el dashboard, diseño responsive para móviles, y eliminación del badge Made with Emergent.
+
+**Last working item**:
+- **Last item agent was working:** El agente analizó la viabilidad de una especificación funcional muy detallada propuesta por el usuario para un módulo de auditoría personalizable. Tras la explicación del usuario de que necesitaba una versión más simple para una auditoría real en 10 días, el agente elaboró y presentó un plan de desarrollo de 10 días para un MVP enfocado en el sector salud. El agente está a la espera de la confirmación del usuario para comenzar la implementación de este nuevo plan.
+- **Status:** NOT STARTED
+- **Agent Testing Done:** N/A
+- **Which testing method agent to use?** Una vez implementado el MVP de 10 días, se deberá usar el  para verificar los nuevos campos de la UI en vistas de escritorio y móvil, y  para probar la creación de una inspección con los nuevos datos del modelo. Dado que es una adición de características, una prueba completa con el  sería recomendable al final.
+- **User Testing Done:** N/A
+
+**All Pending/In progress Issue list**:
+No hay issues pendientes. El último problema relacionado con la compatibilidad de navegadores fue resuelto.
+
+**In progress Task List**:
+No hay tareas en progreso. La última serie de correcciones de errores y mejoras de funciones fue completada.
+
+**Upcoming and Future Tasks**
+**Upcoming Tasks (P0 - Plan de 10 días):**
+1.  **Fase 1 (Backend):** Modificar los modelos de datos en  para:
+    *   Añadir nuevos campos al modelo  para la caracterización extendida.
+    *   Añadir campos  y  al modelo de los estándares de inspección (probablemente dentro de  o ).
+2.  **Fase 2 (Frontend):** Actualizar los componentes de React:
+    *   Modificar  para incluir los nuevos campos de caracterización de la empresa.
+    *   Modificar  o  para mostrar la  y  en un formato accesible (ej. un popover o un acordeón).
+    *   Crear una ficha en  para mostrar los datos de caracterización de la empresa.
+3.  **Fase 3 (Reporte):** Actualizar la lógica de generación de PDF en  para incluir la nueva información de caracterización y las guías de los estándares.
+4.  **Fase 4 (Testing):** Realizar pruebas de extremo a extremo del nuevo flujo.
+
+**Future Tasks (P1):**
+*   Implementar el módulo completo de Auditoría Personalizable según la especificación funcional detallada del usuario. Esto incluye:
+    *   Un formulario de caracterización de empresa avanzado.
+    *   Una base de datos de preguntas de auditoría configurable.
+    *   Un motor de reglas de aplicabilidad para generar cuestionarios dinámicos.
+    *   Reportes avanzados con agrupaciones y filtros.
+
+**Completed work in this session**
+- **Core App:** Creación de la aplicación multi-cliente completa con registro, login y dashboard de admin/cliente.
+- **Inspecciones:** Implementación del flujo de creación de inspecciones con 60 estándares y cálculo de puntaje.
+- **Integración IA:** Integración de OpenAI (GPT-4o) para generar análisis y un plan de acción a partir de los resultados de la inspección.
+- **Reportes:** Generación de informes en PDF descargables.
+- **Dashboard Visual:** Adición de gráficos (radar, barras) y KPIs en el dashboard del cliente con la librería .
+- **Autenticación y Seguridad:**
+    - Implementación de JWT.
+    - Funcionalidad de Olvidó su contraseña con envío de email real a través de Gmail SMTP.
+    - Opción para que el superadministrador cambie su contraseña dentro de su panel.
+- **UX/UI:**
+    - Personalización de marca con subida de logo de empresa.
+    - Mejoras en formularios (visibilidad de contraseña).
+    - Eliminación del badge Made with Emergent.
+    - Correcciones de diseño responsive para una correcta visualización en dispositivos móviles.
+- **Dominio y Despliegue:**
+    - Asesoramiento y confirmación de la configuración del dominio personalizado .
+    - Corrección de la variable de entorno  para apuntar al dominio de producción.
+- **Bugs y Estabilidad:**
+    - Solución de un error de compatibilidad entre un script externo y React que causaba una pantalla en blanco, implementando un  y manejadores de errores globales para ignorar el error no crítico.
+
+**Earlier issues found/mentioned but not fixed**
+- No hay problemas conocidos que no se hayan solucionado.
+
+**Known issue recurrence from previous fork**
+- N/A
+
+**Code Architecture**
+
+
+**Key Technical Concepts**
+- **Backend:** FastAPI, Pydantic, MongoDB (con ), JWT para autenticación,  para subida de archivos,  para envío de correos, integración con API de OpenAI.
+- **Frontend:** React, React Router, Tailwind CSS,  para llamadas a la API,  para gráficos,  y  para la generación de PDF en el cliente.
+- **Arquitectura:** Full-stack con API RESTful, desacoplamiento entre frontend y backend.
+
+**key DB schema**
+- **users:** { email, hashed_password, role ('superadmin' | 'admin'), company_id, is_active, reset_token }
+- **companies:** { name, admin_name, address, phone, is_active, logo_url }
+- **inspections:** { company_id, user_id, creation_date, total_score, responses, ai_analysis }
+- **responses:** { standard_id, answer ('cumple' | 'cumple parcial' | 'no cumple'), notes }
+
+**changes in tech stack**
+-  fue añadido para el envío de emails.
+-  fue añadido para los gráficos en el frontend.
+
+**All files**
+*   : Modificado extensivamente para añadir todas las funcionalidades del backend: endpoints de registro, login, gestión de inspecciones, análisis con IA, subida de logos, recuperación y cambio de contraseña, y envío de emails.
+*   : Actualizado con credenciales para la base de datos y SMTP de Gmail.
+*   : Actualizado con las rutas para los nuevos componentes y el .
+*   : Reescrito para incluir campos de confirmación, visibilidad de contraseña y subida de logo.
+*   : Reescrito para añadir visibilidad de contraseña y el modal de olvidó su contraseña.
+*   : Modificado para agregar la funcionalidad de cambio de contraseña del admin.
+*   : Modificado extensivamente para añadir pestañas, gráficos (), y mostrar el logo de la empresa.
+*   : Creado para el flujo de reseteo de contraseña.
+*   : Creado para encapsular los gráficos de Recharts.
+*   : Creado para manejar errores de renderizado de React.
+*   : Modificado para envolver la app en el  y añadir manejadores de errores globales.
+*   : Modificado para ocultar el badge de Made with Emergent.
+*   : Modificado para cambiar el título de la app a AuditX y añadir un favicon.
+*   : Actualizado para apuntar  al dominio de producción.
+
+**Areas that need refactoring**
+- El manejo de errores en  y  es un workaround para suprimir un error causado por un script externo (). Aunque efectivo, no soluciona la causa raíz. Si el script externo cambia, la solución podría romperse.
+
+**key api endpoints**
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+
+**Critical Info for New Agent**
+1.  **Prioridad Máxima:** La tarea actual es implementar el **Plan de MVP de 10 días** para la auditoría del sector salud. El usuario está esperando que comiences. No procedas con ninguna otra mejora hasta que esto esté completado y validado.
+2.  **Usuario Experto:** El usuario es un experto en SST y **proporcionará el contenido necesario** para los nuevos campos (, ). Tu trabajo es crear la estructura para almacenar y mostrar esta información.
+3.  **Workaround de Error:** Estás heredando un workaround que ignora un error de DOM () para evitar que la aplicación se bloquee. Este error es causado por un script externo de la plataforma Emergent. No intentes arreglarlo a menos que cause nuevos problemas; la solución actual es estable.
+4.  **Credenciales:** Las credenciales de SMTP para Gmail están en . No las modifiques. El email de envío es  pero la autenticación se hace con .
+5.  **Dominio:** La aplicación está en producción y funcionando en . Todas las pruebas de UI deben realizarse en esta URL. La variable  está configurada correctamente.
+
+**documents created in this job**
+- No se crearon documentos  o .
+
+**Last 5 User Messages and any pending user messages**
+1.  **User (hace 4 mensajes):** Proporcionó una especificación funcional muy detallada para un módulo de auditoría personalizable y pidió un análisis de viabilidad, no una implementación. (Completado)
+2.  **Agent (hace 3 mensajes):** Entregó un análisis de viabilidad exhaustivo, estimando un tiempo de 3-5 meses y recomendando un enfoque por fases. (Completado)
+3.  **User (hace 2 mensajes):** Aclaró que necesita un MVP práctico en 10 días para una auditoría real en el sector salud y que él, como experto, proporcionará el contenido para enriquecer las preguntas existentes. (Completado)
+4.  **Agent (hace 1 mensaje):** Propuso un plan de acción detallado de 10 días para construir este MVP y preguntó al usuario si estaba de acuerdo para comenzar. (Completado)
+5.  **User (último mensaje):** me parece genial tu plan, ahora te explico... la idea es implementar algo pequeño y practico... Este mensaje es una confirmación y reformulación de su necesidad para el MVP de 10 días, dando luz verde para empezar.
+
+**Project Health Check:**
+- **Broken:** Ninguna funcionalidad principal está rota.
+- **Mocked:** Ninguna funcionalidad está mockeada. El envío de emails es real.
+
+**Testing status**
+- **Testing agent used after significant changes:** YES (una vez al principio).
+- **Troubleshoot agent used after agent stuck in loop:** NO.
+- **Test files created:** []
+- **Known regressions:** Ninguna.
+
+**Credentials to test flow:**
+- **URL:** 
+- **Superadmin Email:** 
+- **Superadmin Password:**  (El agente implementó una forma para que el usuario la cambie; la contraseña actual puede ser diferente).
+
+**What agent forgot to execute**
+- El agente no olvidó nada. Está posicionado exactamente donde debe estar: esperando la orden implícita del último mensaje del usuario para comenzar a ejecutar el plan de 10 días acordado.</analysis>
