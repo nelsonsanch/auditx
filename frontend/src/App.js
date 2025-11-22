@@ -9,14 +9,17 @@ import ClientDashboard from "@/pages/ClientDashboard";
 import CreateInspection from "@/pages/CreateInspection";
 import ViewInspection from "@/pages/ViewInspection";
 import { Toaster } from "@/components/ui/sonner";
+import ErrorBoundary from "@/components/ErrorBoundary";
 
 // Error boundary fallback
 window.addEventListener('error', (event) => {
   console.error('Global error:', event.error);
+  event.preventDefault(); // Prevent default browser error handling
 });
 
 window.addEventListener('unhandledrejection', (event) => {
   console.error('Unhandled promise rejection:', event.reason);
+  event.preventDefault();
 });
 
 const ProtectedRoute = ({ children, allowedRoles }) => {
