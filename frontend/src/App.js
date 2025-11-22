@@ -13,6 +13,14 @@ import ErrorBoundary from "@/components/ErrorBoundary";
 
 // Error boundary fallback
 window.addEventListener('error', (event) => {
+  // Suppress DOM errors from external scripts (Emergent tracking)
+  if (event.error && event.error.message && 
+      (event.error.message.includes('removeChild') || 
+       event.error.message.includes('Failed to execute'))) {
+    console.warn('Suppressed external script error:', event.error.message);
+    event.preventDefault();
+    return;
+  }
   console.error('Global error:', event.error);
   event.preventDefault(); // Prevent default browser error handling
 });
