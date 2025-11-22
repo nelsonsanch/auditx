@@ -14,22 +14,35 @@ const API = `${BACKEND_URL}/api`;
 
 const ClientDashboard = () => {
   const [inspections, setInspections] = useState([]);
+  const [company, setCompany] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [activeTab, setActiveTab] = useState("inspections");
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetchInspections();
+    fetchData();
   }, []);
 
-  const fetchInspections = async () => {
+  const fetchData = async () => {
     try {
       const token = localStorage.getItem("token");
-      const response = await axios.get(`${API}/inspections`, {
+      
+      // Fetch inspections
+      const inspectionsResponse = await axios.get(`${API}/inspections`, {
         headers: { Authorization: `Bearer ${token}` }
       });
-      setInspections(response.data);
+      setInspections(inspectionsResponse.data);
+      
+      // Fetch company data
+      const companiesResponse = await axios.get(`${API}/my-companies`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      
+      if (companiesResponse.data && companiesResponse.data.length > 0) {
+        setCompany(companiesResponse.data[0]);
+      }
     } catch (error) {
-      toast.error("Error al cargar inspecciones");
+      toast.error("Error al cargar datos");
     } finally {
       setLoading(false);
     }
