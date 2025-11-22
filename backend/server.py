@@ -340,12 +340,20 @@ async def register(user_data: UserCreate):
 @api_router.post("/auth/login")
 async def login(credentials: UserLogin):
     # Find user
+    logging.info(f"Login attempt for email: {credentials.email}")
     user = await db.users.find_one({"email": credentials.email}, {"_id": 0})
     if not user:
+        logging.warning(f"User not found: {credentials.email}")
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Credenciales inválidas")
     
+    logging.info(f"User found: {user['email']}, role: {user['role']}")
+    
     # Verify password
-    if not verify_password(credentials.password, user['password']):
+    password_valid = verify_password(credentials.password, user['password'])
+    logging.info(f"Password verification result: {password_valid}")
+    
+    if not password_valid:
+        logging.warning(f"Invalid password for user: {credentials.email}")
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Credenciales inválidas")
     
     # Check if active (except for superadmin)
