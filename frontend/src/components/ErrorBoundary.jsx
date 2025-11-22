@@ -10,6 +10,13 @@ class ErrorBoundary extends React.Component {
   }
 
   static getDerivedStateFromError(error) {
+    // Ignore DOM manipulation errors from external scripts
+    if (error && error.message && 
+        (error.message.includes('removeChild') || 
+         error.message.includes('Failed to execute'))) {
+      console.warn('Ignoring external script DOM error');
+      return { hasError: false, error: null };
+    }
     return { hasError: true, error };
   }
 
