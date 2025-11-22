@@ -355,7 +355,17 @@ async def register(user_data: UserCreate):
         address=user_data.address,
         phone=user_data.phone,
         logo_url=user_data.logo_url,
-        is_active=False
+        is_active=False,
+        nit=user_data.nit,
+        representante_legal=user_data.representante_legal,
+        arl_afiliada=user_data.arl_afiliada,
+        nivel_riesgo=user_data.nivel_riesgo,
+        codigo_ciiu=user_data.codigo_ciiu,
+        subdivision_ciiu=user_data.subdivision_ciiu,
+        descripcion_actividad=user_data.descripcion_actividad,
+        numero_trabajadores=user_data.numero_trabajadores,
+        numero_sedes=user_data.numero_sedes,
+        sedes_adicionales=[sede.model_dump() for sede in user_data.sedes_adicionales] if user_data.sedes_adicionales else []
     )
     
     # Save to database
