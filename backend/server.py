@@ -49,6 +49,14 @@ api_router = APIRouter(prefix="/api")
 # MODELS
 # ====================
 
+class SedeAdicional(BaseModel):
+    direccion: str
+    numero_trabajadores: int
+    nivel_riesgo: str  # 1 dígito (1-5)
+    codigo_ciiu: str  # 4 dígitos
+    subdivision_ciiu: str  # 2 dígitos
+    descripcion_actividad: str = "Según definición establecida en el CIIU"
+
 class UserCreate(BaseModel):
     email: EmailStr
     password: str
@@ -57,6 +65,17 @@ class UserCreate(BaseModel):
     address: str
     phone: str
     logo_url: Optional[str] = None
+    # Nuevos campos de caracterización
+    nit: Optional[str] = None
+    representante_legal: Optional[str] = None
+    arl_afiliada: Optional[str] = None
+    nivel_riesgo: Optional[str] = None  # 1 dígito (1-5)
+    codigo_ciiu: Optional[str] = None  # 4 dígitos
+    subdivision_ciiu: Optional[str] = None  # 2 dígitos
+    descripcion_actividad: Optional[str] = "Según definición establecida en el CIIU"
+    numero_trabajadores: Optional[int] = None
+    numero_sedes: Optional[int] = 1
+    sedes_adicionales: Optional[List[SedeAdicional]] = []
 
 class UserLogin(BaseModel):
     email: EmailStr
