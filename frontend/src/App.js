@@ -10,6 +10,15 @@ import CreateInspection from "@/pages/CreateInspection";
 import ViewInspection from "@/pages/ViewInspection";
 import { Toaster } from "@/components/ui/sonner";
 
+// Error boundary fallback
+window.addEventListener('error', (event) => {
+  console.error('Global error:', event.error);
+});
+
+window.addEventListener('unhandledrejection', (event) => {
+  console.error('Unhandled promise rejection:', event.reason);
+});
+
 const ProtectedRoute = ({ children, allowedRoles }) => {
   const token = localStorage.getItem("token");
   const userRole = localStorage.getItem("userRole");
