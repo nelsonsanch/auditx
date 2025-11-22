@@ -128,6 +128,27 @@ const Register = () => {
     return true;
   };
 
+  const handleAddSede = () => {
+    setSedesAdicionales([...sedesAdicionales, {
+      direccion: "",
+      numero_trabajadores: "",
+      nivel_riesgo: "",
+      codigo_ciiu: "",
+      subdivision_ciiu: "",
+      descripcion_actividad: "Según definición establecida en el CIIU"
+    }]);
+  };
+
+  const handleRemoveSede = (index) => {
+    setSedesAdicionales(sedesAdicionales.filter((_, i) => i !== index));
+  };
+
+  const handleSedeChange = (index, field, value) => {
+    const newSedes = [...sedesAdicionales];
+    newSedes[index][field] = value;
+    setSedesAdicionales(newSedes);
+  };
+
   const handleRegister = async (e) => {
     e.preventDefault();
     
@@ -140,6 +161,16 @@ const Register = () => {
     try {
       // Remove confirmation fields before sending
       const { confirm_email, confirm_password, ...dataToSend } = formData;
+      
+      // Convert numeric strings to numbers
+      dataToSend.numero_trabajadores = parseInt(dataToSend.numero_trabajadores) || 0;
+      dataToSend.numero_sedes = parseInt(dataToSend.numero_sedes) || 1;
+      
+      // Add sedes adicionales
+      dataToSend.sedes_adicionales = sedesAdicionales.map(sede => ({
+        ...sede,
+        numero_trabajadores: parseInt(sede.numero_trabajadores) || 0
+      }));
       
       const response = await axios.post(`${API}/auth/register`, dataToSend);
       toast.success(response.data.message);
