@@ -142,67 +142,223 @@ const ClientDashboard = () => {
           </Card>
         </div>
 
-        <Card className="shadow-xl" data-testid="inspections-table-card">
-          <CardHeader>
-            <CardTitle className="text-2xl" style={{ fontFamily: 'Space Grotesk' }}>Mis Inspecciones</CardTitle>
-            <CardDescription>Historial de inspecciones de seguridad y salud en el trabajo</CardDescription>
-          </CardHeader>
-          <CardContent>
-            {loading ? (
-              <div className="text-center py-8" data-testid="loading-indicator">Cargando...</div>
-            ) : inspections.length === 0 ? (
-              <div className="text-center py-12" data-testid="no-inspections">
-                <FileText className="mx-auto h-12 w-12 text-gray-400 mb-4" />
-                <p className="text-gray-600 mb-4">Aún no has creado ninguna inspección</p>
-                <Button 
-                  onClick={() => navigate("/client/inspection/create")}
-                  className="bg-gradient-to-r from-blue-600 to-purple-600"
-                  data-testid="create-first-inspection-button"
-                >
-                  <Plus className="mr-2 h-4 w-4" />
-                  Crear Primera Inspección
-                </Button>
-              </div>
-            ) : (
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Empresa</TableHead>
-                    <TableHead>Fecha</TableHead>
-                    <TableHead>Puntaje</TableHead>
-                    <TableHead>Nivel</TableHead>
-                    <TableHead className="text-right">Acciones</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {inspections.map((inspection) => (
-                    <TableRow key={inspection.id} data-testid={`inspection-row-${inspection.id}`}>
-                      <TableCell className="font-medium">{inspection.company_name}</TableCell>
-                      <TableCell>{new Date(inspection.created_at).toLocaleDateString('es-ES')}</TableCell>
-                      <TableCell>
-                        <span className={`text-2xl font-bold ${getScoreColor(inspection.total_score)}`} data-testid={`score-${inspection.id}`}>
-                          {inspection.total_score.toFixed(1)}%
-                        </span>
-                      </TableCell>
-                      <TableCell>{getScoreBadge(inspection.total_score)}</TableCell>
-                      <TableCell className="text-right">
-                        <Button
-                          onClick={() => navigate(`/client/inspection/${inspection.id}`)}
-                          size="sm"
-                          variant="outline"
-                          data-testid={`view-button-${inspection.id}`}
-                        >
-                          <Eye className="mr-1 h-4 w-4" />
-                          Ver Detalle
-                        </Button>
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            )}
-          </CardContent>
-        </Card>
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+          <TabsList className="grid w-full grid-cols-2 mb-6">
+            <TabsTrigger value="inspections" className="flex items-center gap-2">
+              <FileText className="h-4 w-4" />
+              Inspecciones
+            </TabsTrigger>
+            <TabsTrigger value="caracterizacion" className="flex items-center gap-2">
+              <Building2 className="h-4 w-4" />
+              Caracterización
+            </TabsTrigger>
+          </TabsList>
+
+          {/* TAB: INSPECCIONES */}
+          <TabsContent value="inspections">
+            <Card className="shadow-xl" data-testid="inspections-table-card">
+              <CardHeader>
+                <CardTitle className="text-2xl" style={{ fontFamily: 'Space Grotesk' }}>Mis Inspecciones</CardTitle>
+                <CardDescription>Historial de inspecciones de seguridad y salud en el trabajo</CardDescription>
+              </CardHeader>
+              <CardContent>
+                {loading ? (
+                  <div className="text-center py-8" data-testid="loading-indicator">Cargando...</div>
+                ) : inspections.length === 0 ? (
+                  <div className="text-center py-12" data-testid="no-inspections">
+                    <FileText className="mx-auto h-12 w-12 text-gray-400 mb-4" />
+                    <p className="text-gray-600 mb-4">Aún no has creado ninguna inspección</p>
+                    <Button 
+                      onClick={() => navigate("/client/inspection/create")}
+                      className="bg-gradient-to-r from-blue-600 to-purple-600"
+                      data-testid="create-first-inspection-button"
+                    >
+                      <Plus className="mr-2 h-4 w-4" />
+                      Crear Primera Inspección
+                    </Button>
+                  </div>
+                ) : (
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead>Empresa</TableHead>
+                        <TableHead>Fecha</TableHead>
+                        <TableHead>Puntaje</TableHead>
+                        <TableHead>Nivel</TableHead>
+                        <TableHead className="text-right">Acciones</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {inspections.map((inspection) => (
+                        <TableRow key={inspection.id} data-testid={`inspection-row-${inspection.id}`}>
+                          <TableCell className="font-medium">{inspection.company_name}</TableCell>
+                          <TableCell>{new Date(inspection.created_at).toLocaleDateString('es-ES')}</TableCell>
+                          <TableCell>
+                            <span className={`text-2xl font-bold ${getScoreColor(inspection.total_score)}`} data-testid={`score-${inspection.id}`}>
+                              {inspection.total_score.toFixed(1)}%
+                            </span>
+                          </TableCell>
+                          <TableCell>{getScoreBadge(inspection.total_score)}</TableCell>
+                          <TableCell className="text-right">
+                            <Button
+                              onClick={() => navigate(`/client/inspection/${inspection.id}`)}
+                              size="sm"
+                              variant="outline"
+                              data-testid={`view-button-${inspection.id}`}
+                            >
+                              <Eye className="mr-1 h-4 w-4" />
+                              Ver Detalle
+                            </Button>
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                )}
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          {/* TAB: CARACTERIZACIÓN */}
+          <TabsContent value="caracterizacion">
+            <Card className="shadow-xl">
+              <CardHeader>
+                <CardTitle className="text-2xl flex items-center gap-2" style={{ fontFamily: 'Space Grotesk' }}>
+                  <Building2 className="h-6 w-6" />
+                  Caracterización de la Empresa
+                </CardTitle>
+                <CardDescription>Información detallada de la empresa según Resolución 0312 de 2019</CardDescription>
+              </CardHeader>
+              <CardContent>
+                {loading ? (
+                  <div className="text-center py-8">Cargando...</div>
+                ) : !company ? (
+                  <div className="text-center py-8 text-gray-600">
+                    No se encontró información de la empresa
+                  </div>
+                ) : (
+                  <div className="space-y-6">
+                    {/* Información General */}
+                    <div className="border-b pb-4">
+                      <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
+                        <Building2 className="h-5 w-5 text-blue-600" />
+                        Información General
+                      </h3>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                          <p className="text-sm text-gray-600">Nombre de la Empresa</p>
+                          <p className="font-semibold">{company.company_name}</p>
+                        </div>
+                        <div>
+                          <p className="text-sm text-gray-600">Representante Legal</p>
+                          <p className="font-semibold">{company.representante_legal || "No especificado"}</p>
+                        </div>
+                        <div>
+                          <p className="text-sm text-gray-600">NIT</p>
+                          <p className="font-semibold">{company.nit || "No especificado"}</p>
+                        </div>
+                        <div>
+                          <p className="text-sm text-gray-600">ARL Afiliada</p>
+                          <p className="font-semibold">{company.arl_afiliada || "No especificado"}</p>
+                        </div>
+                        <div>
+                          <p className="text-sm text-gray-600">Dirección</p>
+                          <p className="font-semibold">{company.address}</p>
+                        </div>
+                        <div>
+                          <p className="text-sm text-gray-600">Teléfono</p>
+                          <p className="font-semibold">{company.phone}</p>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Actividad Económica */}
+                    <div className="border-b pb-4">
+                      <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
+                        <TrendingUp className="h-5 w-5 text-green-600" />
+                        Actividad Económica (Decreto 768/2022)
+                      </h3>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                          <p className="text-sm text-gray-600">Código Completo</p>
+                          <p className="font-semibold text-lg">
+                            {company.nivel_riesgo || "?"}-{company.codigo_ciiu || "????"}-{company.subdivision_ciiu || "??"}
+                          </p>
+                          <p className="text-xs text-gray-500 mt-1">
+                            Nivel de Riesgo: {company.nivel_riesgo || "No especificado"}
+                          </p>
+                        </div>
+                        <div>
+                          <p className="text-sm text-gray-600">Descripción</p>
+                          <p className="font-semibold">{company.descripcion_actividad || "Según definición establecida en el CIIU"}</p>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Información Laboral */}
+                    <div className="border-b pb-4">
+                      <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
+                        <Users className="h-5 w-5 text-purple-600" />
+                        Información Laboral
+                      </h3>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                          <p className="text-sm text-gray-600">Número de Trabajadores (Sede Principal)</p>
+                          <p className="font-semibold text-2xl">{company.numero_trabajadores || 0}</p>
+                        </div>
+                        <div>
+                          <p className="text-sm text-gray-600">Número Total de Sedes</p>
+                          <p className="font-semibold text-2xl">{company.numero_sedes || 1}</p>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Sedes Adicionales */}
+                    {company.sedes_adicionales && company.sedes_adicionales.length > 0 && (
+                      <div>
+                        <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
+                          <MapPin className="h-5 w-5 text-red-600" />
+                          Sedes Adicionales
+                        </h3>
+                        <div className="space-y-4">
+                          {company.sedes_adicionales.map((sede, index) => (
+                            <Card key={index} className="border-l-4 border-blue-500">
+                              <CardHeader className="pb-3">
+                                <CardTitle className="text-base">Sede {index + 2}</CardTitle>
+                              </CardHeader>
+                              <CardContent>
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                                  <div>
+                                    <p className="text-sm text-gray-600">Dirección</p>
+                                    <p className="font-semibold">{sede.direccion}</p>
+                                  </div>
+                                  <div>
+                                    <p className="text-sm text-gray-600">Número de Trabajadores</p>
+                                    <p className="font-semibold">{sede.numero_trabajadores}</p>
+                                  </div>
+                                  <div>
+                                    <p className="text-sm text-gray-600">Código de Actividad</p>
+                                    <p className="font-semibold">
+                                      {sede.nivel_riesgo}-{sede.codigo_ciiu}-{sede.subdivision_ciiu}
+                                    </p>
+                                  </div>
+                                  <div>
+                                    <p className="text-sm text-gray-600">Descripción Actividad</p>
+                                    <p className="font-semibold text-sm">{sede.descripcion_actividad}</p>
+                                  </div>
+                                </div>
+                              </CardContent>
+                            </Card>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+          </TabsContent>
+        </Tabs>
       </div>
     </div>
   );
