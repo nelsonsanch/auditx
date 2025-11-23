@@ -986,18 +986,28 @@ async def update_analysis(analysis_id: str, report: str, current_user: dict = De
 
 @api_router.get("/generate-pdf/{inspection_id}")
 async def generate_pdf(inspection_id: str, current_user: dict = Depends(get_current_user)):
-    inspection = await db.inspections.find_one({"id": inspection_id}, {"_id": 0})
-    if not inspection:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Inspección no encontrada")
-    
-    if current_user['role'] == 'client' and inspection['user_id'] != current_user['id']:
-        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="No tiene permiso")
-    
-    company = await db.companies.find_one({"id": inspection['company_id']}, {"_id": 0})
-    analysis = await db.ai_analyses.find_one({"inspection_id": inspection_id}, {"_id": 0})
-    
-    # Create PDF
-    pdf_path = f"/tmp/informe_{inspection_id}.pdf"
+    """Generate PDF report with professional design"""
+    try:
+        # Get inspection
+        inspection = await db.inspections.find_one({"id": inspection_id}, {"_id": 0})
+        if not inspection:
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Inspección no encontrada")
+        
+        # Check permissions
+        if current_user['role'] == 'client' and inspection['user_id'] != current_user['id']:
+            raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="No tiene permiso")
+        
+        # Get company
+        company = await db.companies.find_one({"id": inspection['company_id']}, {"_id": 0})
+        
+        # Get AI analysis
+        analysis = await db.ai_analyses.find_one({"inspection_id": inspection_id}, {"_id": 0})
+        
+        # Create PDF with professional design
+        from pdf_generator import generate_professional_pdf
+        
+        pdf_filename = f"informe_{company['company_name'].replace(' ', '_')}.pdf"
+        pdf_path = f"/tmp/{pdf_filename}"
     doc = SimpleDocTemplate(pdf_path, pagesize=letter)
     story = []
     styles = getSampleStyleSheet()
