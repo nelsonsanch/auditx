@@ -1008,77 +1008,21 @@ async def generate_pdf(inspection_id: str, current_user: dict = Depends(get_curr
         
         pdf_filename = f"informe_{company['company_name'].replace(' ', '_')}.pdf"
         pdf_path = f"/tmp/{pdf_filename}"
-    doc = SimpleDocTemplate(pdf_path, pagesize=letter)
-    story = []
-    styles = getSampleStyleSheet()
-    
-    # Title
-    title_style = ParagraphStyle(
-        'CustomTitle',
-        parent=styles['Heading1'],
-        fontSize=18,
-        textColor=colors.HexColor('#1a1a1a'),
-        spaceAfter=30,
-        alignment=1  # Center
-    )
-    story.append(Paragraph("INFORME DE EVALUACIÓN DEL SISTEMA DE GESTIÓN DE SEGURIDAD Y SALUD EN EL TRABAJO", title_style))
-    story.append(Spacer(1, 0.3*inch))
-    
-    # Company info - Basic
-    company_data = [
-        ["Empresa:", company['company_name']],
-        ["Administrador:", company['admin_name']],
-        ["Dirección:", company['address']],
-        ["Teléfono:", company['phone']],
-        ["Fecha de Evaluación:", datetime.now(timezone.utc).strftime('%d/%m/%Y')],
-        ["Puntaje Total:", f"{inspection['total_score']:.2f}%"]
-    ]
-    
-    # Add characterization data if available
-    if company.get('nit'):
-        company_data.append(["NIT:", company['nit']])
-    if company.get('representante_legal'):
-        company_data.append(["Representante Legal:", company['representante_legal']])
-    if company.get('arl_afiliada'):
-        company_data.append(["ARL Afiliada:", company['arl_afiliada']])
-    if company.get('nivel_riesgo') and company.get('codigo_ciiu'):
-        actividad_economica = f"{company.get('nivel_riesgo', '')}-{company.get('codigo_ciiu', '')}-{company.get('subdivision_ciiu', '')}"
-        company_data.append(["Actividad Económica:", actividad_economica])
-    if company.get('descripcion_actividad'):
-        company_data.append(["Descripción Actividad:", company['descripcion_actividad']])
-    if company.get('numero_trabajadores'):
-        company_data.append(["Número de Trabajadores:", str(company['numero_trabajadores'])])
-    if company.get('numero_sedes') and company['numero_sedes'] > 1:
-        company_data.append(["Número de Sedes:", str(company['numero_sedes'])])
-    
-    company_table = Table(company_data, colWidths=[2*inch, 4*inch])
-    company_table.setStyle(TableStyle([
-        ('BACKGROUND', (0, 0), (0, -1), colors.HexColor('#e8f4f8')),
-        ('TEXTCOLOR', (0, 0), (-1, -1), colors.black),
-        ('ALIGN', (0, 0), (-1, -1), 'LEFT'),
-        ('FONTNAME', (0, 0), (0, -1), 'Helvetica-Bold'),
-        ('FONTSIZE', (0, 0), (-1, -1), 10),
-        ('BOTTOMPADDING', (0, 0), (-1, -1), 12),
-        ('GRID', (0, 0), (-1, -1), 1, colors.grey)
-    ]))
-    story.append(company_table)
-    story.append(Spacer(1, 0.3*inch))
-    
-    # Report content
-    if analysis:
-        story.append(Paragraph("INFORME DETALLADO", styles['Heading2']))
-        story.append(Spacer(1, 0.2*inch))
         
-        # Split report into paragraphs
-        report_lines = analysis['report'].split('\n')
-        for line in report_lines:
-            if line.strip():
-                story.append(Paragraph(line, styles['BodyText']))
-                story.append(Spacer(1, 0.1*inch))
-    
-    doc.build(story)
-    
-    return FileResponse(pdf_path, media_type='application/pdf', filename=f"informe_{company['company_name']}.pdf")
+        # Generate professional PDF
+        generate_professional_pdf(
+            pdf_path=pdf_path,
+            company=company,
+            inspection=inspection,
+            analysis=analysis,
+            standards=STANDARDS
+        )
+        
+        return FileResponse(pdf_path, media_type='application/pdf', filename=pdf_filename)
+        
+    except Exception as e:
+        logging.error(f"Error generating PDF: {str(e)}")
+        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=f"Error al generar PDF: {str(e)}")
 
 # ====================
 # INITIALIZE SUPERADMIN
