@@ -523,6 +523,36 @@ const ClientDashboard = () => {
           </DialogHeader>
 
           <div className="space-y-6 py-4">
+            {/* Logo de la Empresa */}
+            <div className="space-y-4">
+              <h3 className="text-lg font-semibold border-b pb-2">Logo de la Empresa</h3>
+              <div className="flex items-center gap-4">
+                {editFormData.logo_url && (
+                  <img 
+                    src={editFormData.logo_url} 
+                    alt="Logo actual" 
+                    className="w-20 h-20 rounded-lg object-cover border"
+                  />
+                )}
+                <div className="flex-1">
+                  <Label htmlFor="edit_logo">Cambiar Logo</Label>
+                  <Input
+                    id="edit_logo"
+                    type="file"
+                    accept="image/*"
+                    onChange={handleLogoUpload}
+                    disabled={uploadingLogo}
+                  />
+                  {uploadingLogo && (
+                    <p className="text-sm text-gray-500 mt-1 flex items-center gap-2">
+                      <Loader2 className="h-3 w-3 animate-spin" />
+                      Subiendo logo...
+                    </p>
+                  )}
+                </div>
+              </div>
+            </div>
+
             {/* Información General */}
             <div className="space-y-4">
               <h3 className="text-lg font-semibold border-b pb-2">Información General</h3>
