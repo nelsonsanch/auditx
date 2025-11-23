@@ -237,6 +237,46 @@ const ViewInspection = () => {
                 <p className="text-sm text-gray-600">Dirección</p>
                 <p className="font-medium">{inspection.company.address}</p>
               </div>
+              
+              {/* Caracterización adicional */}
+              {inspection.company.nit && (
+                <div>
+                  <p className="text-sm text-gray-600">NIT</p>
+                  <p className="font-medium">{inspection.company.nit}</p>
+                </div>
+              )}
+              {inspection.company.representante_legal && (
+                <div>
+                  <p className="text-sm text-gray-600">Representante Legal</p>
+                  <p className="font-medium">{inspection.company.representante_legal}</p>
+                </div>
+              )}
+              {inspection.company.arl_afiliada && (
+                <div>
+                  <p className="text-sm text-gray-600">ARL</p>
+                  <p className="font-medium">{inspection.company.arl_afiliada}</p>
+                </div>
+              )}
+              {(inspection.company.nivel_riesgo || inspection.company.codigo_ciiu) && (
+                <div>
+                  <p className="text-sm text-gray-600">Actividad Económica</p>
+                  <p className="font-medium">
+                    {inspection.company.nivel_riesgo}-{inspection.company.codigo_ciiu}-{inspection.company.subdivision_ciiu}
+                  </p>
+                </div>
+              )}
+              {inspection.company.numero_trabajadores && (
+                <div>
+                  <p className="text-sm text-gray-600">Número de Trabajadores</p>
+                  <p className="font-medium">{inspection.company.numero_trabajadores}</p>
+                </div>
+              )}
+              {inspection.company.numero_sedes && inspection.company.numero_sedes > 1 && (
+                <div>
+                  <p className="text-sm text-gray-600">Número de Sedes</p>
+                  <p className="font-medium">{inspection.company.numero_sedes}</p>
+                </div>
+              )}
             </div>
             <Progress value={inspection.total_score} className="h-3" data-testid="score-progress" />
           </CardContent>
