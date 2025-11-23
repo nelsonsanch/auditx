@@ -13,7 +13,7 @@ def get_firebase_config():
 
 def upload_file_to_firebase(file_content: bytes, filename: str, content_type: str) -> str:
     """
-    Upload a file to Firebase Storage and return the public URL
+    Upload a file to Firebase Storage using REST API and return the public URL
     
     Args:
         file_content: File content as bytes
@@ -24,25 +24,30 @@ def upload_file_to_firebase(file_content: bytes, filename: str, content_type: st
         Public URL of the uploaded file
     """
     try:
-        # Initialize Firebase if not already done
-        initialize_firebase()
-        
-        # Get storage bucket
-        bucket = storage.bucket()
+        config = get_firebase_config()
         
         # Generate unique filename
         file_extension = filename.split('.')[-1] if '.' in filename else 'png'
         unique_filename = f"logos/{uuid.uuid4()}.{file_extension}"
         
-        # Create blob and upload
-        blob = bucket.blob(unique_filename)
-        blob.upload_from_string(file_content, content_type=content_type)
+        # Firebase Storage REST API endpoint
+        upload_url = f"https://firebasestorage.googleapis.com/v0/b/{config['storage_bucket']}/o?uploadType=media&name={unique_filename}"
         
-        # Make the blob publicly accessible
-        blob.make_public()
+        # Upload file using REST API
+        response = requests.post(
+            upload_url,
+            data=file_content,
+            headers={'Content-Type': content_type}
+        )
         
-        # Return public URL
-        return blob.public_url
+        if response.status_code not in [200, 201]:
+            raise Exception(f"Firebase upload failed: {response.status_code} - {response.text}")
+        
+        # Construct public URL
+        # URL format: https://firebasestorage.googleapis.com/v0/b/{bucket}/o/{path}?alt=media
+        public_url = f"https://firebasestorage.googleapis.com/v0/b/{config['storage_bucket']}/o/{unique_filename.replace('/', '%2F')}?alt=media"
+        
+        return public_url
         
     except Exception as e:
         print(f"Error uploading to Firebase Storage: {str(e)}")
