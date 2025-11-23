@@ -47,11 +47,19 @@ def create_cover_page(story, styles, company_data, inspection_data, company_logo
             response = requests.get(company_logo_url, timeout=5)
             if response.status_code == 200:
                 img_data = BytesIO(response.content)
-                img = Image(img_data, width=2*inch, height=2*inch)
+                img = Image(img_data)
+                # Maintain aspect ratio, max 2 inches
+                aspect = img.imageHeight / float(img.imageWidth)
+                img.drawWidth = 2*inch
+                img.drawHeight = 2*inch * aspect
+                if img.drawHeight > 2*inch:
+                    img.drawHeight = 2*inch
+                    img.drawWidth = 2*inch / aspect
                 img.hAlign = 'CENTER'
                 story.append(img)
-                story.append(Spacer(1, 0.3*inch))
-        except Exception:
+                story.append(Spacer(1, 0.4*inch))
+        except Exception as e:
+            print(f"Error loading logo: {e}")
             pass  # Continue without logo if it fails
     
     # Main title
