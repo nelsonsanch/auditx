@@ -55,7 +55,7 @@ class SedeAdicional(BaseModel):
     nivel_riesgo: str  # 1 dígito (1-5)
     codigo_ciiu: str  # 4 dígitos
     subdivision_ciiu: str  # 2 dígitos
-    descripcion_actividad: str = "Según definición establecida en el CIIU"
+    descripcion_actividad: str
 
 class UserCreate(BaseModel):
     email: EmailStr
