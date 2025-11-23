@@ -22,7 +22,9 @@ const ClientDashboard = () => {
   const [activeTab, setActiveTab] = useState("inspections");
   const [editDialogOpen, setEditDialogOpen] = useState(false);
   const [editFormData, setEditFormData] = useState({});
+  const [editSedesAdicionales, setEditSedesAdicionales] = useState([]);
   const [saving, setSaving] = useState(false);
+  const [uploadingLogo, setUploadingLogo] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
