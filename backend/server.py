@@ -920,7 +920,18 @@ El informe debe incluir:
     - Normatividad aplicable
     - Formatos recomendados
 
-El informe debe ser formal, accionable y listo para presentar a gerencia. Usa formato markdown con títulos, subtítulos, listas y tablas."""
+El informe debe ser formal, accionable y listo para presentar a gerencia. Usa formato markdown con títulos, subtítulos, listas y tablas.
+
+**IMPORTANTE - ANÁLISIS PROFUNDO Y ESPECÍFICO:**
+- Para cada acción del plan, proporciona detalles concretos y específicos para la empresa
+- Los análisis de riesgo deben ser cuantitativos cuando sea posible (ej: "potencial de X accidentes/año")
+- Las recomendaciones deben incluir pasos específicos detallados paso a paso, no generalizaciones
+- Considera el contexto específico de la empresa ({company['company_name']}) y su actividad económica
+- Los cronogramas deben ser realistas y considerar recursos limitados de empresas medianas
+- Incluye estimaciones de costos aproximados en COP (pesos colombianos) cuando sea relevante
+- Los KPIs deben ser SMART (específicos, medibles, alcanzables, relevantes, temporales)
+- Proporciona ejemplos concretos y plantillas cuando sea aplicable
+"""
         
         report_message = UserMessage(text=report_prompt)
         report_result = await chat.send_message(report_message)
