@@ -72,7 +72,7 @@ class UserCreate(BaseModel):
     nivel_riesgo: Optional[str] = None  # 1 dígito (1-5)
     codigo_ciiu: Optional[str] = None  # 4 dígitos
     subdivision_ciiu: Optional[str] = None  # 2 dígitos
-    descripcion_actividad: Optional[str] = "Según definición establecida en el CIIU"
+    descripcion_actividad: Optional[str] = None
     numero_trabajadores: Optional[int] = None
     numero_sedes: Optional[int] = 1
     sedes_adicionales: Optional[List[SedeAdicional]] = []
@@ -107,7 +107,7 @@ class Company(BaseModel):
     nivel_riesgo: Optional[str] = None  # 1 dígito (1-5)
     codigo_ciiu: Optional[str] = None  # 4 dígitos
     subdivision_ciiu: Optional[str] = None  # 2 dígitos
-    descripcion_actividad: Optional[str] = "Según definición establecida en el CIIU"
+    descripcion_actividad: Optional[str] = None
     numero_trabajadores: Optional[int] = None
     numero_sedes: Optional[int] = 1
     sedes_adicionales: Optional[List[Dict[str, Any]]] = []
