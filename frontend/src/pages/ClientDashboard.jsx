@@ -25,6 +25,7 @@ const ClientDashboard = () => {
   const [editSedesAdicionales, setEditSedesAdicionales] = useState([]);
   const [saving, setSaving] = useState(false);
   const [uploadingLogo, setUploadingLogo] = useState(false);
+  const [logoPreview, setLogoPreview] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
