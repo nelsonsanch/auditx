@@ -538,29 +538,49 @@ const ClientDashboard = () => {
             {/* Logo de la Empresa */}
             <div className="space-y-4">
               <h3 className="text-lg font-semibold border-b pb-2">Logo de la Empresa</h3>
-              <div className="flex items-center gap-4">
-                {editFormData.logo_url && (
-                  <img 
-                    src={editFormData.logo_url} 
-                    alt="Logo actual" 
-                    className="w-20 h-20 rounded-lg object-cover border"
-                  />
-                )}
+              <div className="flex items-start gap-4">
+                <div className="flex-shrink-0">
+                  {logoPreview ? (
+                    <div className="relative">
+                      <img 
+                        src={logoPreview} 
+                        alt="Logo preview" 
+                        className="w-24 h-24 rounded-lg object-cover border-2 border-gray-300"
+                      />
+                      {uploadingLogo && (
+                        <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center rounded-lg">
+                          <Loader2 className="h-6 w-6 animate-spin text-white" />
+                        </div>
+                      )}
+                    </div>
+                  ) : (
+                    <div className="w-24 h-24 rounded-lg border-2 border-dashed border-gray-300 flex items-center justify-center bg-gray-50">
+                      <Building2 className="h-10 w-10 text-gray-400" />
+                    </div>
+                  )}
+                </div>
                 <div className="flex-1">
-                  <Label htmlFor="edit_logo">Cambiar Logo</Label>
+                  <Label htmlFor="edit_logo" className="text-sm font-medium">
+                    {logoPreview ? "Cambiar Logo" : "Subir Logo"}
+                  </Label>
                   <Input
                     id="edit_logo"
                     type="file"
                     accept="image/*"
                     onChange={handleLogoUpload}
                     disabled={uploadingLogo}
+                    className="mt-1"
                   />
-                  {uploadingLogo && (
-                    <p className="text-sm text-gray-500 mt-1 flex items-center gap-2">
-                      <Loader2 className="h-3 w-3 animate-spin" />
-                      Subiendo logo...
-                    </p>
-                  )}
+                  <p className="text-xs text-gray-500 mt-2">
+                    {uploadingLogo ? (
+                      <span className="flex items-center gap-1">
+                        <Loader2 className="h-3 w-3 animate-spin" />
+                        Subiendo logo...
+                      </span>
+                    ) : (
+                      "Formatos: JPG, PNG. Tamaño máximo: 5MB"
+                    )}
+                  </p>
                 </div>
               </div>
             </div>
