@@ -587,6 +587,54 @@ async def get_my_companies(current_user: dict = Depends(get_current_user)):
     companies = await db.companies.find({"user_id": current_user['id']}, {"_id": 0}).to_list(1000)
     return companies
 
+@api_router.delete("/admin/delete-company/{company_id}")
+async def delete_company(company_id: str, current_user: dict = Depends(get_current_user)):
+    """Delete an inactive company and its associated user"""
+    if current_user['role'] != 'superadmin':
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Acceso denegado")
+    
+    # Find company
+    company = await db.companies.find_one({"id": company_id}, {"_id": 0})
+    if not company:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Empresa no encontrada")
+    
+    # Only allow deleting inactive companies
+    if company.get('is_active', False):
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Solo se pueden eliminar empresas inactivas")
+    
+    # Delete company's inspections first
+    await db.inspections.delete_many({"company_id": company_id})
+    
+    # Delete company
+    await db.companies.delete_one({"id": company_id})
+    
+    # Delete associated user
+    await db.users.delete_one({"id": company['user_id']})
+    
+    return {"message": "Empresa eliminada exitosamente"}
+
+@api_router.put("/company/{company_id}")
+async def update_company(company_id: str, company_data: dict, current_user: dict = Depends(get_current_user)):
+    """Update company information"""
+    # Find company
+    company = await db.companies.find_one({"id": company_id}, {"_id": 0})
+    if not company:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Empresa no encontrada")
+    
+    # Check permissions
+    if current_user['role'] == 'client' and company['user_id'] != current_user['id']:
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="No tiene permiso para editar esta empresa")
+    
+    # Don't allow changing certain fields
+    company_data.pop('id', None)
+    company_data.pop('user_id', None)
+    company_data.pop('created_at', None)
+    
+    # Update company
+    await db.companies.update_one({"id": company_id}, {"$set": company_data})
+    
+    return {"message": "Empresa actualizada exitosamente"}
+
 # ====================
 # STANDARDS ENDPOINTS
 # ====================
