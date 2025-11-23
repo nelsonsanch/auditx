@@ -89,14 +89,77 @@ const ClientDashboard = () => {
     setEditFormData(prev => ({ ...prev, [name]: value }));
   };
 
+  const handleLogoUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    if (!file.type.startsWith("image/")) {
+      toast.error("Solo se permiten archivos de imagen");
+      return;
+    }
+
+    try {
+      setUploadingLogo(true);
+      const formData = new FormData();
+      formData.append("file", file);
+
+      const token = localStorage.getItem("token");
+      const response = await axios.post(`${API}/upload-logo`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${token}`
+        }
+      });
+
+      setEditFormData(prev => ({ ...prev, logo_url: response.data.logo_url }));
+      toast.success("Logo subido exitosamente");
+    } catch (error) {
+      toast.error("Error al subir logo");
+    } finally {
+      setUploadingLogo(false);
+    }
+  };
+
+  const handleAddEditSede = () => {
+    setEditSedesAdicionales([...editSedesAdicionales, {
+      direccion: "",
+      numero_trabajadores: "",
+      nivel_riesgo: "",
+      codigo_ciiu: "",
+      subdivision_ciiu: "",
+      descripcion_actividad: ""
+    }]);
+  };
+
+  const handleRemoveEditSede = (index) => {
+    setEditSedesAdicionales(editSedesAdicionales.filter((_, i) => i !== index));
+  };
+
+  const handleEditSedeChange = (index, field, value) => {
+    const newSedes = [...editSedesAdicionales];
+    newSedes[index][field] = value;
+    setEditSedesAdicionales(newSedes);
+  };
+
   const handleSaveChanges = async () => {
     try {
       setSaving(true);
       const token = localStorage.getItem("token");
       
+      // Prepare data with sedes adicionales
+      const dataToSend = {
+        ...editFormData,
+        numero_trabajadores: parseInt(editFormData.numero_trabajadores) || 0,
+        numero_sedes: parseInt(editFormData.numero_sedes) || 1,
+        sedes_adicionales: editSedesAdicionales.map(sede => ({
+          ...sede,
+          numero_trabajadores: parseInt(sede.numero_trabajadores) || 0
+        }))
+      };
+      
       await axios.put(
         `${API}/company/${company.id}`,
-        editFormData,
+        dataToSend,
         { headers: { Authorization: `Bearer ${token}` } }
       );
       
