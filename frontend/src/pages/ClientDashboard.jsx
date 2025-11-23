@@ -81,6 +81,7 @@ const ClientDashboard = () => {
         logo_url: company.logo_url || ""
       });
       setEditSedesAdicionales(company.sedes_adicionales || []);
+      setLogoPreview(company.logo_url || null);
       setEditDialogOpen(true);
     }
   };
