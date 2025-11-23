@@ -64,19 +64,21 @@ def delete_file_from_firebase(file_url: str) -> bool:
         True if successful, False otherwise
     """
     try:
-        # Initialize Firebase if not already done
-        initialize_firebase()
+        config = get_firebase_config()
         
-        # Extract blob path from URL
-        # URL format: https://storage.googleapis.com/{bucket}/logos/{filename}
-        if 'storage.googleapis.com' in file_url:
-            parts = file_url.split('/')
-            blob_path = '/'.join(parts[4:])  # Everything after bucket name
+        # Extract file path from URL
+        # URL format: https://firebasestorage.googleapis.com/v0/b/{bucket}/o/{path}?alt=media
+        if 'firebasestorage.googleapis.com' in file_url and '%2F' in file_url:
+            # Extract encoded path
+            path_start = file_url.find('/o/') + 3
+            path_end = file_url.find('?') if '?' in file_url else len(file_url)
+            encoded_path = file_url[path_start:path_end]
             
-            bucket = storage.bucket()
-            blob = bucket.blob(blob_path)
-            blob.delete()
-            return True
+            # Delete using REST API
+            delete_url = f"https://firebasestorage.googleapis.com/v0/b/{config['storage_bucket']}/o/{encoded_path}"
+            response = requests.delete(delete_url)
+            
+            return response.status_code == 204
     except Exception as e:
         print(f"Error deleting from Firebase Storage: {str(e)}")
         return False
