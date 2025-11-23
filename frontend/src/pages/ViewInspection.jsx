@@ -165,10 +165,21 @@ const ViewInspection = () => {
         <div className="max-w-7xl mx-auto px-2 sm:px-4 lg:px-8">
           <div className="flex justify-between items-center h-16 gap-2">
             <div className="flex items-center space-x-2 min-w-0">
-              <div className="w-8 h-8 sm:w-10 sm:h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center flex-shrink-0" data-testid="view-inspection-logo">
-                <Shield className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
-              </div>
-              <h1 className="text-base sm:text-xl lg:text-2xl font-bold truncate" style={{ fontFamily: 'Space Grotesk' }}>Detalle</h1>
+              {inspection?.company?.logo_url ? (
+                <img 
+                  src={inspection.company.logo_url} 
+                  alt="Logo empresa" 
+                  className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl object-cover flex-shrink-0" 
+                  data-testid="company-logo-nav"
+                />
+              ) : (
+                <div className="w-8 h-8 sm:w-10 sm:h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center flex-shrink-0" data-testid="view-inspection-logo">
+                  <Shield className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
+                </div>
+              )}
+              <h1 className="text-base sm:text-xl lg:text-2xl font-bold truncate" style={{ fontFamily: 'Space Grotesk' }}>
+                {inspection?.company?.company_name || "Detalle"}
+              </h1>
             </div>
             <Button onClick={() => navigate("/client/dashboard")} variant="outline" size="sm" data-testid="back-button" className="text-xs sm:text-sm flex-shrink-0">
               <ArrowLeft className="h-4 w-4 sm:mr-2" />
