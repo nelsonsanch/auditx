@@ -84,6 +84,24 @@ const SuperAdminDashboard = () => {
     }
   };
 
+  const handleDelete = async (companyId, companyName) => {
+    if (!window.confirm(`¿Está seguro que desea eliminar permanentemente la empresa "${companyName}"? Esta acción no se puede deshacer.`)) {
+      return;
+    }
+
+    try {
+      const token = localStorage.getItem("token");
+      await axios.delete(
+        `${API}/admin/delete-company/${companyId}`,
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      toast.success("Empresa eliminada exitosamente");
+      fetchData();
+    } catch (error) {
+      toast.error(error.response?.data?.detail || "Error al eliminar empresa");
+    }
+  };
+
   const handleLogout = () => {
     localStorage.clear();
     navigate("/login");
