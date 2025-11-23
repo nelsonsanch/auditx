@@ -1,20 +1,15 @@
 import os
-import firebase_admin
-from firebase_admin import credentials, storage
-from typing import Optional
+import requests
 import uuid
-from datetime import timedelta
+from typing import Optional
 
-# Initialize Firebase
-def initialize_firebase():
-    """Initialize Firebase Admin SDK"""
-    if not firebase_admin._apps:
-        # Firebase will use application default credentials
-        # No service account JSON needed for basic storage operations
-        cred = credentials.ApplicationDefault()
-        firebase_admin.initialize_app(cred, {
-            'storageBucket': os.getenv('FIREBASE_STORAGE_BUCKET')
-        })
+def get_firebase_config():
+    """Get Firebase configuration from environment"""
+    return {
+        'api_key': os.getenv('FIREBASE_API_KEY'),
+        'project_id': os.getenv('FIREBASE_PROJECT_ID'),
+        'storage_bucket': os.getenv('FIREBASE_STORAGE_BUCKET')
+    }
 
 def upload_file_to_firebase(file_content: bytes, filename: str, content_type: str) -> str:
     """
