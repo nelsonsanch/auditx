@@ -405,7 +405,7 @@ async def forgot_password(request: PasswordResetRequest):
     })
     
     # Send mock email with reset link
-    reset_link = f"https://auditx.sanchezcya.com/reset-password?token={reset_token}"
+    reset_link = f"{os.getenv('FRONTEND_URL', 'https://auditx.sanchezcya.com')}/reset-password?token={reset_token}"
     await send_email(
         to_email=user['email'],
         subject="Restablecer Contraseña - AuditX",
