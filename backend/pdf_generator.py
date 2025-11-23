@@ -51,7 +51,7 @@ def create_cover_page(story, styles, company_data, inspection_data, company_logo
                 img.hAlign = 'CENTER'
                 story.append(img)
                 story.append(Spacer(1, 0.3*inch))
-        except:
+        except Exception:
             pass  # Continue without logo if it fails
     
     # Main title
