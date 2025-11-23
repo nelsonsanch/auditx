@@ -442,6 +442,198 @@ const ClientDashboard = () => {
           </TabsContent>
         </Tabs>
       </div>
+
+      {/* DIALOG: EDITAR CARACTERIZACIÓN */}
+      <Dialog open={editDialogOpen} onOpenChange={setEditDialogOpen}>
+        <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <Edit className="h-5 w-5" />
+              Editar Caracterización de la Empresa
+            </DialogTitle>
+            <DialogDescription>
+              Actualice la información de su empresa según Resolución 0312 de 2019
+            </DialogDescription>
+          </DialogHeader>
+
+          <div className="space-y-6 py-4">
+            {/* Información General */}
+            <div className="space-y-4">
+              <h3 className="text-lg font-semibold border-b pb-2">Información General</h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="edit_company_name">Nombre de la Empresa *</Label>
+                  <Input
+                    id="edit_company_name"
+                    name="company_name"
+                    value={editFormData.company_name || ""}
+                    onChange={handleEditChange}
+                    required
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="edit_admin_name">Administrador *</Label>
+                  <Input
+                    id="edit_admin_name"
+                    name="admin_name"
+                    value={editFormData.admin_name || ""}
+                    onChange={handleEditChange}
+                    required
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="edit_nit">NIT *</Label>
+                  <Input
+                    id="edit_nit"
+                    name="nit"
+                    value={editFormData.nit || ""}
+                    onChange={handleEditChange}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="edit_representante_legal">Representante Legal *</Label>
+                  <Input
+                    id="edit_representante_legal"
+                    name="representante_legal"
+                    value={editFormData.representante_legal || ""}
+                    onChange={handleEditChange}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="edit_arl_afiliada">ARL Afiliada *</Label>
+                  <Input
+                    id="edit_arl_afiliada"
+                    name="arl_afiliada"
+                    value={editFormData.arl_afiliada || ""}
+                    onChange={handleEditChange}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="edit_phone">Teléfono *</Label>
+                  <Input
+                    id="edit_phone"
+                    name="phone"
+                    value={editFormData.phone || ""}
+                    onChange={handleEditChange}
+                  />
+                </div>
+                <div className="space-y-2 md:col-span-2">
+                  <Label htmlFor="edit_address">Dirección *</Label>
+                  <Input
+                    id="edit_address"
+                    name="address"
+                    value={editFormData.address || ""}
+                    onChange={handleEditChange}
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* Actividad Económica */}
+            <div className="space-y-4">
+              <h3 className="text-lg font-semibold border-b pb-2">Actividad Económica</h3>
+              <div className="grid grid-cols-3 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="edit_nivel_riesgo">Nivel de Riesgo (1-5)</Label>
+                  <Input
+                    id="edit_nivel_riesgo"
+                    name="nivel_riesgo"
+                    maxLength="1"
+                    value={editFormData.nivel_riesgo || ""}
+                    onChange={handleEditChange}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="edit_codigo_ciiu">Código CIIU (4 dígitos)</Label>
+                  <Input
+                    id="edit_codigo_ciiu"
+                    name="codigo_ciiu"
+                    maxLength="4"
+                    value={editFormData.codigo_ciiu || ""}
+                    onChange={handleEditChange}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="edit_subdivision_ciiu">Subdivisión (2 dígitos)</Label>
+                  <Input
+                    id="edit_subdivision_ciiu"
+                    name="subdivision_ciiu"
+                    maxLength="2"
+                    value={editFormData.subdivision_ciiu || ""}
+                    onChange={handleEditChange}
+                  />
+                </div>
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="edit_descripcion_actividad">Descripción de la Actividad</Label>
+                <textarea
+                  id="edit_descripcion_actividad"
+                  name="descripcion_actividad"
+                  className="flex min-h-[80px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                  value={editFormData.descripcion_actividad || ""}
+                  onChange={handleEditChange}
+                  rows="3"
+                />
+                <p className="text-xs text-gray-500">Esta información será usada por la IA para generar informes personalizados</p>
+              </div>
+            </div>
+
+            {/* Información Laboral */}
+            <div className="space-y-4">
+              <h3 className="text-lg font-semibold border-b pb-2">Información Laboral</h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="edit_numero_trabajadores">Número de Trabajadores</Label>
+                  <Input
+                    id="edit_numero_trabajadores"
+                    name="numero_trabajadores"
+                    type="number"
+                    min="0"
+                    value={editFormData.numero_trabajadores || 0}
+                    onChange={handleEditChange}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="edit_numero_sedes">Número de Sedes</Label>
+                  <Input
+                    id="edit_numero_sedes"
+                    name="numero_sedes"
+                    type="number"
+                    min="1"
+                    value={editFormData.numero_sedes || 1}
+                    onChange={handleEditChange}
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* Botones */}
+            <div className="flex justify-end gap-2 pt-4 border-t">
+              <Button
+                variant="outline"
+                onClick={() => setEditDialogOpen(false)}
+                disabled={saving}
+              >
+                Cancelar
+              </Button>
+              <Button
+                onClick={handleSaveChanges}
+                disabled={saving}
+                className="bg-gradient-to-r from-blue-600 to-purple-600"
+              >
+                {saving ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Guardando...
+                  </>
+                ) : (
+                  "Guardar Cambios"
+                )}
+              </Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
