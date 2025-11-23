@@ -196,7 +196,7 @@ const ViewInspection = () => {
               <div className="flex items-start gap-4">
                 {inspection.company.logo_url && (
                   <img 
-                    src={`${BACKEND_URL}${inspection.company.logo_url}`}
+                    src={inspection.company.logo_url}
                     alt={`${inspection.company.company_name} logo`}
                     className="w-16 h-16 object-contain rounded-lg border-2 border-gray-200"
                     data-testid="company-logo"
