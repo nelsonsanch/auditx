@@ -29,7 +29,7 @@ const Register = () => {
     nivel_riesgo: "",
     codigo_ciiu: "",
     subdivision_ciiu: "",
-    descripcion_actividad: "Según definición establecida en el CIIU",
+    descripcion_actividad: "",
     numero_trabajadores: "",
     numero_sedes: "1"
   });
