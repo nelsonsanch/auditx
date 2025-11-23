@@ -504,6 +504,21 @@ const Register = () => {
               </div>
 
               <div className="mt-4 space-y-2">
+                <Label htmlFor="descripcion_actividad">Descripción de la Actividad Económica *</Label>
+                <textarea
+                  id="descripcion_actividad"
+                  name="descripcion_actividad"
+                  className="flex min-h-[80px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                  placeholder="Según definición establecida en el CIIU. Ej: Cultivo de café, Servicios de salud especializados, Construcción de edificaciones, etc."
+                  value={formData.descripcion_actividad}
+                  onChange={handleChange}
+                  required
+                  rows="3"
+                />
+                <p className="text-xs text-gray-500">Esta información será usada por la IA para generar mejores informes personalizados</p>
+              </div>
+
+              <div className="mt-4 space-y-2">
                 <Label htmlFor="numero_sedes">Número Total de Sedes *</Label>
                 <Input
                   id="numero_sedes"
