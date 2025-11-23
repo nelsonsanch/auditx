@@ -290,11 +290,26 @@ const ClientDashboard = () => {
           <TabsContent value="caracterizacion">
             <Card className="shadow-xl">
               <CardHeader>
-                <CardTitle className="text-2xl flex items-center gap-2" style={{ fontFamily: 'Space Grotesk' }}>
-                  <Building2 className="h-6 w-6" />
-                  Caracterización de la Empresa
-                </CardTitle>
-                <CardDescription>Información detallada de la empresa según Resolución 0312 de 2019</CardDescription>
+                <div className="flex justify-between items-start">
+                  <div>
+                    <CardTitle className="text-2xl flex items-center gap-2" style={{ fontFamily: 'Space Grotesk' }}>
+                      <Building2 className="h-6 w-6" />
+                      Caracterización de la Empresa
+                    </CardTitle>
+                    <CardDescription>Información detallada de la empresa según Resolución 0312 de 2019</CardDescription>
+                  </div>
+                  {company && (
+                    <Button
+                      onClick={openEditDialog}
+                      variant="outline"
+                      size="sm"
+                      className="flex items-center gap-2"
+                    >
+                      <Edit className="h-4 w-4" />
+                      Editar Información
+                    </Button>
+                  )}
+                </div>
               </CardHeader>
               <CardContent>
                 {loading ? (
