@@ -679,7 +679,7 @@ const ClientDashboard = () => {
               <h3 className="text-lg font-semibold border-b pb-2">Información Laboral</h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <Label htmlFor="edit_numero_trabajadores">Número de Trabajadores</Label>
+                  <Label htmlFor="edit_numero_trabajadores">Número de Trabajadores (Sede Principal)</Label>
                   <Input
                     id="edit_numero_trabajadores"
                     name="numero_trabajadores"
@@ -697,11 +697,130 @@ const ClientDashboard = () => {
                     type="number"
                     min="1"
                     value={editFormData.numero_sedes || 1}
-                    onChange={handleEditChange}
+                    onChange={(e) => {
+                      handleEditChange(e);
+                      const numSedes = parseInt(e.target.value) || 1;
+                      if (numSedes === 1) {
+                        setEditSedesAdicionales([]);
+                      }
+                    }}
                   />
                 </div>
               </div>
             </div>
+
+            {/* Sedes Adicionales */}
+            {parseInt(editFormData.numero_sedes) > 1 && (
+              <div className="space-y-4">
+                <div className="flex justify-between items-center border-b pb-2">
+                  <h3 className="text-lg font-semibold">Sedes Adicionales</h3>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    onClick={handleAddEditSede}
+                  >
+                    <Plus className="h-4 w-4 mr-1" />
+                    Agregar Sede
+                  </Button>
+                </div>
+                
+                {editSedesAdicionales.length === 0 ? (
+                  <p className="text-sm text-gray-500 text-center py-4">
+                    No hay sedes adicionales. Haz clic en "Agregar Sede" para añadir una.
+                  </p>
+                ) : (
+                  <div className="space-y-4">
+                    {editSedesAdicionales.map((sede, index) => (
+                      <Card key={index} className="border-l-4 border-blue-500 relative">
+                        <button
+                          type="button"
+                          onClick={() => handleRemoveEditSede(index)}
+                          className="absolute top-2 right-2 text-red-500 hover:text-red-700"
+                        >
+                          <X className="w-4 h-4" />
+                        </button>
+                        
+                        <CardHeader className="pb-3">
+                          <CardTitle className="text-base">Sede {index + 2}</CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                          <div className="space-y-3">
+                            <div>
+                              <Label className="text-xs">Dirección *</Label>
+                              <Input
+                                type="text"
+                                placeholder="Dirección de la sede"
+                                value={sede.direccion}
+                                onChange={(e) => handleEditSedeChange(index, 'direccion', e.target.value)}
+                                required
+                              />
+                            </div>
+                            
+                            <div>
+                              <Label className="text-xs">Número de Trabajadores *</Label>
+                              <Input
+                                type="number"
+                                min="1"
+                                placeholder="20"
+                                value={sede.numero_trabajadores}
+                                onChange={(e) => handleEditSedeChange(index, 'numero_trabajadores', e.target.value)}
+                                required
+                              />
+                            </div>
+                            
+                            <div>
+                              <Label className="text-xs">Código de Actividad Económica *</Label>
+                              <div className="grid grid-cols-3 gap-2">
+                                <Input
+                                  type="text"
+                                  maxLength="1"
+                                  pattern="[1-5]"
+                                  placeholder="Riesgo"
+                                  value={sede.nivel_riesgo}
+                                  onChange={(e) => handleEditSedeChange(index, 'nivel_riesgo', e.target.value)}
+                                  required
+                                />
+                                <Input
+                                  type="text"
+                                  maxLength="4"
+                                  pattern="[0-9]{4}"
+                                  placeholder="CIIU"
+                                  value={sede.codigo_ciiu}
+                                  onChange={(e) => handleEditSedeChange(index, 'codigo_ciiu', e.target.value)}
+                                  required
+                                />
+                                <Input
+                                  type="text"
+                                  maxLength="2"
+                                  pattern="[0-9]{2}"
+                                  placeholder="Subdiv"
+                                  value={sede.subdivision_ciiu}
+                                  onChange={(e) => handleEditSedeChange(index, 'subdivision_ciiu', e.target.value)}
+                                  required
+                                />
+                              </div>
+                            </div>
+                            
+                            <div>
+                              <Label className="text-xs">Descripción de la Actividad *</Label>
+                              <textarea
+                                className="flex min-h-[60px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                                placeholder="Según definición establecida en el CIIU"
+                                value={sede.descripcion_actividad}
+                                onChange={(e) => handleEditSedeChange(index, 'descripcion_actividad', e.target.value)}
+                                required
+                                rows="2"
+                              />
+                            </div>
+                          </div>
+                        </CardContent>
+                      </Card>
+                    ))}
+                  </div>
+                )}
+              </div>
+            )}
 
             {/* Botones */}
             <div className="flex justify-end gap-2 pt-4 border-t">
