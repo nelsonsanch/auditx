@@ -1012,10 +1012,9 @@ async def generate_pdf(inspection_id: str, current_user: dict = Depends(get_curr
         # Generate professional PDF
         generate_professional_pdf(
             pdf_path=pdf_path,
-            company=company,
-            inspection=inspection,
-            analysis=analysis,
-            standards=STANDARDS
+            company_data=company,
+            inspection_data=inspection,
+            analysis_data=analysis
         )
         
         return FileResponse(pdf_path, media_type='application/pdf', filename=pdf_filename)
