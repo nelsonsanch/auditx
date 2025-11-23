@@ -71,10 +71,21 @@ const ClientDashboard = () => {
         <div className="max-w-7xl mx-auto px-2 sm:px-4 lg:px-8">
           <div className="flex justify-between items-center h-16 gap-2">
             <div className="flex items-center space-x-2 min-w-0">
-              <div className="w-8 h-8 sm:w-10 sm:h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center flex-shrink-0" data-testid="client-logo">
-                <Shield className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
-              </div>
-              <h1 className="text-base sm:text-xl lg:text-2xl font-bold truncate" style={{ fontFamily: 'Space Grotesk' }}>Panel Cliente</h1>
+              {company?.logo_url ? (
+                <img 
+                  src={company.logo_url} 
+                  alt="Logo empresa" 
+                  className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl object-cover flex-shrink-0" 
+                  data-testid="company-logo"
+                />
+              ) : (
+                <div className="w-8 h-8 sm:w-10 sm:h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center flex-shrink-0" data-testid="client-logo">
+                  <Shield className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
+                </div>
+              )}
+              <h1 className="text-base sm:text-xl lg:text-2xl font-bold truncate" style={{ fontFamily: 'Space Grotesk' }}>
+                {company?.company_name || "Panel Cliente"}
+              </h1>
             </div>
             <div className="flex items-center space-x-1 sm:space-x-2 flex-shrink-0">
               <Button 
