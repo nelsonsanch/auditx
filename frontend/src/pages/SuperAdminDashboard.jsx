@@ -376,28 +376,41 @@ const SuperAdminDashboard = () => {
                         )}
                       </TableCell>
                       <TableCell className="text-right">
-                        {company.is_active ? (
-                          <Button
-                            onClick={() => handleDeactivate(company.id)}
-                            variant="outline"
-                            size="sm"
-                            className="text-red-600 hover:text-red-800"
-                            data-testid={`deactivate-button-${company.id}`}
-                          >
-                            <XCircle className="mr-1 h-4 w-4" />
-                            Desactivar
-                          </Button>
-                        ) : (
-                          <Button
-                            onClick={() => handleActivate(company.id)}
-                            size="sm"
-                            className="bg-green-600 hover:bg-green-700"
-                            data-testid={`activate-button-${company.id}`}
-                          >
-                            <CheckCircle2 className="mr-1 h-4 w-4" />
-                            Activar
-                          </Button>
-                        )}
+                        <div className="flex gap-2 justify-end">
+                          {company.is_active ? (
+                            <Button
+                              onClick={() => handleDeactivate(company.id)}
+                              variant="outline"
+                              size="sm"
+                              className="text-red-600 hover:text-red-800"
+                              data-testid={`deactivate-button-${company.id}`}
+                            >
+                              <XCircle className="mr-1 h-4 w-4" />
+                              Desactivar
+                            </Button>
+                          ) : (
+                            <>
+                              <Button
+                                onClick={() => handleActivate(company.id)}
+                                size="sm"
+                                className="bg-green-600 hover:bg-green-700"
+                                data-testid={`activate-button-${company.id}`}
+                              >
+                                <CheckCircle2 className="mr-1 h-4 w-4" />
+                                Activar
+                              </Button>
+                              <Button
+                                onClick={() => handleDelete(company.id, company.company_name)}
+                                variant="outline"
+                                size="sm"
+                                className="text-red-600 hover:text-red-800 hover:bg-red-50"
+                                data-testid={`delete-button-${company.id}`}
+                              >
+                                <Trash2 className="h-4 w-4" />
+                              </Button>
+                            </>
+                          )}
+                        </div>
                       </TableCell>
                     </TableRow>
                   ))}
