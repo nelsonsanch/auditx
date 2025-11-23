@@ -59,6 +59,56 @@ const ClientDashboard = () => {
     navigate("/login");
   };
 
+  const openEditDialog = () => {
+    if (company) {
+      setEditFormData({
+        company_name: company.company_name || "",
+        admin_name: company.admin_name || "",
+        address: company.address || "",
+        phone: company.phone || "",
+        nit: company.nit || "",
+        representante_legal: company.representante_legal || "",
+        arl_afiliada: company.arl_afiliada || "",
+        nivel_riesgo: company.nivel_riesgo || "",
+        codigo_ciiu: company.codigo_ciiu || "",
+        subdivision_ciiu: company.subdivision_ciiu || "",
+        descripcion_actividad: company.descripcion_actividad || "",
+        numero_trabajadores: company.numero_trabajadores || 0,
+        numero_sedes: company.numero_sedes || 1,
+        sedes_adicionales: company.sedes_adicionales || []
+      });
+      setEditDialogOpen(true);
+    }
+  };
+
+  const handleEditChange = (e) => {
+    const { name, value } = e.target;
+    setEditFormData(prev => ({ ...prev, [name]: value }));
+  };
+
+  const handleSaveChanges = async () => {
+    try {
+      setSaving(true);
+      const token = localStorage.getItem("token");
+      
+      await axios.put(
+        `${API}/company/${company.id}`,
+        editFormData,
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      
+      toast.success("Información actualizada exitosamente");
+      setEditDialogOpen(false);
+      
+      // Refresh data
+      fetchData();
+    } catch (error) {
+      toast.error(error.response?.data?.detail || "Error al actualizar información");
+    } finally {
+      setSaving(false);
+    }
+  };
+
   const getScoreColor = (score) => {
     if (score >= 85) return "text-green-600";
     if (score >= 60) return "text-yellow-600";
