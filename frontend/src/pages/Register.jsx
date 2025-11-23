@@ -621,6 +621,18 @@ const Register = () => {
                             />
                           </div>
                         </div>
+                        
+                        <div>
+                          <Label className="text-xs">Descripción de la Actividad *</Label>
+                          <textarea
+                            className="flex min-h-[60px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                            placeholder="Según definición establecida en el CIIU"
+                            value={sede.descripcion_actividad}
+                            onChange={(e) => handleSedeChange(index, 'descripcion_actividad', e.target.value)}
+                            required
+                            rows="2"
+                          />
+                        </div>
                       </div>
                     </div>
                   ))}
