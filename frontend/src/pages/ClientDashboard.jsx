@@ -100,6 +100,13 @@ const ClientDashboard = () => {
       return;
     }
 
+    // Create preview immediately
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setLogoPreview(reader.result);
+    };
+    reader.readAsDataURL(file);
+
     try {
       setUploadingLogo(true);
       const formData = new FormData();
@@ -114,9 +121,12 @@ const ClientDashboard = () => {
       });
 
       setEditFormData(prev => ({ ...prev, logo_url: response.data.logo_url }));
+      setLogoPreview(response.data.logo_url);
       toast.success("Logo subido exitosamente");
     } catch (error) {
       toast.error("Error al subir logo");
+      // Revert preview on error
+      setLogoPreview(editFormData.logo_url || null);
     } finally {
       setUploadingLogo(false);
     }
