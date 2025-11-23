@@ -77,8 +77,9 @@ const ClientDashboard = () => {
         descripcion_actividad: company.descripcion_actividad || "",
         numero_trabajadores: company.numero_trabajadores || 0,
         numero_sedes: company.numero_sedes || 1,
-        sedes_adicionales: company.sedes_adicionales || []
+        logo_url: company.logo_url || ""
       });
+      setEditSedesAdicionales(company.sedes_adicionales || []);
       setEditDialogOpen(true);
     }
   };
