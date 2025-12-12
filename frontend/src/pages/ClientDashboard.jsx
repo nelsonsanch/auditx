@@ -319,7 +319,7 @@ const ClientDashboard = () => {
                 ) : inspections.length === 0 ? (
                   <div className="text-center py-12" data-testid="no-inspections">
                     <FileText className="mx-auto h-12 w-12 text-gray-400 mb-4" />
-                    <p className="text-gray-600 mb-4">Aún no has creado ninguna inspección</p>
+                    <p className="text-gray-600 mb-4">Aún no has creado ninguna auditoría</p>
                     <Button 
                       onClick={() => navigate("/client/inspection/create")}
                       className="bg-gradient-to-r from-blue-600 to-purple-600"
