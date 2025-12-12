@@ -371,6 +371,24 @@ const ClientDashboard = () => {
             </Card>
           </TabsContent>
 
+          {/* TAB: DOCUMENTOS INTERNOS */}
+          <TabsContent value="documentos">
+            <Card className="shadow-xl">
+              <CardHeader>
+                <CardTitle className="text-2xl flex items-center gap-2" style={{ fontFamily: 'Space Grotesk' }}>
+                  <BookOpen className="h-6 w-6 text-blue-600" />
+                  Documentos Internos
+                </CardTitle>
+                <CardDescription>
+                  Políticas, reglamentos, manuales e instructivos de su organización que serán considerados en las auditorías
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                {company && <NormasEspecificasManager companyId={company.id} />}
+              </CardContent>
+            </Card>
+          </TabsContent>
+
           {/* TAB: CARACTERIZACIÓN */}
           <TabsContent value="caracterizacion">
             <Card className="shadow-xl">
