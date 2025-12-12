@@ -294,7 +294,7 @@ const ClientDashboard = () => {
           <TabsList className="grid w-full grid-cols-3 mb-6">
             <TabsTrigger value="inspections" className="flex items-center gap-2">
               <FileText className="h-4 w-4" />
-              Inspecciones
+              Auditorías
             </TabsTrigger>
             <TabsTrigger value="documentos" className="flex items-center gap-2">
               <BookOpen className="h-4 w-4" />
