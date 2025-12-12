@@ -226,13 +226,13 @@ const ClientDashboard = () => {
             </div>
             <div className="flex items-center space-x-1 sm:space-x-2 flex-shrink-0">
               <Button 
-                onClick={() => navigate("/client/inspection/create")} 
+                onClick={() => setShowAuditWizard(true)} 
                 className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-xs sm:text-sm"
                 size="sm"
                 data-testid="create-inspection-button"
               >
                 <Plus className="h-4 w-4 sm:mr-2" />
-                <span className="hidden sm:inline">Nueva Inspección</span>
+                <span className="hidden sm:inline">Nueva Auditoría</span>
               </Button>
               <Button onClick={handleLogout} variant="outline" size="sm" data-testid="logout-button" className="text-xs sm:text-sm">
                 <LogOut className="h-4 w-4 sm:mr-2" />
