@@ -151,7 +151,8 @@ const CreateInspection = () => {
         response: currentResponse.response,
         observations: currentResponse.observations || "",
         company_activity: companyData?.descripcion_actividad || "",
-        risk_level: companyData?.nivel_riesgo || ""
+        risk_level: companyData?.nivel_riesgo || "",
+        audit_config_id: auditConfigId || null  // Include audit config for normative context
       };
 
       const response = await axios.post(`${API}/ai/standard-recommendation`, payload, {
