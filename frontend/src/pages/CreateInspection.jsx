@@ -349,7 +349,7 @@ const CreateInspection = () => {
       toast.success(`Auditoría completada exitosamente. Puntaje: ${response.data.total_score.toFixed(1)}%`);
       navigate("/client/dashboard");
     } catch (error) {
-      toast.error("Error al crear inspección");
+      toast.error("Error al crear auditoría");
     } finally {
       setSubmitting(false);
     }
