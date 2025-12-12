@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+// Using native HTML radio inputs instead of Radix RadioGroup for React 19 compatibility
 import { Progress } from "@/components/ui/progress";
 import { toast } from "sonner";
 import { Shield, ArrowLeft, Save, Loader2, CheckCircle2, XCircle, Circle as CircleIcon } from "lucide-react";
