@@ -8,7 +8,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Progress } from "@/components/ui/progress";
 import { toast } from "sonner";
-import { Shield, ArrowLeft, Save, Loader2, CheckCircle2, XCircle, Circle } from "lucide-react";
+import { Shield, ArrowLeft, Save, Loader2, CheckCircle2, XCircle, Circle as CircleIcon } from "lucide-react";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
