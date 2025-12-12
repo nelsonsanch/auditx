@@ -310,8 +310,8 @@ const ClientDashboard = () => {
           <TabsContent value="inspections">
             <Card className="shadow-xl" data-testid="inspections-table-card">
               <CardHeader>
-                <CardTitle className="text-2xl" style={{ fontFamily: 'Space Grotesk' }}>Mis Inspecciones</CardTitle>
-                <CardDescription>Historial de inspecciones de seguridad y salud en el trabajo</CardDescription>
+                <CardTitle className="text-2xl" style={{ fontFamily: 'Space Grotesk' }}>Mis Auditorías</CardTitle>
+                <CardDescription>Historial de auditorías de seguridad y salud en el trabajo</CardDescription>
               </CardHeader>
               <CardContent>
                 {loading ? (
