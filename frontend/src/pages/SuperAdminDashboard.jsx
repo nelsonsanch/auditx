@@ -316,10 +316,10 @@ const SuperAdminDashboard = () => {
 
         <Card className="shadow-xl" data-testid="companies-table-card">
           <CardHeader>
-            <div className="flex space-x-4 border-b">
+            <div className="flex space-x-4 border-b overflow-x-auto">
               <button
                 onClick={() => setActiveTab("pending")}
-                className={`pb-2 px-4 font-medium transition-colors ${
+                className={`pb-2 px-4 font-medium transition-colors whitespace-nowrap ${
                   activeTab === "pending"
                     ? "border-b-2 border-blue-600 text-blue-600"
                     : "text-gray-600 hover:text-blue-600"
@@ -330,7 +330,7 @@ const SuperAdminDashboard = () => {
               </button>
               <button
                 onClick={() => setActiveTab("all")}
-                className={`pb-2 px-4 font-medium transition-colors ${
+                className={`pb-2 px-4 font-medium transition-colors whitespace-nowrap ${
                   activeTab === "all"
                     ? "border-b-2 border-blue-600 text-blue-600"
                     : "text-gray-600 hover:text-blue-600"
@@ -339,10 +339,24 @@ const SuperAdminDashboard = () => {
               >
                 Todas ({companies.length})
               </button>
+              <button
+                onClick={() => setActiveTab("normas")}
+                className={`pb-2 px-4 font-medium transition-colors whitespace-nowrap flex items-center gap-2 ${
+                  activeTab === "normas"
+                    ? "border-b-2 border-purple-600 text-purple-600"
+                    : "text-gray-600 hover:text-purple-600"
+                }`}
+                data-testid="normas-tab"
+              >
+                <BookOpen className="h-4 w-4" />
+                Repositorio Normativo
+              </button>
             </div>
           </CardHeader>
           <CardContent>
-            {loading ? (
+            {activeTab === "normas" ? (
+              <NormasGeneralesManager />
+            ) : loading ? (
               <div className="text-center py-8" data-testid="loading-indicator">Cargando...</div>
             ) : (
               <Table>
