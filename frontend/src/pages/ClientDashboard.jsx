@@ -326,7 +326,7 @@ const ClientDashboard = () => {
                       data-testid="create-first-inspection-button"
                     >
                       <Plus className="mr-2 h-4 w-4" />
-                      Crear Primera Inspección
+                      Crear Primera Auditoría
                     </Button>
                   </div>
                 ) : (
