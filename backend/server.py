@@ -153,6 +153,24 @@ class ChangePassword(BaseModel):
     current_password: str
     new_password: str
 
+# Nuevos modelos para IA de inspecciones
+class AIRecommendationRequest(BaseModel):
+    standard_id: str
+    standard_title: str
+    standard_description: str
+    metodo_verificacion: str
+    criterio: str
+    response: str  # "cumple", "no_cumple", "no_aplica"
+    observations: Optional[str] = ""
+    company_activity: Optional[str] = ""
+    risk_level: Optional[str] = ""
+
+class AIImageAnalysisRequest(BaseModel):
+    standard_id: str
+    standard_title: str
+    image_base64: str
+    company_activity: Optional[str] = ""
+
 # ====================
 # STANDARDS DATA
 # ====================
