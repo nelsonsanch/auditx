@@ -990,13 +990,16 @@ async def get_analysis(inspection_id: str, current_user: dict = Depends(get_curr
     
     return analysis
 
+class UpdateReportRequest(BaseModel):
+    report: str
+
 @api_router.put("/analysis/{analysis_id}")
-async def update_analysis(analysis_id: str, report: str, current_user: dict = Depends(get_current_user)):
+async def update_analysis(analysis_id: str, request: UpdateReportRequest, current_user: dict = Depends(get_current_user)):
     analysis = await db.ai_analyses.find_one({"id": analysis_id}, {"_id": 0})
     if not analysis:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Análisis no encontrado")
     
-    await db.ai_analyses.update_one({"id": analysis_id}, {"$set": {"report": report}})
+    await db.ai_analyses.update_one({"id": analysis_id}, {"$set": {"report": request.report}})
     
     return {"message": "Informe actualizado exitosamente"}
 
