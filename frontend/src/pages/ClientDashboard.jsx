@@ -291,10 +291,14 @@ const ClientDashboard = () => {
         </div>
 
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="grid w-full grid-cols-2 mb-6">
+          <TabsList className="grid w-full grid-cols-3 mb-6">
             <TabsTrigger value="inspections" className="flex items-center gap-2">
               <FileText className="h-4 w-4" />
               Inspecciones
+            </TabsTrigger>
+            <TabsTrigger value="documentos" className="flex items-center gap-2">
+              <BookOpen className="h-4 w-4" />
+              Documentos Internos
             </TabsTrigger>
             <TabsTrigger value="caracterizacion" className="flex items-center gap-2">
               <Building2 className="h-4 w-4" />
