@@ -245,7 +245,7 @@ const CreateInspection = () => {
                               <RadioGroupItem value="cumple_parcial" id={`${standard.id}-parcial`} data-testid={`radio-parcial-${standard.id}`} />
                               <Label htmlFor={`${standard.id}-parcial`} className="flex-1 cursor-pointer">
                                 <div className="flex items-center gap-2">
-                                  <Circle className="h-4 w-4 text-yellow-600" />
+                                  <CircleIcon className="h-4 w-4 text-yellow-600" />
                                   <span className="font-medium">Cumple Parcial</span>
                                   <span className="text-sm text-gray-500">(50% del puntaje)</span>
                                 </div>
