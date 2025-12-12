@@ -10,7 +10,9 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, Di
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
-import { Shield, Plus, LogOut, FileText, Calendar, TrendingUp, Eye, Building2, MapPin, Users, Edit, X, Loader2 } from "lucide-react";
+import { Shield, Plus, LogOut, FileText, Calendar, TrendingUp, Eye, Building2, MapPin, Users, Edit, X, Loader2, Settings, BookOpen } from "lucide-react";
+import ConfiguracionAuditoriaWizard from "@/components/ConfiguracionAuditoriaWizard";
+import NormasEspecificasManager from "@/components/NormasEspecificasManager";
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API = `${BACKEND_URL}/api`;
