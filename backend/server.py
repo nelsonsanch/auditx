@@ -114,8 +114,10 @@ class Company(BaseModel):
 
 class StandardResponse(BaseModel):
     standard_id: str
-    response: str  # "cumple", "cumple_parcial", "no_cumple"
+    response: str  # "cumple", "no_cumple", "no_aplica"
     observations: str = ""
+    ai_recommendation: Optional[str] = None
+    evidence_images: Optional[List[Dict[str, str]]] = []  # [{url, analysis}]
 
 class InspectionCreate(BaseModel):
     company_id: str
