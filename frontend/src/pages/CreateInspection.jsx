@@ -215,7 +215,7 @@ const CreateInspection = () => {
                           <div className="flex-1">
                             <CardTitle className="text-base flex items-center gap-2">
                               {responses[standard.id]?.response === "cumple" && <CheckCircle2 className="h-5 w-5 text-green-600" />}
-                              {responses[standard.id]?.response === "cumple_parcial" && <Circle className="h-5 w-5 text-yellow-600" />}
+                              {responses[standard.id]?.response === "cumple_parcial" && <CircleIcon className="h-5 w-5 text-yellow-600" />}
                               {responses[standard.id]?.response === "no_cumple" && <XCircle className="h-5 w-5 text-red-600" />}
                               {standard.id}. {standard.title}
                             </CardTitle>
