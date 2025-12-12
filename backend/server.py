@@ -758,6 +758,256 @@ async def get_standards(current_user: dict = Depends(get_current_user)):
     return STANDARDS
 
 # ====================
+# REPOSITORIO NORMATIVO - NORMAS GENERALES (Solo Superadmin)
+# ====================
+
+@api_router.get("/normas-generales")
+async def get_normas_generales(current_user: dict = Depends(get_current_user)):
+    """Obtener todas las normas generales"""
+    normas = await db.normas_generales.find({"vigente": True}, {"_id": 0}).to_list(1000)
+    return normas
+
+@api_router.get("/normas-generales/all")
+async def get_all_normas_generales(current_user: dict = Depends(get_current_user)):
+    """Obtener todas las normas generales (incluyendo no vigentes) - Solo Superadmin"""
+    if current_user['role'] != 'superadmin':
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Acceso denegado")
+    normas = await db.normas_generales.find({}, {"_id": 0}).to_list(1000)
+    return normas
+
+@api_router.post("/normas-generales")
+async def create_norma_general(request: CreateNormaGeneralRequest, current_user: dict = Depends(get_current_user)):
+    """Crear una nueva norma general - Solo Superadmin"""
+    if current_user['role'] != 'superadmin':
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Solo el superadministrador puede crear normas generales")
+    
+    norma = NormaGeneral(
+        nombre=request.nombre,
+        categoria=request.categoria,
+        descripcion=request.descripcion,
+        contenido=request.contenido,
+        fecha_expedicion=request.fecha_expedicion,
+        entidad_emisora=request.entidad_emisora
+    )
+    
+    await db.normas_generales.insert_one(norma.model_dump())
+    return {"message": "Norma general creada exitosamente", "id": norma.id}
+
+@api_router.put("/normas-generales/{norma_id}")
+async def update_norma_general(norma_id: str, request: CreateNormaGeneralRequest, current_user: dict = Depends(get_current_user)):
+    """Actualizar una norma general - Solo Superadmin"""
+    if current_user['role'] != 'superadmin':
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Solo el superadministrador puede actualizar normas generales")
+    
+    norma = await db.normas_generales.find_one({"id": norma_id}, {"_id": 0})
+    if not norma:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Norma no encontrada")
+    
+    update_data = {
+        "nombre": request.nombre,
+        "categoria": request.categoria,
+        "descripcion": request.descripcion,
+        "contenido": request.contenido,
+        "fecha_expedicion": request.fecha_expedicion,
+        "entidad_emisora": request.entidad_emisora,
+        "updated_at": datetime.now(timezone.utc)
+    }
+    
+    await db.normas_generales.update_one({"id": norma_id}, {"$set": update_data})
+    return {"message": "Norma general actualizada exitosamente"}
+
+@api_router.delete("/normas-generales/{norma_id}")
+async def delete_norma_general(norma_id: str, current_user: dict = Depends(get_current_user)):
+    """Eliminar (desactivar) una norma general - Solo Superadmin"""
+    if current_user['role'] != 'superadmin':
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Solo el superadministrador puede eliminar normas generales")
+    
+    norma = await db.normas_generales.find_one({"id": norma_id}, {"_id": 0})
+    if not norma:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Norma no encontrada")
+    
+    await db.normas_generales.update_one({"id": norma_id}, {"$set": {"vigente": False}})
+    return {"message": "Norma general desactivada exitosamente"}
+
+# ====================
+# REPOSITORIO NORMATIVO - NORMAS ESPECÍFICAS (Por empresa)
+# ====================
+
+@api_router.get("/normas-especificas/{company_id}")
+async def get_normas_especificas(company_id: str, current_user: dict = Depends(get_current_user)):
+    """Obtener normas específicas de una empresa"""
+    # Verify access
+    company = await db.companies.find_one({"id": company_id}, {"_id": 0})
+    if not company:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Empresa no encontrada")
+    
+    if current_user['role'] == 'client' and company['user_id'] != current_user['id']:
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Acceso denegado")
+    
+    normas = await db.normas_especificas.find({"company_id": company_id, "vigente": True}, {"_id": 0}).to_list(1000)
+    return normas
+
+@api_router.post("/normas-especificas")
+async def create_norma_especifica(request: CreateNormaEspecificaRequest, current_user: dict = Depends(get_current_user)):
+    """Crear una nueva norma específica para una empresa"""
+    # Verify access
+    company = await db.companies.find_one({"id": request.company_id}, {"_id": 0})
+    if not company:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Empresa no encontrada")
+    
+    if current_user['role'] == 'client' and company['user_id'] != current_user['id']:
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Acceso denegado")
+    
+    norma = NormaEspecifica(
+        company_id=request.company_id,
+        nombre=request.nombre,
+        tipo=request.tipo,
+        descripcion=request.descripcion,
+        contenido=request.contenido,
+        version=request.version
+    )
+    
+    await db.normas_especificas.insert_one(norma.model_dump())
+    return {"message": "Norma específica creada exitosamente", "id": norma.id}
+
+@api_router.put("/normas-especificas/{norma_id}")
+async def update_norma_especifica(norma_id: str, request: CreateNormaEspecificaRequest, current_user: dict = Depends(get_current_user)):
+    """Actualizar una norma específica"""
+    norma = await db.normas_especificas.find_one({"id": norma_id}, {"_id": 0})
+    if not norma:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Norma no encontrada")
+    
+    # Verify access
+    company = await db.companies.find_one({"id": norma['company_id']}, {"_id": 0})
+    if current_user['role'] == 'client' and company['user_id'] != current_user['id']:
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Acceso denegado")
+    
+    update_data = {
+        "nombre": request.nombre,
+        "tipo": request.tipo,
+        "descripcion": request.descripcion,
+        "contenido": request.contenido,
+        "version": request.version,
+        "updated_at": datetime.now(timezone.utc)
+    }
+    
+    await db.normas_especificas.update_one({"id": norma_id}, {"$set": update_data})
+    return {"message": "Norma específica actualizada exitosamente"}
+
+@api_router.delete("/normas-especificas/{norma_id}")
+async def delete_norma_especifica(norma_id: str, current_user: dict = Depends(get_current_user)):
+    """Eliminar (desactivar) una norma específica"""
+    norma = await db.normas_especificas.find_one({"id": norma_id}, {"_id": 0})
+    if not norma:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Norma no encontrada")
+    
+    # Verify access
+    company = await db.companies.find_one({"id": norma['company_id']}, {"_id": 0})
+    if current_user['role'] == 'client' and company['user_id'] != current_user['id']:
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Acceso denegado")
+    
+    await db.normas_especificas.update_one({"id": norma_id}, {"$set": {"vigente": False}})
+    return {"message": "Norma específica desactivada exitosamente"}
+
+# ====================
+# CONFIGURACIÓN DE AUDITORÍA
+# ====================
+
+@api_router.get("/configuraciones-auditoria/{company_id}")
+async def get_configuraciones_auditoria(company_id: str, current_user: dict = Depends(get_current_user)):
+    """Obtener configuraciones de auditoría de una empresa"""
+    company = await db.companies.find_one({"id": company_id}, {"_id": 0})
+    if not company:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Empresa no encontrada")
+    
+    if current_user['role'] == 'client' and company['user_id'] != current_user['id']:
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Acceso denegado")
+    
+    configs = await db.configuraciones_auditoria.find({"company_id": company_id}, {"_id": 0}).to_list(1000)
+    return configs
+
+@api_router.get("/configuracion-auditoria/{config_id}")
+async def get_configuracion_auditoria(config_id: str, current_user: dict = Depends(get_current_user)):
+    """Obtener una configuración de auditoría específica"""
+    config = await db.configuraciones_auditoria.find_one({"id": config_id}, {"_id": 0})
+    if not config:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Configuración no encontrada")
+    
+    # Get full normas data
+    normas_generales = []
+    for norma_id in config.get('normas_generales_ids', []):
+        norma = await db.normas_generales.find_one({"id": norma_id}, {"_id": 0})
+        if norma:
+            normas_generales.append(norma)
+    
+    normas_especificas = []
+    for norma_id in config.get('normas_especificas_ids', []):
+        norma = await db.normas_especificas.find_one({"id": norma_id}, {"_id": 0})
+        if norma:
+            normas_especificas.append(norma)
+    
+    config['normas_generales'] = normas_generales
+    config['normas_especificas'] = normas_especificas
+    
+    return config
+
+@api_router.post("/configuraciones-auditoria")
+async def create_configuracion_auditoria(request: CreateConfiguracionRequest, current_user: dict = Depends(get_current_user)):
+    """Crear una nueva configuración de auditoría"""
+    company = await db.companies.find_one({"id": request.company_id}, {"_id": 0})
+    if not company:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Empresa no encontrada")
+    
+    if current_user['role'] == 'client' and company['user_id'] != current_user['id']:
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Acceso denegado")
+    
+    config = ConfiguracionAuditoria(
+        company_id=request.company_id,
+        fecha_inicio=request.fecha_inicio,
+        fecha_fin=request.fecha_fin,
+        alcance=request.alcance,
+        tipo_auditoria=request.tipo_auditoria,
+        areas_proceso=request.areas_proceso,
+        equipo_auditor=[m.model_dump() for m in request.equipo_auditor],
+        equipo_auditado=[m.model_dump() for m in request.equipo_auditado],
+        normas_generales_ids=request.normas_generales_ids,
+        normas_especificas_ids=request.normas_especificas_ids,
+        objetivos=request.objetivos,
+        criterios_adicionales=request.criterios_adicionales
+    )
+    
+    await db.configuraciones_auditoria.insert_one(config.model_dump())
+    return {"message": "Configuración de auditoría creada exitosamente", "id": config.id}
+
+@api_router.put("/configuraciones-auditoria/{config_id}")
+async def update_configuracion_auditoria(config_id: str, request: CreateConfiguracionRequest, current_user: dict = Depends(get_current_user)):
+    """Actualizar una configuración de auditoría"""
+    config = await db.configuraciones_auditoria.find_one({"id": config_id}, {"_id": 0})
+    if not config:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Configuración no encontrada")
+    
+    company = await db.companies.find_one({"id": config['company_id']}, {"_id": 0})
+    if current_user['role'] == 'client' and company['user_id'] != current_user['id']:
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Acceso denegado")
+    
+    update_data = {
+        "fecha_inicio": request.fecha_inicio,
+        "fecha_fin": request.fecha_fin,
+        "alcance": request.alcance,
+        "tipo_auditoria": request.tipo_auditoria,
+        "areas_proceso": request.areas_proceso,
+        "equipo_auditor": [m.model_dump() for m in request.equipo_auditor],
+        "equipo_auditado": [m.model_dump() for m in request.equipo_auditado],
+        "normas_generales_ids": request.normas_generales_ids,
+        "normas_especificas_ids": request.normas_especificas_ids,
+        "objetivos": request.objetivos,
+        "criterios_adicionales": request.criterios_adicionales
+    }
+    
+    await db.configuraciones_auditoria.update_one({"id": config_id}, {"$set": update_data})
+    return {"message": "Configuración actualizada exitosamente"}
+
+# ====================
 # INSPECTION ENDPOINTS
 # ====================
 
