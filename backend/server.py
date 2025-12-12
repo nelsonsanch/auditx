@@ -999,6 +999,184 @@ async def update_analysis(analysis_id: str, report: str, current_user: dict = De
     return {"message": "Informe actualizado exitosamente"}
 
 # ====================
+# AI RECOMMENDATIONS PER STANDARD
+# ====================
+
+@api_router.post("/ai/standard-recommendation")
+async def get_standard_recommendation(request: AIRecommendationRequest, current_user: dict = Depends(get_current_user)):
+    """Generate AI recommendations for a specific standard based on the response"""
+    try:
+        api_key = os.getenv("EMERGENT_LLM_KEY")
+        if not api_key:
+            raise HTTPException(status_code=500, detail="API key no configurada")
+        
+        # Build context-aware prompt
+        response_text = {
+            "cumple": "CUMPLE con el estándar",
+            "no_cumple": "NO CUMPLE con el estándar",
+            "no_aplica": "NO APLICA a la empresa"
+        }.get(request.response, request.response)
+        
+        system_message = """Eres un experto en Seguridad y Salud en el Trabajo (SST) de Colombia, especializado en la Resolución 0312 de 2019.
+Tu rol es proporcionar recomendaciones prácticas, específicas y accionables basadas en las mejores prácticas internacionales (ISO 45001, OHSAS) y la normativa colombiana.
+
+IMPORTANTE:
+- Sé conciso pero completo
+- Proporciona acciones específicas y medibles
+- Incluye referencias normativas cuando sea relevante
+- Adapta las recomendaciones al contexto de la empresa
+- Si el estándar NO CUMPLE, enfócate en acciones correctivas prioritarias
+- Si CUMPLE, sugiere mejoras continuas y buenas prácticas adicionales
+- Si NO APLICA, explica brevemente por qué podría no aplicar y qué considerar"""
+
+        user_prompt = f"""**ESTÁNDAR A EVALUAR:**
+- ID: {request.standard_id}
+- Título: {request.standard_title}
+- Descripción: {request.standard_description}
+- Método de Verificación: {request.metodo_verificacion}
+- Criterio de Evaluación: {request.criterio}
+
+**RESULTADO DE LA EVALUACIÓN:** {response_text}
+
+**CONTEXTO DE LA EMPRESA:**
+- Actividad Económica: {request.company_activity or 'No especificada'}
+- Nivel de Riesgo: {request.risk_level or 'No especificado'}
+- Observaciones del auditor: {request.observations or 'Ninguna'}
+
+**SOLICITUD:**
+Genera recomendaciones específicas para este estándar considerando el resultado de la evaluación.
+Incluye:
+1. Análisis breve del resultado
+2. Acciones recomendadas (priorizadas)
+3. Evidencias que se deberían mantener o implementar
+4. Referencia normativa aplicable
+5. Plazo sugerido para implementación (si aplica)"""
+
+        chat = LlmChat(
+            api_key=api_key,
+            session_id=f"rec_{request.standard_id}_{uuid.uuid4()}",
+            system_message=system_message
+        ).with_model("openai", "gpt-4o")
+        
+        response = await chat.send_message(UserMessage(text=user_prompt))
+        
+        return {
+            "standard_id": request.standard_id,
+            "recommendation": response,
+            "generated_at": datetime.now(timezone.utc).isoformat()
+        }
+        
+    except Exception as e:
+        logging.error(f"Error generating recommendation: {e}")
+        raise HTTPException(status_code=500, detail=f"Error al generar recomendación: {str(e)}")
+
+@api_router.post("/ai/analyze-image")
+async def analyze_inspection_image(request: AIImageAnalysisRequest, current_user: dict = Depends(get_current_user)):
+    """Analyze an image for SST compliance and evidence extraction"""
+    try:
+        api_key = os.getenv("EMERGENT_LLM_KEY")
+        if not api_key:
+            raise HTTPException(status_code=500, detail="API key no configurada")
+        
+        system_message = """Eres un experto en Seguridad y Salud en el Trabajo (SST) analizando evidencia fotográfica para una auditoría basada en la Resolución 0312 de 2019 de Colombia.
+
+Tu objetivo es analizar la imagen y extraer información relevante para el informe de inspección.
+
+DEBES PROPORCIONAR:
+1. **Descripción General**: Qué se observa en la imagen
+2. **Elementos de SST Identificados**: EPP, señalización, condiciones de trabajo, etc.
+3. **Aspectos Positivos (Cumplimiento)**: Lo que cumple con normativas de SST
+4. **Aspectos a Mejorar (No Cumplimiento)**: Riesgos o incumplimientos detectados
+5. **Relevancia para el Estándar**: Cómo la imagen se relaciona con el estándar evaluado
+6. **Recomendaciones**: Acciones basadas en lo observado
+
+Sé objetivo, técnico y específico. Basa tu análisis en evidencia visible."""
+
+        user_prompt = f"""Analiza esta imagen como evidencia para el siguiente estándar de auditoría SST:
+
+**ESTÁNDAR:**
+- ID: {request.standard_id}
+- Título: {request.standard_title}
+
+**CONTEXTO:**
+- Actividad de la empresa: {request.company_activity or 'No especificada'}
+
+Por favor proporciona un análisis detallado de la imagen en relación con este estándar."""
+
+        # Create image content from base64
+        image_content = ImageContent(image_base64=request.image_base64)
+        
+        chat = LlmChat(
+            api_key=api_key,
+            session_id=f"img_{request.standard_id}_{uuid.uuid4()}",
+            system_message=system_message
+        ).with_model("openai", "gpt-4o")
+        
+        response = await chat.send_message(UserMessage(
+            text=user_prompt,
+            file_contents=[image_content]
+        ))
+        
+        return {
+            "standard_id": request.standard_id,
+            "analysis": response,
+            "analyzed_at": datetime.now(timezone.utc).isoformat()
+        }
+        
+    except Exception as e:
+        logging.error(f"Error analyzing image: {e}")
+        raise HTTPException(status_code=500, detail=f"Error al analizar imagen: {str(e)}")
+
+@api_router.post("/upload-evidence")
+async def upload_evidence(file: UploadFile = File(...), current_user: dict = Depends(get_current_user)):
+    """Upload evidence image to Firebase Storage"""
+    try:
+        from firebase_storage import upload_file_to_firebase
+        
+        # Validate file type
+        allowed_types = ["image/jpeg", "image/png", "image/webp"]
+        if file.content_type not in allowed_types:
+            raise HTTPException(status_code=400, detail="Solo se permiten imágenes JPEG, PNG o WEBP")
+        
+        # Read file content
+        file_content = await file.read()
+        
+        # Max size 5MB
+        if len(file_content) > 5 * 1024 * 1024:
+            raise HTTPException(status_code=400, detail="La imagen no puede superar 5MB")
+        
+        # Upload to Firebase with 'evidencias' folder
+        file_extension = file.filename.split('.')[-1] if '.' in file.filename else 'jpg'
+        unique_filename = f"evidencias/{uuid.uuid4()}.{file_extension}"
+        
+        # Use modified upload function for evidencias
+        config = {
+            'storage_bucket': os.getenv('FIREBASE_STORAGE_BUCKET')
+        }
+        
+        import requests
+        upload_url = f"https://firebasestorage.googleapis.com/v0/b/{config['storage_bucket']}/o?uploadType=media&name={unique_filename}"
+        
+        response = requests.post(
+            upload_url,
+            data=file_content,
+            headers={'Content-Type': file.content_type}
+        )
+        
+        if response.status_code not in [200, 201]:
+            raise Exception(f"Firebase upload failed: {response.status_code}")
+        
+        public_url = f"https://firebasestorage.googleapis.com/v0/b/{config['storage_bucket']}/o/{unique_filename.replace('/', '%2F')}?alt=media"
+        
+        return {"url": public_url, "filename": file.filename}
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        logging.error(f"Error uploading evidence: {e}")
+        raise HTTPException(status_code=500, detail=f"Error al subir imagen: {str(e)}")
+
+# ====================
 # PDF GENERATION
 # ====================
 
