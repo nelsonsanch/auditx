@@ -277,7 +277,7 @@ const ClientDashboard = () => {
             <CardHeader className="pb-3">
               <CardTitle className="text-sm font-medium text-purple-800 flex items-center">
                 <Calendar className="mr-2 h-4 w-4" />
-                Última Inspección
+                Última Auditoría
               </CardTitle>
             </CardHeader>
             <CardContent>
