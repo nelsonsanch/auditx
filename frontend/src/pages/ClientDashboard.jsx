@@ -306,7 +306,7 @@ const ClientDashboard = () => {
             </TabsTrigger>
           </TabsList>
 
-          {/* TAB: INSPECCIONES */}
+          {/* TAB: AUDITORÍAS */}
           <TabsContent value="inspections">
             <Card className="shadow-xl" data-testid="inspections-table-card">
               <CardHeader>
