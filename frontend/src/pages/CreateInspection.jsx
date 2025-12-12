@@ -390,7 +390,7 @@ const CreateInspection = () => {
               <div className="w-8 h-8 sm:w-10 sm:h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center flex-shrink-0">
                 <Shield className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
               </div>
-              <h1 className="text-base sm:text-xl lg:text-2xl font-bold truncate" style={{ fontFamily: 'Space Grotesk' }}>Nueva Inspección</h1>
+              <h1 className="text-base sm:text-xl lg:text-2xl font-bold truncate" style={{ fontFamily: 'Space Grotesk' }}>Auditoría en Curso</h1>
             </div>
             <div className="flex items-center space-x-1 sm:space-x-2 flex-shrink-0">
               <div className="text-xs sm:text-sm text-gray-600 hidden md:block">
