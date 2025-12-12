@@ -346,7 +346,7 @@ const CreateInspection = () => {
         headers: { Authorization: `Bearer ${token}` }
       });
 
-      toast.success(`Inspección creada exitosamente. Puntaje: ${response.data.total_score.toFixed(1)}%`);
+      toast.success(`Auditoría completada exitosamente. Puntaje: ${response.data.total_score.toFixed(1)}%`);
       navigate("/client/dashboard");
     } catch (error) {
       toast.error("Error al crear inspección");
