@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import axios from "axios";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -10,7 +10,7 @@ import { toast } from "sonner";
 import { 
   Shield, ArrowLeft, Save, Loader2, CheckCircle2, XCircle, 
   Circle as CircleIcon, Sparkles, Camera, X, Image as ImageIcon,
-  Info, Copy, ChevronDown, ChevronUp
+  Info, Copy, ChevronDown, ChevronUp, Settings
 } from "lucide-react";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import {
@@ -25,11 +25,15 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { Badge } from "@/components/ui/badge";
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API = `${BACKEND_URL}/api`;
 
 const CreateInspection = () => {
+  const [searchParams] = useSearchParams();
+  const auditConfigId = searchParams.get('config');
+  
   const [standards, setStandards] = useState([]);
   const [companies, setCompanies] = useState([]);
   const [selectedCompany, setSelectedCompany] = useState("");
@@ -37,6 +41,7 @@ const CreateInspection = () => {
   const [responses, setResponses] = useState({});
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
+  const [auditConfig, setAuditConfig] = useState(null);
   
   // AI States
   const [aiLoading, setAiLoading] = useState({});
