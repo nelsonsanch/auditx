@@ -89,6 +89,20 @@ const CreateInspection = () => {
         setCompanyData(userCompanies[0]);
       }
 
+      // Load audit configuration if provided
+      if (auditConfigId) {
+        try {
+          const configRes = await axios.get(`${API}/configuracion-auditoria/${auditConfigId}`, { headers });
+          setAuditConfig(configRes.data);
+          // Set company from config
+          if (configRes.data.company_id) {
+            setSelectedCompany(configRes.data.company_id);
+          }
+        } catch (err) {
+          console.error("Error loading audit config:", err);
+        }
+      }
+
       const initialResponses = {};
       standardsRes.data.forEach(standard => {
         initialResponses[standard.id] = {
