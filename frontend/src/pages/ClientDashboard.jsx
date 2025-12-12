@@ -249,7 +249,7 @@ const ClientDashboard = () => {
             <CardHeader className="pb-3">
               <CardTitle className="text-sm font-medium text-blue-800 flex items-center">
                 <FileText className="mr-2 h-4 w-4" />
-                Total Inspecciones
+                Total Auditorías
               </CardTitle>
             </CardHeader>
             <CardContent>
