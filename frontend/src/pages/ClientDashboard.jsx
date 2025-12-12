@@ -906,6 +906,33 @@ const ClientDashboard = () => {
           </div>
         </DialogContent>
       </Dialog>
+
+      {/* Dialog para Wizard de Configuración de Auditoría */}
+      <Dialog open={showAuditWizard} onOpenChange={setShowAuditWizard}>
+        <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <Settings className="h-5 w-5 text-blue-600" />
+              Configurar Nueva Auditoría
+            </DialogTitle>
+            <DialogDescription>
+              Configure los parámetros de la auditoría antes de iniciar
+            </DialogDescription>
+          </DialogHeader>
+          {company && (
+            <ConfiguracionAuditoriaWizard
+              companyId={company.id}
+              onComplete={(configId) => {
+                setShowAuditWizard(false);
+                toast.success("Configuración guardada. Iniciando auditoría...");
+                // Navegar a crear inspección con el config_id
+                navigate(`/client/inspection/create?config=${configId}`);
+              }}
+              onCancel={() => setShowAuditWizard(false)}
+            />
+          )}
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
