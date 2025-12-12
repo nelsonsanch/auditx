@@ -28,6 +28,7 @@ const ClientDashboard = () => {
   const [saving, setSaving] = useState(false);
   const [uploadingLogo, setUploadingLogo] = useState(false);
   const [logoPreview, setLogoPreview] = useState(null);
+  const [showAuditWizard, setShowAuditWizard] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
