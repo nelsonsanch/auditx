@@ -155,6 +155,97 @@ class ChangePassword(BaseModel):
     current_password: str
     new_password: str
 
+# ====================
+# MODELOS PARA REPOSITORIO NORMATIVO Y CONFIGURACIÓN DE AUDITORÍA
+# ====================
+
+class NormaGeneral(BaseModel):
+    """Normas generales que aplican a todas las empresas - Solo Superadmin puede gestionar"""
+    model_config = ConfigDict(extra="ignore")
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    nombre: str  # Ej: "Resolución 0312 de 2019"
+    categoria: str  # SST, Laboral, Calidad, Medio Ambiente, etc.
+    descripcion: str  # Descripción breve
+    contenido: str  # Texto completo/resumen de la norma (soporta gran cantidad de texto)
+    vigente: bool = True
+    fecha_expedicion: Optional[str] = None
+    entidad_emisora: Optional[str] = None  # Ej: "Ministerio del Trabajo"
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    updated_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
+class NormaEspecifica(BaseModel):
+    """Normas específicas/internas por empresa"""
+    model_config = ConfigDict(extra="ignore")
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    company_id: str  # Asociada a una empresa específica
+    nombre: str  # Ej: "Reglamento Interno de Trabajo"
+    tipo: str  # politica, reglamento, manual, instructivo, procedimiento
+    descripcion: str
+    contenido: str  # Texto completo
+    vigente: bool = True
+    version: Optional[str] = "1.0"
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    updated_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
+class MiembroEquipo(BaseModel):
+    """Miembro del equipo auditor o auditado"""
+    nombre: str
+    identificacion: str
+    rol: str  # auditor_lider, auditor, observador, etc.
+    cargo: Optional[str] = None
+    email: Optional[str] = None
+
+class ConfiguracionAuditoria(BaseModel):
+    """Configuración previa a la auditoría"""
+    model_config = ConfigDict(extra="ignore")
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    company_id: str
+    fecha_inicio: str
+    fecha_fin: Optional[str] = None
+    alcance: str  # Descripción del alcance
+    tipo_auditoria: str  # SST, Calidad, Talento_Humano, Medio_Ambiente, Otro
+    areas_proceso: Optional[List[str]] = []  # Áreas o procesos a auditar
+    equipo_auditor: List[MiembroEquipo] = []
+    equipo_auditado: List[MiembroEquipo] = []
+    normas_generales_ids: List[str] = []  # IDs de normas generales seleccionadas
+    normas_especificas_ids: List[str] = []  # IDs de normas específicas seleccionadas
+    objetivos: Optional[str] = None
+    criterios_adicionales: Optional[str] = None
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
+class CreateNormaGeneralRequest(BaseModel):
+    nombre: str
+    categoria: str
+    descripcion: str
+    contenido: str
+    fecha_expedicion: Optional[str] = None
+    entidad_emisora: Optional[str] = None
+
+class CreateNormaEspecificaRequest(BaseModel):
+    company_id: str
+    nombre: str
+    tipo: str
+    descripcion: str
+    contenido: str
+    version: Optional[str] = "1.0"
+
+class CreateConfiguracionRequest(BaseModel):
+    company_id: str
+    fecha_inicio: str
+    fecha_fin: Optional[str] = None
+    alcance: str
+    tipo_auditoria: str
+    areas_proceso: Optional[List[str]] = []
+    equipo_auditor: List[MiembroEquipo] = []
+    equipo_auditado: List[MiembroEquipo] = []
+    normas_generales_ids: List[str] = []
+    normas_especificas_ids: List[str] = []
+    objetivos: Optional[str] = None
+    criterios_adicionales: Optional[str] = None
+
+class UpdateReportRequest(BaseModel):
+    report: str
+
 # Nuevos modelos para IA de inspecciones
 class AIRecommendationRequest(BaseModel):
     standard_id: str
@@ -166,6 +257,8 @@ class AIRecommendationRequest(BaseModel):
     observations: Optional[str] = ""
     company_activity: Optional[str] = ""
     risk_level: Optional[str] = ""
+    # Nuevo: contexto normativo
+    audit_config_id: Optional[str] = None
 
 class AIImageAnalysisRequest(BaseModel):
     standard_id: str
