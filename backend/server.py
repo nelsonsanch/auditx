@@ -1352,7 +1352,7 @@ async def update_analysis(analysis_id: str, request: UpdateReportRequest, curren
 
 @api_router.post("/ai/standard-recommendation")
 async def get_standard_recommendation(request: AIRecommendationRequest, current_user: dict = Depends(get_current_user)):
-    """Generate AI recommendations for a specific standard based on the response"""
+    """Generate AI recommendations for a specific standard based on the response and normative context"""
     try:
         api_key = os.getenv("EMERGENT_LLM_KEY")
         if not api_key:
@@ -1365,17 +1365,51 @@ async def get_standard_recommendation(request: AIRecommendationRequest, current_
             "no_aplica": "NO APLICA a la empresa"
         }.get(request.response, request.response)
         
-        system_message = """Eres un experto en Seguridad y Salud en el Trabajo (SST) de Colombia, especializado en la Resolución 0312 de 2019.
-Tu rol es proporcionar recomendaciones prácticas, específicas y accionables basadas en las mejores prácticas internacionales (ISO 45001, OHSAS) y la normativa colombiana.
+        # Get normative context if audit_config_id is provided
+        normative_context = ""
+        if request.audit_config_id:
+            config = await db.configuraciones_auditoria.find_one({"id": request.audit_config_id}, {"_id": 0})
+            if config:
+                # Get normas generales
+                normas_gen_texts = []
+                for norma_id in config.get('normas_generales_ids', []):
+                    norma = await db.normas_generales.find_one({"id": norma_id}, {"_id": 0})
+                    if norma:
+                        normas_gen_texts.append(f"**{norma['nombre']}** ({norma['categoria']}): {norma['contenido'][:2000]}...")
+                
+                # Get normas específicas
+                normas_esp_texts = []
+                for norma_id in config.get('normas_especificas_ids', []):
+                    norma = await db.normas_especificas.find_one({"id": norma_id}, {"_id": 0})
+                    if norma:
+                        normas_esp_texts.append(f"**{norma['nombre']}** ({norma['tipo']}): {norma['contenido'][:1500]}...")
+                
+                if normas_gen_texts or normas_esp_texts:
+                    normative_context = "\n\n**CONTEXTO NORMATIVO APLICABLE:**\n"
+                    if normas_gen_texts:
+                        normative_context += "\n*Normas Generales:*\n" + "\n".join(normas_gen_texts)
+                    if normas_esp_texts:
+                        normative_context += "\n\n*Normas Internas de la Empresa:*\n" + "\n".join(normas_esp_texts)
+        
+        system_message = """Eres un experto auditor en Sistemas de Gestión con especialización en Seguridad y Salud en el Trabajo (SST), Calidad (ISO 9001), Medio Ambiente (ISO 14001) y normativa laboral colombiana.
 
-IMPORTANTE:
-- Sé conciso pero completo
-- Proporciona acciones específicas y medibles
-- Incluye referencias normativas cuando sea relevante
-- Adapta las recomendaciones al contexto de la empresa
-- Si el estándar NO CUMPLE, enfócate en acciones correctivas prioritarias
-- Si CUMPLE, sugiere mejoras continuas y buenas prácticas adicionales
-- Si NO APLICA, explica brevemente por qué podría no aplicar y qué considerar"""
+Tu conocimiento incluye:
+- Resolución 0312 de 2019 (Estándares Mínimos del SG-SST)
+- Decreto 1072 de 2015 (Decreto Único Reglamentario del Sector Trabajo)
+- ISO 45001:2018 (Sistema de Gestión de SST)
+- Código Sustantivo del Trabajo
+- Ley 100 de 1993 (Sistema de Seguridad Social)
+- Y demás normativa aplicable
+
+DIRECTRICES PARA TUS RECOMENDACIONES:
+1. Sé específico y accionable - proporciona pasos concretos
+2. Prioriza las acciones según criticidad e impacto
+3. Cita los artículos o requisitos normativos específicos cuando sea relevante
+4. Considera el contexto normativo proporcionado (tanto general como interno)
+5. Adapta las recomendaciones al sector y nivel de riesgo de la empresa
+6. Si hay normas internas, verifica cumplimiento con ellas también
+7. Proporciona evidencias sugeridas para demostrar cumplimiento
+8. Indica plazos realistas para implementación"""
 
         user_prompt = f"""**ESTÁNDAR A EVALUAR:**
 - ID: {request.standard_id}
@@ -1390,15 +1424,32 @@ IMPORTANTE:
 - Actividad Económica: {request.company_activity or 'No especificada'}
 - Nivel de Riesgo: {request.risk_level or 'No especificado'}
 - Observaciones del auditor: {request.observations or 'Ninguna'}
+{normative_context}
 
 **SOLICITUD:**
-Genera recomendaciones específicas para este estándar considerando el resultado de la evaluación.
-Incluye:
-1. Análisis breve del resultado
-2. Acciones recomendadas (priorizadas)
-3. Evidencias que se deberían mantener o implementar
-4. Referencia normativa aplicable
-5. Plazo sugerido para implementación (si aplica)"""
+Genera un análisis profesional y recomendaciones específicas para este estándar.
+
+ESTRUCTURA TU RESPUESTA ASÍ:
+
+## 📋 Análisis del Hallazgo
+[Breve análisis del resultado de la evaluación]
+
+## ⚡ Acciones Recomendadas (Priorizadas)
+1. **[Acción Crítica]** - Plazo: X días
+   - Descripción detallada
+   - Responsable sugerido
+   
+2. **[Acción Importante]** - Plazo: X días
+   ...
+
+## 📎 Evidencias Requeridas
+- [Lista de documentos/registros que demuestran cumplimiento]
+
+## 📚 Fundamento Normativo
+- [Referencias específicas a artículos de normas aplicables]
+
+## 💡 Mejores Prácticas
+- [Recomendaciones adicionales basadas en estándares internacionales]"""
 
         chat = LlmChat(
             api_key=api_key,
