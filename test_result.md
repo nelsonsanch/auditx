@@ -101,3 +101,70 @@
 #====================================================================================================
 # Testing Data - Main Agent and testing sub agent both should log testing data below this section
 #====================================================================================================
+
+user_problem_statement: |
+  Bug crítico en AuditX: Al intentar responder una pregunta en el formulario de inspección 
+  (seleccionar "Cumple", "No Cumple", etc.), la selección no se guarda y la página retrocede.
+  Error en consola: "NotFoundError: Failed to execute 'insertBefore' on 'Node'"
+
+backend:
+  - task: "API de estándares de inspección"
+    implemented: true
+    working: true
+    file: "/app/backend/server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: true
+        agent: "main"
+        comment: "API funcionando correctamente, devuelve 60 estándares"
+
+frontend:
+  - task: "Formulario de creación de inspección - Selección de respuestas"
+    implemented: true
+    working: "NA"
+    file: "/app/frontend/src/pages/CreateInspection.jsx"
+    stuck_count: 1
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: false
+        agent: "user"
+        comment: "Usuario reporta que al seleccionar una opción, la página retrocede y no guarda. Error: NotFoundError insertBefore"
+      - working: "NA"
+        agent: "main"
+        comment: "Se reemplazó RadioGroup de Radix UI por inputs HTML nativos para compatibilidad con React 19. El error de DOM ya no aparece en pruebas iniciales con screenshot tool."
+
+metadata:
+  created_by: "main_agent"
+  version: "1.0"
+  test_sequence: 1
+  run_ui: true
+
+test_plan:
+  current_focus:
+    - "Formulario de creación de inspección - Selección de respuestas"
+  stuck_tasks: []
+  test_all: false
+  test_priority: "high_first"
+
+agent_communication:
+  - agent: "main"
+    message: |
+      He corregido el bug de selección de respuestas en CreateInspection.jsx:
+      1. Reemplacé el componente RadioGroup de Radix UI (@radix-ui/react-radio-group) por inputs HTML nativos
+      2. El error "insertBefore" era causado por incompatibilidad entre React 19 y Radix UI
+      3. Las opciones ahora son: CUMPLE, NO CUMPLE, NO APLICA (alineado con la UI original del usuario)
+      4. Screenshots iniciales muestran que ya no hay errores de DOM
+      
+      POR FAVOR VERIFICAR:
+      - Que se pueden seleccionar las 3 opciones para cada estándar
+      - Que las selecciones persisten (no se pierden al interactuar)
+      - Que el contador de progreso se actualiza correctamente
+      - Que se puede completar una inspección y guardarla
+      
+      CREDENCIALES:
+      - URL: https://auditx.sanchezcya.com
+      - Email: Nelsonsr.1983@gmail.com
+      - Password: ELrey@28
