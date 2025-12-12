@@ -226,42 +226,68 @@ const CreateInspection = () => {
                       <CardContent className="space-y-4">
                         <div>
                           <Label className="mb-3 block">Nivel de Cumplimiento *</Label>
-                          <RadioGroup
-                            value={responses[standard.id]?.response || ""}
-                            onValueChange={(value) => handleResponseChange(standard.id, "response", value)}
-                            data-testid={`radio-group-${standard.id}`}
-                          >
-                            <div className="flex items-center space-x-2 p-3 rounded-lg border hover:bg-green-50 transition-colors">
-                              <RadioGroupItem value="cumple" id={`${standard.id}-cumple`} data-testid={`radio-cumple-${standard.id}`} />
-                              <Label htmlFor={`${standard.id}-cumple`} className="flex-1 cursor-pointer">
-                                <div className="flex items-center gap-2">
-                                  <CheckCircle2 className="h-4 w-4 text-green-600" />
-                                  <span className="font-medium">Cumple</span>
-                                  <span className="text-sm text-gray-500">(100% del puntaje)</span>
-                                </div>
-                              </Label>
-                            </div>
-                            <div className="flex items-center space-x-2 p-3 rounded-lg border hover:bg-yellow-50 transition-colors">
-                              <RadioGroupItem value="cumple_parcial" id={`${standard.id}-parcial`} data-testid={`radio-parcial-${standard.id}`} />
-                              <Label htmlFor={`${standard.id}-parcial`} className="flex-1 cursor-pointer">
-                                <div className="flex items-center gap-2">
-                                  <CircleIcon className="h-4 w-4 text-yellow-600" />
-                                  <span className="font-medium">Cumple Parcial</span>
-                                  <span className="text-sm text-gray-500">(50% del puntaje)</span>
-                                </div>
-                              </Label>
-                            </div>
-                            <div className="flex items-center space-x-2 p-3 rounded-lg border hover:bg-red-50 transition-colors">
-                              <RadioGroupItem value="no_cumple" id={`${standard.id}-no`} data-testid={`radio-no-cumple-${standard.id}`} />
-                              <Label htmlFor={`${standard.id}-no`} className="flex-1 cursor-pointer">
-                                <div className="flex items-center gap-2">
-                                  <XCircle className="h-4 w-4 text-red-600" />
-                                  <span className="font-medium">No Cumple</span>
-                                  <span className="text-sm text-gray-500">(0% del puntaje)</span>
-                                </div>
-                              </Label>
-                            </div>
-                          </RadioGroup>
+                          <div className="grid gap-2" data-testid={`radio-group-${standard.id}`}>
+                            <label 
+                              className={`flex items-center space-x-2 p-3 rounded-lg border cursor-pointer transition-colors ${
+                                responses[standard.id]?.response === "cumple" ? "bg-green-50 border-green-500" : "hover:bg-green-50"
+                              }`}
+                            >
+                              <input
+                                type="radio"
+                                name={`response-${standard.id}`}
+                                value="cumple"
+                                checked={responses[standard.id]?.response === "cumple"}
+                                onChange={(e) => handleResponseChange(standard.id, "response", e.target.value)}
+                                className="h-4 w-4 text-green-600 border-gray-300 focus:ring-green-500"
+                                data-testid={`radio-cumple-${standard.id}`}
+                              />
+                              <div className="flex items-center gap-2 flex-1">
+                                <CheckCircle2 className="h-4 w-4 text-green-600" />
+                                <span className="font-medium">CUMPLE</span>
+                                <span className="text-sm text-gray-500">(Puntaje total: 0,5 %)</span>
+                              </div>
+                            </label>
+                            <label 
+                              className={`flex items-center space-x-2 p-3 rounded-lg border cursor-pointer transition-colors ${
+                                responses[standard.id]?.response === "no_cumple" ? "bg-red-50 border-red-500" : "hover:bg-red-50"
+                              }`}
+                            >
+                              <input
+                                type="radio"
+                                name={`response-${standard.id}`}
+                                value="no_cumple"
+                                checked={responses[standard.id]?.response === "no_cumple"}
+                                onChange={(e) => handleResponseChange(standard.id, "response", e.target.value)}
+                                className="h-4 w-4 text-red-600 border-gray-300 focus:ring-red-500"
+                                data-testid={`radio-no-cumple-${standard.id}`}
+                              />
+                              <div className="flex items-center gap-2 flex-1">
+                                <XCircle className="h-4 w-4 text-red-600" />
+                                <span className="font-medium">NO CUMPLE</span>
+                                <span className="text-sm text-gray-500">(0 puntos)</span>
+                              </div>
+                            </label>
+                            <label 
+                              className={`flex items-center space-x-2 p-3 rounded-lg border cursor-pointer transition-colors ${
+                                responses[standard.id]?.response === "no_aplica" ? "bg-gray-50 border-gray-500" : "hover:bg-gray-50"
+                              }`}
+                            >
+                              <input
+                                type="radio"
+                                name={`response-${standard.id}`}
+                                value="no_aplica"
+                                checked={responses[standard.id]?.response === "no_aplica"}
+                                onChange={(e) => handleResponseChange(standard.id, "response", e.target.value)}
+                                className="h-4 w-4 text-gray-600 border-gray-300 focus:ring-gray-500"
+                                data-testid={`radio-no-aplica-${standard.id}`}
+                              />
+                              <div className="flex items-center gap-2 flex-1">
+                                <CircleIcon className="h-4 w-4 text-gray-600" />
+                                <span className="font-medium">NO APLICA</span>
+                                <span className="text-sm text-gray-500">(Puntaje total: 0,5 %)</span>
+                              </div>
+                            </label>
+                          </div>
                         </div>
                         <div>
                           <Label htmlFor={`obs-${standard.id}`}>Observaciones / Novedades</Label>
