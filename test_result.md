@@ -123,11 +123,11 @@ backend:
 frontend:
   - task: "Formulario de creación de inspección - Selección de respuestas"
     implemented: true
-    working: "NA"
+    working: true
     file: "/app/frontend/src/pages/CreateInspection.jsx"
     stuck_count: 1
     priority: "high"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
       - working: false
         agent: "user"
@@ -135,6 +135,9 @@ frontend:
       - working: "NA"
         agent: "main"
         comment: "Se reemplazó RadioGroup de Radix UI por inputs HTML nativos para compatibilidad con React 19. El error de DOM ya no aparece en pruebas iniciales con screenshot tool."
+      - working: true
+        agent: "testing"
+        comment: "TESTING COMPLETADO EXITOSAMENTE: Todas las funcionalidades de selección de respuestas funcionan correctamente. ✅ CUMPLE, NO CUMPLE y NO APLICA se seleccionan correctamente ✅ Contador de progreso se actualiza (2% por respuesta) ✅ Selecciones persisten al hacer scroll ✅ Múltiples estándares funcionan ✅ No hay errores de DOM ✅ No hay navegación inesperada ✅ Acordeón permanece expandido. NOTA TÉCNICA: Los componentes siguen usando Radix UI (no HTML nativo como se esperaba), pero funcionan sin errores con React 19. El data-testid para NO APLICA es 'radio-na-X' no 'radio-no-aplica-X'."
 
 metadata:
   created_by: "main_agent"
