@@ -207,15 +207,23 @@ const CreateInspection = () => {
           company_activity: companyData?.descripcion_actividad || ""
         };
 
-        const analysisResponse = await axios.post(`${API}/ai/analyze-image`, analysisPayload, {
-          headers: { Authorization: `Bearer ${token}` }
-        });
+        let analysisResult = "Análisis no disponible";
+        try {
+          const analysisResponse = await axios.post(`${API}/ai/analyze-image`, analysisPayload, {
+            headers: { Authorization: `Bearer ${token}` }
+          });
+          analysisResult = analysisResponse.data.analysis;
+        } catch (analysisError) {
+          console.error("Error in AI analysis:", analysisError);
+          analysisResult = "No se pudo analizar la imagen. La imagen se guardó como evidencia.";
+          toast.warning("Imagen guardada. El análisis de IA no está disponible para esta imagen.");
+        }
 
         // Store image and analysis
         const newImage = {
           url: imageUrl,
           filename: file.name,
-          analysis: analysisResponse.data.analysis
+          analysis: analysisResult
         };
 
         setEvidenceImages(prev => ({
@@ -225,7 +233,7 @@ const CreateInspection = () => {
 
         setImageAnalyses(prev => ({
           ...prev,
-          [`${standardId}_${currentImages.length}`]: analysisResponse.data.analysis
+          [`${standardId}_${currentImages.length}`]: analysisResult
         }));
 
         // Update responses with evidence
@@ -233,10 +241,18 @@ const CreateInspection = () => {
           [...(responses[standardId]?.evidence_images || []), newImage]
         );
 
-        toast.success("Imagen subida y analizada exitosamente");
+        if (analysisResult !== "No se pudo analizar la imagen. La imagen se guardó como evidencia.") {
+          toast.success("Imagen subida y analizada exitosamente");
+        }
       } catch (error) {
         console.error("Error uploading/analyzing image:", error);
-        toast.error("Error al procesar la imagen");
+        if (error.response?.status === 403) {
+          toast.error("Error de permisos al subir imagen. Contacte al administrador.");
+        } else if (error.response?.data?.detail) {
+          toast.error(error.response.data.detail);
+        } else {
+          toast.error("Error al procesar la imagen. Intente con otra imagen.");
+        }
       } finally {
         setImageLoading(prev => ({ ...prev, [standardId]: false }));
       }
