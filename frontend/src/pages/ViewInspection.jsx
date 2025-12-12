@@ -91,7 +91,7 @@ const ViewInspection = () => {
       const token = localStorage.getItem("token");
       await axios.put(
         `${API}/analysis/${analysis.id}`,
-        editedReport,
+        { report: editedReport },
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -101,8 +101,9 @@ const ViewInspection = () => {
       );
       setAnalysis({ ...analysis, report: editedReport });
       setEditMode(false);
-      toast.success("Informe actualizado");
+      toast.success("Informe actualizado exitosamente");
     } catch (error) {
+      console.error("Error saving report:", error);
       toast.error("Error al actualizar informe");
     }
   };
