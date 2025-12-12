@@ -1147,19 +1147,18 @@ async def upload_evidence(file: UploadFile = File(...), current_user: dict = Dep
         if len(file_content) > 5 * 1024 * 1024:
             raise HTTPException(status_code=400, detail="La imagen no puede superar 5MB")
         
-        # Upload to Firebase with 'evidencias' folder
+        # Upload to Firebase using same folder as logos (already has permissions)
         file_extension = file.filename.split('.')[-1] if '.' in file.filename else 'jpg'
-        unique_filename = f"evidencias/{uuid.uuid4()}.{file_extension}"
+        unique_filename = f"logos/evidence_{uuid.uuid4()}.{file_extension}"
         
-        # Use modified upload function for evidencias
         config = {
             'storage_bucket': os.getenv('FIREBASE_STORAGE_BUCKET')
         }
         
-        import requests
+        import requests as http_requests
         upload_url = f"https://firebasestorage.googleapis.com/v0/b/{config['storage_bucket']}/o?uploadType=media&name={unique_filename}"
         
-        response = requests.post(
+        response = http_requests.post(
             upload_url,
             data=file_content,
             headers={'Content-Type': file.content_type}
