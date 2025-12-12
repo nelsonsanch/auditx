@@ -1,171 +1,183 @@
 <analysis>**original_problem_statement:**
-El usuario solicitó una aplicación web multi-cliente para realizar inspecciones de Seguridad y Salud en el Trabajo (SST) basadas en la resolución 0312 de 2019 de Colombia.
+El usuario, un experto en Seguridad y Salud en el Trabajo (SST), solicitó una aplicación web multi-cliente llamada AuditX para realizar inspecciones basadas en la resolución 0312 de 2019 de Colombia.
 
-**Requisitos iniciales:**
-1.  Registro de clientes con aprobación de un superadministrador ().
-2.  Panel de cliente para crear inspecciones basadas en 60 estándares (proporcionados en un archivo Excel).
-3.  Cada estándar debe tener opciones de Cumple, Cumple Parcial, No Cumple y un campo de novedades.
-4.  Cálculo de puntaje porcentual.
-5.  Integración con IA (OpenAI GPT-5, luego cambiado a GPT-4o) para analizar los resultados y generar un informe editable y descargable en PDF.
-6.  Sistema de autenticación con recuperación de contraseña.
-7.  Personalización de marca (logo de la empresa).
-8.  La aplicación debe llamarse AuditX y funcionar en el dominio personalizado .
-
-**PRODUCT REQUIREMENTS (Última solicitud):**
-El usuario, un experto en SST, necesita una versión MVP mejorada de la aplicación en 10 días para usarla en una auditoría real para una empresa del sector salud. Este MVP debe incluir:
+**Requisitos del MVP (para una auditoría real en 10 días):**
 1.  Una caracterización más detallada de la empresa en el registro.
-2.  Enriquecer los 60 estándares actuales con campos de fundamento legal y guía de verificación para que sus auxiliares sepan qué solicitar.
+2.  Enriquecer los 60 estándares de auditoría actuales con campos de fundamento legal y guía de verificación.
 3.  Una interfaz de auditoría que muestre esta nueva información.
-4.  Actualizar el informe PDF para incluir los nuevos datos.
+4.  Integración con IA (GPT-4o) para generar un informe de plan de acción más profundo y profesional.
+5.  Actualizar el informe PDF para incluir los nuevos datos de caracterización y mejorar su diseño.
+6.  Almacenamiento persistente para los logos de las empresas.
+7.  Funcionalidad para editar la información de la empresa y eliminar clientes inactivos.
 
 **User's preferred language**: Spanish
 
 **what currently exists?**
-Una aplicación full-stack completamente funcional llamada AuditX, desplegada y accesible en .
-- **Backend (FastAPI):** Gestiona usuarios, empresas, inspecciones y autenticación JWT. Se integra con OpenAI para análisis y con Gmail (SMTP) para el envío real de correos electrónicos.
-- **Frontend (React):** Permite el registro de empresas, inicio de sesión, un panel de superadministrador para activar clientes, y un panel de cliente. Los clientes pueden crear inspecciones, ver resultados, visualizar gráficos de análisis (radar, barras), generar análisis con IA y descargar informes en PDF.
-- **Funcionalidades Clave Implementadas:** Flujo multi-cliente, creación de inspecciones, análisis por IA, reportes en PDF, gráficos de datos, subida de logos, recuperación de contraseña por email, cambio de contraseña en el dashboard, diseño responsive para móviles, y eliminación del badge Made with Emergent.
+Una aplicación full-stack AuditX desplegada y funcional en .
+-   **Backend (FastAPI):** Gestiona usuarios, empresas, inspecciones y autenticación. Se integra con OpenAI, Gmail (SMTP) y Firebase Storage para el almacenamiento de logos. Incluye endpoints para la gestión completa de empresas (crear, editar, eliminar).
+-   **Frontend (React):** Permite el registro de empresas con un formulario de caracterización detallado, inicio de sesión y dashboards para superadministrador y cliente.
+-   **Funcionalidades Clave Implementadas:** Flujo multi-cliente, creación/visualización de inspecciones, análisis por IA, reportes en PDF con diseño mejorado, gráficos de datos, subida de logos a Firebase, recuperación/cambio de contraseña, edición completa de la información de la empresa (incluyendo sedes adicionales), y eliminación de empresas inactivas por el superadmin.
 
 **Last working item**:
-- **Last item agent was working:** El agente analizó la viabilidad de una especificación funcional muy detallada propuesta por el usuario para un módulo de auditoría personalizable. Tras la explicación del usuario de que necesitaba una versión más simple para una auditoría real en 10 días, el agente elaboró y presentó un plan de desarrollo de 10 días para un MVP enfocado en el sector salud. El agente está a la espera de la confirmación del usuario para comenzar la implementación de este nuevo plan.
-- **Status:** NOT STARTED
-- **Agent Testing Done:** N/A
-- **Which testing method agent to use?** Una vez implementado el MVP de 10 días, se deberá usar el  para verificar los nuevos campos de la UI en vistas de escritorio y móvil, y  para probar la creación de una inspección con los nuevos datos del modelo. Dado que es una adición de características, una prueba completa con el  sería recomendable al final.
-- **User Testing Done:** N/A
+-   **Last item agent was working:** El usuario reportó un bug crítico: al intentar responder una pregunta en el formulario de inspección (seleccionar Cumple, No Cumple, etc.), la selección no se guarda y la página retrocede. El agente estaba a punto de investigar el componente  para diagnosticar y solucionar este bloqueo.
+-   **Status:** IN PROGRESS
+-   **Agent Testing Done:** N
+-   **Which testing method agent to use?** Frontend testing agent. Es un bug crítico en la UI. El agente de pruebas debe crear un script que inicie sesión como cliente, vaya a una inspección, intente seleccionar una respuesta y verifique que la selección se mantenga y el estado se actualice correctamente.
+-   **User Testing Done:** N (El usuario acaba de reportar el bug).
 
 **All Pending/In progress Issue list**:
-No hay issues pendientes. El último problema relacionado con la compatibilidad de navegadores fue resuelto.
+-   **Issue 1 (P0 - BLOCKER):** No se pueden responder las preguntas de la inspección. Al seleccionar una opción, la página retrocede y no guarda el cambio.
+-   **Issue 2 (P1):** El informe PDF generado presenta superposición de texto, especialmente en el análisis de la IA. Se intentó una corrección, pero no ha sido verificada.
+-   **Issue 3 (P2):** El frontend tiene un problema de caché persistente en el entorno de producción, lo que obliga al usuario a realizar recargas forzadas () para ver los cambios.
+
+**Issues Detail:**
+-   **Issue 1: La selección de respuestas en la inspección no funciona**
+    -   **Attempted fixes:** Ninguno todavía.
+    -   **Next debug checklist:**
+        -   Revisar el manejador de eventos (ej. ) de los radio buttons en .
+        -   Inspeccionar los hooks de estado () que gestionan las respuestas de la inspección.
+        -   Verificar si algún  está causando un re-renderizado o navegación inesperada.
+        -   Buscar un posible  faltante o mal utilizado en los manejadores del formulario.
+    -   **Why fix this issue and what will be achieved with the fix?** Es la funcionalidad principal de la aplicación. Sin esto, no se pueden realizar auditorías. Solucionarlo es crucial para el MVP.
+    -   **Status:** IN PROGRESS
+    -   **Is recurring issue?** N
+    -   **Should Test frontend/backend/both after fix?** Frontend.
+    -   **Blocked on other issue:** No.
+
+-   **Issue 2: Superposición de texto en el PDF**
+    -   **Attempted fixes:** Se modificó  para mejorar el manejo de saltos de línea y markdown.
+    -   **Next debug checklist:**
+        -   Generar un nuevo informe en PDF para verificar si la corrección funcionó.
+        -   Si persiste, investigar las opciones de la librería  para el renderizado de párrafos () y ajustar el espaciado entre líneas.
+    -   **Why fix this issue and what will be achieved with the fix?** El informe es un entregable clave para el cliente final y debe ser legible y profesional.
+    -   **Status:** USER VERIFICATION PENDING
+    -   **Is recurring issue?** Y
+    -   **Should Test frontend/backend/both after fix?** Backend (generar PDF y revisar).
+    -   **Blocked on other issue:** No.
+
+-   **Issue 3: Problema de caché en el frontend**
+    -   **Attempted fixes:** El agente diagnosticó el problema y sugirió soluciones manuales al usuario. No se implementó una solución de código.
+    -   **Next debug checklist:**
+        -   Investigar técnicas de cache-busting para Create React App.
+        -   Asegurarse de que el proceso de build esté generando nombres de archivo con hash.
+    -   **Why fix this issue and what will be achieved with the fix?** Mejora la experiencia de desarrollo y de usuario, asegurando que las actualizaciones se reflejen inmediatamente.
+    -   **Status:** NOT STARTED
+    -   **Is recurring issue?** Y
+    -   **Should Test frontend/backend/both after fix?** Frontend.
+    -   **Blocked on other issue:** No.
 
 **In progress Task List**:
-No hay tareas en progreso. La última serie de correcciones de errores y mejoras de funciones fue completada.
+-   No hay tareas en progreso más allá de la corrección de los bugs mencionados.
 
 **Upcoming and Future Tasks**
-**Upcoming Tasks (P0 - Plan de 10 días):**
-1.  **Fase 1 (Backend):** Modificar los modelos de datos en  para:
-    *   Añadir nuevos campos al modelo  para la caracterización extendida.
-    *   Añadir campos  y  al modelo de los estándares de inspección (probablemente dentro de  o ).
-2.  **Fase 2 (Frontend):** Actualizar los componentes de React:
-    *   Modificar  para incluir los nuevos campos de caracterización de la empresa.
-    *   Modificar  o  para mostrar la  y  en un formato accesible (ej. un popover o un acordeón).
-    *   Crear una ficha en  para mostrar los datos de caracterización de la empresa.
-3.  **Fase 3 (Reporte):** Actualizar la lógica de generación de PDF en  para incluir la nueva información de caracterización y las guías de los estándares.
-4.  **Fase 4 (Testing):** Realizar pruebas de extremo a extremo del nuevo flujo.
-
-**Future Tasks (P1):**
-*   Implementar el módulo completo de Auditoría Personalizable según la especificación funcional detallada del usuario. Esto incluye:
-    *   Un formulario de caracterización de empresa avanzado.
-    *   Una base de datos de preguntas de auditoría configurable.
-    *   Un motor de reglas de aplicabilidad para generar cuestionarios dinámicos.
-    *   Reportes avanzados con agrupaciones y filtros.
+-   **Upcoming Tasks (Plan MVP):**
+    -   **P0 - Fase 4: UI de Inspecciones.** Una vez resuelto el bug de selección, modificar  para mostrar los campos  y  de cada estándar (ej. en un popover).
+    -   **P1 - Fase 6: Pruebas Completas.** Realizar pruebas de extremo a extremo de todo el flujo del MVP una vez que todos los bugs estén resueltos.
+-   **Future Tasks (Post-MVP):**
+    -   Implementar el módulo completo de Auditoría Personalizable según la especificación funcional detallada del usuario.
 
 **Completed work in this session**
-- **Core App:** Creación de la aplicación multi-cliente completa con registro, login y dashboard de admin/cliente.
-- **Inspecciones:** Implementación del flujo de creación de inspecciones con 60 estándares y cálculo de puntaje.
-- **Integración IA:** Integración de OpenAI (GPT-4o) para generar análisis y un plan de acción a partir de los resultados de la inspección.
-- **Reportes:** Generación de informes en PDF descargables.
-- **Dashboard Visual:** Adición de gráficos (radar, barras) y KPIs en el dashboard del cliente con la librería .
-- **Autenticación y Seguridad:**
-    - Implementación de JWT.
-    - Funcionalidad de Olvidó su contraseña con envío de email real a través de Gmail SMTP.
-    - Opción para que el superadministrador cambie su contraseña dentro de su panel.
-- **UX/UI:**
-    - Personalización de marca con subida de logo de empresa.
-    - Mejoras en formularios (visibilidad de contraseña).
-    - Eliminación del badge Made with Emergent.
-    - Correcciones de diseño responsive para una correcta visualización en dispositivos móviles.
-- **Dominio y Despliegue:**
-    - Asesoramiento y confirmación de la configuración del dominio personalizado .
-    - Corrección de la variable de entorno  para apuntar al dominio de producción.
-- **Bugs y Estabilidad:**
-    - Solución de un error de compatibilidad entre un script externo y React que causaba una pantalla en blanco, implementando un  y manejadores de errores globales para ignorar el error no crítico.
+-   **Backend:**
+    -   Modelos de  actualizados con campos de caracterización detallados.
+    -   Estándares de inspección enriquecidos con  y  en .
+    -   Endpoints creados para editar () y eliminar () empresas.
+    -   Prompt de IA mejorado para un análisis más profundo y un plan de acción.
+    -   Generador de PDF () creado para un diseño profesional con branding de AuditX.
+-   **Frontend:**
+    -   Formulario de registro () completamente rediseñado.
+    -   Dashboard del cliente () actualizado con pestañas y una sección de Caracterización.
+    -   Modal de edición de empresa implementado, permitiendo cambiar todos los datos, el logo y gestionar sedes.
+    -   Dashboard del Superadmin () actualizado con botón para eliminar empresas inactivas.
+    -   Navbar del cliente ahora muestra el logo y nombre de la empresa.
+-   **Integraciones y Despliegue:**
+    -   Integración con **Firebase Storage** para el almacenamiento persistente de logos.
+    -   Resolución de problemas críticos de despliegue (variables de entorno, URLs hardcodeadas).
+    -   Corrección de múltiples problemas de inicio de sesión y reconexión del dominio personalizado .
 
 **Earlier issues found/mentioned but not fixed**
-- No hay problemas conocidos que no se hayan solucionado.
+-   Todos los problemas mencionados están en la lista de pendientes o fueron resueltos.
 
 **Known issue recurrence from previous fork**
-- N/A
+-   N/A
 
 **Code Architecture**
 
 
 **Key Technical Concepts**
-- **Backend:** FastAPI, Pydantic, MongoDB (con ), JWT para autenticación,  para subida de archivos,  para envío de correos, integración con API de OpenAI.
-- **Frontend:** React, React Router, Tailwind CSS,  para llamadas a la API,  para gráficos,  y  para la generación de PDF en el cliente.
-- **Arquitectura:** Full-stack con API RESTful, desacoplamiento entre frontend y backend.
+-   **Backend:** FastAPI, Pydantic, MongoDB (), JWT, , .
+-   **Frontend:** React, React Router, Tailwind CSS, , Shadcn UI.
+-   **Storage:** Firebase Storage.
+-   **Deployment:** Plataforma Emergent, configuración de dominio personalizado.
 
 **key DB schema**
-- **users:** { email, hashed_password, role ('superadmin' | 'admin'), company_id, is_active, reset_token }
-- **companies:** { name, admin_name, address, phone, is_active, logo_url }
-- **inspections:** { company_id, user_id, creation_date, total_score, responses, ai_analysis }
-- **responses:** { standard_id, answer ('cumple' | 'cumple parcial' | 'no cumple'), notes }
+-   **users:** { email, hashed_password, role, company_id, is_active }
+-   **companies:** { name, nit, admin_name, address, phone, is_active, logo_url, legal_rep, arl, risk_level, ciiu_code, economic_activity_desc, num_workers, additional_branches: [{...}] }
+-   **inspections:** { company_id, user_id, creation_date, total_score, responses, ai_analysis }
 
 **changes in tech stack**
--  fue añadido para el envío de emails.
--  fue añadido para los gráficos en el frontend.
+-   Se añadió  para la integración con Firebase Storage.
+-   Se utiliza  de forma más avanzada en un módulo dedicado.
 
-**All files**
-*   : Modificado extensivamente para añadir todas las funcionalidades del backend: endpoints de registro, login, gestión de inspecciones, análisis con IA, subida de logos, recuperación y cambio de contraseña, y envío de emails.
-*   : Actualizado con credenciales para la base de datos y SMTP de Gmail.
-*   : Actualizado con las rutas para los nuevos componentes y el .
-*   : Reescrito para incluir campos de confirmación, visibilidad de contraseña y subida de logo.
-*   : Reescrito para añadir visibilidad de contraseña y el modal de olvidó su contraseña.
-*   : Modificado para agregar la funcionalidad de cambio de contraseña del admin.
-*   : Modificado extensivamente para añadir pestañas, gráficos (), y mostrar el logo de la empresa.
-*   : Creado para el flujo de reseteo de contraseña.
-*   : Creado para encapsular los gráficos de Recharts.
-*   : Creado para manejar errores de renderizado de React.
-*   : Modificado para envolver la app en el  y añadir manejadores de errores globales.
-*   : Modificado para ocultar el badge de Made with Emergent.
-*   : Modificado para cambiar el título de la app a AuditX y añadir un favicon.
-*   : Actualizado para apuntar  al dominio de producción.
+**All files of reference**
+-   : **Archivo a investigar para el bug P0.**
+-   : Archivo a revisar para el bug de superposición de texto.
+-   : Lógica principal del backend.
+-   : Dashboard del cliente con la funcionalidad de edición.
+-   : Formulario de registro extendido.
 
-**Areas that need refactoring**
-- El manejo de errores en  y  es un workaround para suprimir un error causado por un script externo (). Aunque efectivo, no soluciona la causa raíz. Si el script externo cambia, la solución podría romperse.
+**Areas that need refactoring**:
+-   El problema de caché del frontend (Issue 3) debe ser resuelto a nivel de configuración del build/servidor para evitar soluciones manuales.
 
 **key api endpoints**
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
+-   : Sube logos a Firebase Storage.
+-   : Actualiza la información de una empresa.
+-   : Elimina una empresa inactiva.
+-   : Genera el informe PDF profesional.
 
 **Critical Info for New Agent**
-1.  **Prioridad Máxima:** La tarea actual es implementar el **Plan de MVP de 10 días** para la auditoría del sector salud. El usuario está esperando que comiences. No procedas con ninguna otra mejora hasta que esto esté completado y validado.
-2.  **Usuario Experto:** El usuario es un experto en SST y **proporcionará el contenido necesario** para los nuevos campos (, ). Tu trabajo es crear la estructura para almacenar y mostrar esta información.
-3.  **Workaround de Error:** Estás heredando un workaround que ignora un error de DOM () para evitar que la aplicación se bloquee. Este error es causado por un script externo de la plataforma Emergent. No intentes arreglarlo a menos que cause nuevos problemas; la solución actual es estable.
-4.  **Credenciales:** Las credenciales de SMTP para Gmail están en . No las modifiques. El email de envío es  pero la autenticación se hace con .
-5.  **Dominio:** La aplicación está en producción y funcionando en . Todas las pruebas de UI deben realizarse en esta URL. La variable  está configurada correctamente.
+1.  **PRIORIDAD MÁXIMA (BLOCKER):** La tarea más urgente es solucionar el bug que impide responder a las preguntas de la inspección en . La aplicación es inútil sin esta funcionalidad.
+2.  **Integración con Firebase:** La subida de logos ahora funciona con Firebase Storage. Las credenciales están en . El usuario ya ha configurado las reglas en su proyecto de Firebase.
+3.  **Despliegue y Caché:** La aplicación está desplegada y el dominio  funciona. Sin embargo, existe un problema conocido de caché en el frontend. Prepárate para explicarle al usuario que podría necesitar una recarga forzada para ver los cambios.
+4.  **Contexto del Usuario:** El usuario es colaborativo, proporciona feedback claro con capturas de pantalla y necesita un MVP funcional para una auditoría real con fecha límite.
 
 **documents created in this job**
-- No se crearon documentos  o .
+-   No se crearon documentos  o .
 
-**Last 5 User Messages and any pending user messages**
-1.  **User (hace 4 mensajes):** Proporcionó una especificación funcional muy detallada para un módulo de auditoría personalizable y pidió un análisis de viabilidad, no una implementación. (Completado)
-2.  **Agent (hace 3 mensajes):** Entregó un análisis de viabilidad exhaustivo, estimando un tiempo de 3-5 meses y recomendando un enfoque por fases. (Completado)
-3.  **User (hace 2 mensajes):** Aclaró que necesita un MVP práctico en 10 días para una auditoría real en el sector salud y que él, como experto, proporcionará el contenido para enriquecer las preguntas existentes. (Completado)
-4.  **Agent (hace 1 mensaje):** Propuso un plan de acción detallado de 10 días para construir este MVP y preguntó al usuario si estaba de acuerdo para comenzar. (Completado)
-5.  **User (último mensaje):** me parece genial tu plan, ahora te explico... la idea es implementar algo pequeño y practico... Este mensaje es una confirmación y reformulación de su necesidad para el MVP de 10 días, dando luz verde para empezar.
+**Last 10 User Messages and any pending user messages**
+1.  User: El botón de editar funciona, pero no permite cambiar el logo ni añadir info de sedes. (Resuelto)
+2.  User: La previsualización del logo no se muestra al subirlo. (Resuelto)
+3.  User: Me pide 50 créditos/mes al intentar desplegar. (Explicado)
+4.  User: La imagen sigue sin cargarse tras el despliegue. (Explicado - problema de caché)
+5.  User: ¿Cómo actualizo las funciones en el enlace público? (Explicado - cómo actualizar el deployment)
+6.  User: ¿Qué significa reemplazar el deployment? (Explicado)
+7.  User: El enlace público no carga. (Resuelto - problema de SSL/dominio)
+8.  User: Al subir una imagen, da error 404. (Resuelto - se implementó Firebase)
+9.  User: El PDF tiene texto superpuesto. (Pendiente - Issue 2)
+10. **User (PENDIENTE):** Al intentar responder una pregunta en la inspección, la app me regresa y no guarda la selección. (Pendiente - Issue 1 - BLOCKER)
 
 **Project Health Check:**
-- **Broken:** Ninguna funcionalidad principal está rota.
-- **Mocked:** Ninguna funcionalidad está mockeada. El envío de emails es real.
+-   **Broken:** La funcionalidad principal de realizar inspecciones está rota.
+-   **Mocked:** Ninguna.
+
+**3rd Party Integrations**
+-   **OpenAI GPT-4o:** Para análisis de IA. (Usa Emergent LLM Key)
+-   **Gmail (SMTP):** Para envío de emails. (Credenciales del usuario)
+-   **Firebase Storage:** Para almacenamiento de logos. (Configuración del usuario)
 
 **Testing status**
-- **Testing agent used after significant changes:** YES (una vez al principio).
-- **Troubleshoot agent used after agent stuck in loop:** NO.
-- **Test files created:** []
-- **Known regressions:** Ninguna.
+-   **Testing agent used after significant changes:** NO
+-   **Troubleshoot agent used after agent stuck in loop:** NO
+-   **Test files created:** []
+-   **Known regressions:** La funcionalidad de responder preguntas en la inspección se rompió después de las últimas modificaciones.
 
 **Credentials to test flow:**
-- **URL:** 
-- **Superadmin Email:** 
-- **Superadmin Password:**  (El agente implementó una forma para que el usuario la cambie; la contraseña actual puede ser diferente).
+-   **URL:** 
+-   **Superadmin:**
+    -   Email: 
+    -   Password: 
+-   **Cliente (Colpu):**
+    -   Email: 
+    -   Password: 
 
 **What agent forgot to execute**
-- El agente no olvidó nada. Está posicionado exactamente donde debe estar: esperando la orden implícita del último mensaje del usuario para comenzar a ejecutar el plan de 10 días acordado.</analysis>
+-   El agente no realizó pruebas de regresión después de implementar nuevas funcionalidades, lo que provocó que se rompiera una característica central (responder preguntas). La corrección de esta regresión es ahora la tarea más crítica.</analysis>
