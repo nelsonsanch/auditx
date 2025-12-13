@@ -340,15 +340,15 @@ const NormasEspecificasManager = ({ companyId }) => {
               </Button>
               <Button type="submit" disabled={saving}>
                 {saving ? (
-                  <>
-                    <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                    Guardando...
-                  </>
+                  <span className="flex items-center">
+                    <LoadingSpinner size="sm" className="mr-2" />
+                    <span>Guardando...</span>
+                  </span>
                 ) : (
-                  <>
+                  <span className="flex items-center">
                     <Save className="h-4 w-4 mr-2" />
-                    {editingNorma ? "Actualizar" : "Crear"}
-                  </>
+                    <span>{editingNorma ? "Actualizar" : "Crear"}</span>
+                  </span>
                 )}
               </Button>
             </DialogFooter>
