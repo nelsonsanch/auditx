@@ -7,9 +7,10 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { Checkbox } from "@/components/ui/checkbox";
+import { LoadingSpinner } from "@/components/ui/loading-spinner";
 import { toast } from "sonner";
 import { 
-  Settings, Plus, Trash2, Save, Loader2, Calendar, Users, 
+  Settings, Plus, Trash2, Save, Calendar, Users, 
   Target, BookOpen, ArrowRight, ArrowLeft, Check, FileText
 } from "lucide-react";
 import {
