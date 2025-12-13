@@ -1013,6 +1013,100 @@ async def update_configuracion_auditoria(config_id: str, request: CreateConfigur
 # INSPECTION ENDPOINTS
 # ====================
 
+class CreateAuditoriaRequest(BaseModel):
+    company_id: str
+    config_id: str
+    responses: List[Dict[str, Any]] = []
+
+@api_router.post("/auditorias")
+async def create_auditoria(request: CreateAuditoriaRequest, current_user: dict = Depends(get_current_user)):
+    """Crear una nueva auditoría en estado en_proceso"""
+    # Verify company belongs to user
+    company = await db.companies.find_one({"id": request.company_id}, {"_id": 0})
+    if not company:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Empresa no encontrada")
+    
+    if current_user['role'] == 'client' and company['user_id'] != current_user['id']:
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="No tiene permiso para esta empresa")
+    
+    # Create inspection in en_proceso state
+    inspection = Inspection(
+        company_id=request.company_id,
+        user_id=current_user['id'],
+        responses=request.responses,
+        total_score=0.0,
+        status="en_proceso",
+        config_id=request.config_id
+    )
+    
+    inspection_doc = inspection.model_dump()
+    inspection_doc['created_at'] = inspection_doc['created_at'].isoformat()
+    
+    await db.inspections.insert_one(inspection_doc)
+    
+    return {"message": "Auditoría creada exitosamente", "id": inspection.id}
+
+@api_router.put("/auditorias/{auditoria_id}/save")
+async def save_auditoria_progress(auditoria_id: str, responses: List[Dict[str, Any]], current_user: dict = Depends(get_current_user)):
+    """Guardar progreso de una auditoría sin cerrarla"""
+    inspection = await db.inspections.find_one({"id": auditoria_id}, {"_id": 0})
+    if not inspection:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Auditoría no encontrada")
+    
+    if current_user['role'] == 'client' and inspection['user_id'] != current_user['id']:
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="No tiene permiso")
+    
+    if inspection.get('status') == 'cerrada':
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="La auditoría está cerrada y no se puede modificar")
+    
+    # Calculate current score
+    total_score = 0.0
+    total_weight = sum([s['weight'] for s in STANDARDS])
+    answered_count = 0
+    
+    responses_with_score = []
+    for response in responses:
+        standard = next((s for s in STANDARDS if s['id'] == response.get('standard_id')), None)
+        if standard and response.get('response'):
+            answered_count += 1
+            if response['response'] == "cumple":
+                score = standard['weight']
+            elif response['response'] == "no_aplica":
+                score = standard['weight']  # No aplica cuenta como cumple
+            else:  # no_cumple
+                score = 0
+            
+            total_score += score
+            responses_with_score.append({
+                "standard_id": response['standard_id'],
+                "response": response['response'],
+                "observations": response.get('observations', ''),
+                "ai_recommendation": response.get('ai_recommendation', ''),
+                "evidence_images": response.get('evidence_images', []),
+                "score": score
+            })
+    
+    percentage = (total_score / total_weight) * 100 if total_weight > 0 else 0
+    progress = (answered_count / len(STANDARDS)) * 100 if STANDARDS else 0
+    
+    await db.inspections.update_one(
+        {"id": auditoria_id},
+        {"$set": {
+            "responses": responses_with_score,
+            "total_score": percentage,
+            "progress": progress,
+            "updated_at": datetime.now(timezone.utc).isoformat()
+        }}
+    )
+    
+    return {
+        "message": "Progreso guardado exitosamente",
+        "total_score": percentage,
+        "progress": progress,
+        "answered": answered_count,
+        "total": len(STANDARDS)
+    }
+
 @api_router.post("/inspections")
 async def create_inspection(inspection_data: InspectionCreate, current_user: dict = Depends(get_current_user)):
     # Verify company belongs to user
