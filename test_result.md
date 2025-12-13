@@ -172,15 +172,18 @@ backend:
 
   - task: "API eliminar auditoría (DELETE /api/inspections/{id})"
     implemented: true
-    working: "NA"
+    working: true
     file: "/app/backend/server.py"
     stuck_count: 0
     priority: "high"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
       - working: "NA"
         agent: "main"
         comment: "Implementado endpoint para eliminar auditorías completamente. Necesita testing."
+      - working: true
+        agent: "testing"
+        comment: "✅ TESTING COMPLETADO: API funciona correctamente. Elimina auditoría completamente de la base de datos, valida permisos de usuario, elimina análisis AI relacionados, auditoría desaparece del listado. Operación irreversible funcionando correctamente."
 
   - task: "API guardar progreso (PUT /api/auditorias/{id}/save)"
     implemented: true
