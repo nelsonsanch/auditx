@@ -6,9 +6,10 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
+import { LoadingSpinner } from "@/components/ui/loading-spinner";
 import { toast } from "sonner";
 import { 
-  FileText, Plus, Edit3, Trash2, Save, Loader2, ChevronDown, ChevronUp
+  FileText, Plus, Edit3, Trash2, Save, ChevronDown, ChevronUp
 } from "lucide-react";
 import {
   Dialog,
