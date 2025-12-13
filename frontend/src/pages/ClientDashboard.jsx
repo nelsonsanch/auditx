@@ -320,23 +320,16 @@ const ClientDashboard = () => {
                   <div className="text-center py-12" data-testid="no-inspections">
                     <FileText className="mx-auto h-12 w-12 text-gray-400 mb-4" />
                     <p className="text-gray-600 mb-4">Aún no has creado ninguna auditoría</p>
-                    <Button 
-                      onClick={() => navigate("/client/inspection/create")}
-                      className="bg-gradient-to-r from-blue-600 to-purple-600"
-                      data-testid="create-first-inspection-button"
-                    >
-                      <Plus className="mr-2 h-4 w-4" />
-                      Crear Primera Auditoría
-                    </Button>
+                    <p className="text-sm text-gray-500">Usa el botón "Nueva Auditoría" en la barra superior para comenzar</p>
                   </div>
                 ) : (
                   <Table>
                     <TableHeader>
                       <TableRow>
-                        <TableHead>Empresa</TableHead>
+                        <TableHead>Auditoría</TableHead>
                         <TableHead>Fecha</TableHead>
+                        <TableHead>Estado</TableHead>
                         <TableHead>Puntaje</TableHead>
-                        <TableHead>Nivel</TableHead>
                         <TableHead className="text-right">Acciones</TableHead>
                       </TableRow>
                     </TableHeader>
@@ -346,21 +339,53 @@ const ClientDashboard = () => {
                           <TableCell className="font-medium">{inspection.company_name}</TableCell>
                           <TableCell>{new Date(inspection.created_at).toLocaleDateString('es-ES')}</TableCell>
                           <TableCell>
-                            <span className={`text-2xl font-bold ${getScoreColor(inspection.total_score)}`} data-testid={`score-${inspection.id}`}>
+                            {inspection.status === 'cerrada' ? (
+                              <Badge variant="secondary" className="bg-gray-100">
+                                <Lock className="h-3 w-3 mr-1" />
+                                Cerrada
+                              </Badge>
+                            ) : (
+                              <Badge className="bg-green-100 text-green-800">
+                                En Desarrollo
+                              </Badge>
+                            )}
+                          </TableCell>
+                          <TableCell>
+                            <span className={`text-xl font-bold ${getScoreColor(inspection.total_score)}`} data-testid={`score-${inspection.id}`}>
                               {inspection.total_score.toFixed(1)}%
                             </span>
                           </TableCell>
-                          <TableCell>{getScoreBadge(inspection.total_score)}</TableCell>
                           <TableCell className="text-right">
-                            <Button
-                              onClick={() => navigate(`/client/inspection/${inspection.id}`)}
-                              size="sm"
-                              variant="outline"
-                              data-testid={`view-button-${inspection.id}`}
-                            >
-                              <Eye className="mr-1 h-4 w-4" />
-                              Ver Detalle
-                            </Button>
+                            <div className="flex justify-end gap-2">
+                              <Button
+                                onClick={() => navigate(`/client/inspection/${inspection.id}`)}
+                                size="sm"
+                                variant="outline"
+                                data-testid={`view-button-${inspection.id}`}
+                              >
+                                <Eye className="h-4 w-4 mr-1" />
+                                Ver
+                              </Button>
+                              {inspection.status !== 'cerrada' && (
+                                <Button
+                                  onClick={() => handleCloseAudit(inspection.id)}
+                                  size="sm"
+                                  variant="outline"
+                                  className="text-orange-600 border-orange-200 hover:bg-orange-50"
+                                >
+                                  <Lock className="h-4 w-4 mr-1" />
+                                  Cerrar
+                                </Button>
+                              )}
+                              <Button
+                                onClick={() => handleDeleteAudit(inspection.id)}
+                                size="sm"
+                                variant="outline"
+                                className="text-red-600 border-red-200 hover:bg-red-50"
+                              >
+                                <Trash2 className="h-4 w-4" />
+                              </Button>
+                            </div>
                           </TableCell>
                         </TableRow>
                       ))}
