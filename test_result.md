@@ -157,15 +157,18 @@ backend:
 
   - task: "API cerrar auditoría (PUT /api/inspections/{id}/close)"
     implemented: true
-    working: "NA"
+    working: true
     file: "/app/backend/server.py"
     stuck_count: 0
     priority: "high"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
       - working: "NA"
         agent: "main"
         comment: "Implementado endpoint para cerrar auditorías cambiando estado a 'cerrada'. Necesita testing."
+      - working: true
+        agent: "testing"
+        comment: "✅ TESTING COMPLETADO: API funciona correctamente. Cambia estado de 'en_proceso' a 'cerrada', establece closed_at timestamp, valida permisos de usuario, previene cerrar auditorías ya cerradas. Estado se refleja correctamente en listado."
 
   - task: "API eliminar auditoría (DELETE /api/inspections/{id})"
     implemented: true
