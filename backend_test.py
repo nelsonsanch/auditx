@@ -83,18 +83,18 @@ class AuditXAPITester:
             self.log_test(name, False, f"Exception: {str(e)}")
             return False, {}
 
-    def test_superadmin_login(self):
-        """Test superadmin login"""
+    def test_client_login(self):
+        """Test client login with provided credentials"""
         success, response = self.run_test(
-            "Superadmin Login",
+            "Client Login",
             "POST",
             "auth/login",
             200,
-            data={"email": "nelson@sanchezcya.com", "password": "admin123"}
+            data={"email": self.test_email, "password": self.test_password}
         )
         if success and 'token' in response:
-            self.superadmin_token = response['token']
-            print(f"   Superadmin token obtained")
+            self.client_token = response['token']
+            print(f"   Client token obtained for {self.test_email}")
             return True
         return False
 
