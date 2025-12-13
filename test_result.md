@@ -103,9 +103,14 @@
 #====================================================================================================
 
 user_problem_statement: |
-  Bug crítico en AuditX: Al intentar responder una pregunta en el formulario de inspección 
-  (seleccionar "Cumple", "No Cumple", etc.), la selección no se guarda y la página retrocede.
-  Error en consola: "NotFoundError: Failed to execute 'insertBefore' on 'Node'"
+  Test completo del ciclo de vida de auditorías en AuditX (aplicación de gestión de auditorías SST).
+  El usuario reportó que las auditorías creadas desde el wizard no aparecían en el dashboard. 
+  El main agent verificó manualmente que el flujo funciona correctamente, pero necesitamos testing exhaustivo.
+  
+  FLUJOS A TESTEAR:
+  1. Ciclo completo de auditoría (login, dashboard, crear auditoría via wizard, verificar aparición, acciones)
+  2. Página de auditoría (configuración, 60 estándares, acordeón, selección de respuestas, progreso)
+  3. APIs Backend: POST /api/auditorias, GET /api/inspections, PUT /api/inspections/{id}/close, DELETE /api/inspections/{id}, PUT /api/auditorias/{id}/save
 
 backend:
   - task: "API de estándares de inspección"
