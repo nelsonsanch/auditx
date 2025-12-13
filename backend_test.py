@@ -233,26 +233,62 @@ class AuditXAPITester:
                 return False
         return success
 
-    def test_get_standards(self):
-        """Test getting standards"""
-        if not self.client_token:
-            self.log_test("Get Standards", False, "No client token")
+    def test_save_auditoria_progress(self):
+        """Test saving audit progress (PUT /api/auditorias/{id}/save)"""
+        if not self.client_token or not self.test_auditoria_id:
+            self.log_test("Save Auditoria Progress", False, "Missing client token or auditoria ID")
             return False
             
+        # Create sample responses for testing
+        sample_responses = [
+            {
+                "standard_id": "1.1.1",
+                "response": "cumple",
+                "observations": "Política de SST documentada y aprobada",
+                "ai_recommendation": "",
+                "evidence_images": []
+            },
+            {
+                "standard_id": "1.1.2", 
+                "response": "no_cumple",
+                "observations": "Falta evidencia de comunicación de la política",
+                "ai_recommendation": "",
+                "evidence_images": []
+            },
+            {
+                "standard_id": "1.1.3",
+                "response": "no_aplica",
+                "observations": "No aplica para el tipo de empresa",
+                "ai_recommendation": "",
+                "evidence_images": []
+            }
+        ]
+        
         success, response = self.run_test(
-            "Get Standards",
-            "GET",
-            "standards",
+            "Save Auditoria Progress (PUT /api/auditorias/{id}/save)",
+            "PUT",
+            f"auditorias/{self.test_auditoria_id}/save",
             200,
+            data=sample_responses,
             headers={"Authorization": f"Bearer {self.client_token}"}
         )
         
-        if success and isinstance(response, list):
-            print(f"   Found {len(response)} standards")
-            if len(response) == 60:
-                print(f"   ✅ Correct number of standards (60)")
+        if success:
+            total_score = response.get('total_score', 0)
+            progress = response.get('progress', 0)
+            answered = response.get('answered', 0)
+            total = response.get('total', 0)
+            
+            print(f"   Progress saved - Score: {total_score:.1f}%, Progress: {progress:.1f}%")
+            print(f"   Answered: {answered}/{total} standards")
+            
+            # Verify progress calculation
+            expected_progress = (3 / 60) * 100  # 3 answered out of 60 standards
+            if abs(progress - expected_progress) < 0.1:
+                print(f"   ✅ Progress calculation correct")
             else:
-                print(f"   ⚠️  Expected 60 standards, found {len(response)}")
+                print(f"   ⚠️  Progress calculation may be incorrect. Expected ~{expected_progress:.1f}%, got {progress:.1f}%")
+        
         return success
 
     def test_create_inspection(self):
