@@ -1163,14 +1163,23 @@ async def get_inspections(current_user: dict = Depends(get_current_user)):
     else:
         inspections = await db.inspections.find({"user_id": current_user['id']}, {"_id": 0}).to_list(1000)
     
-    # Add company info
+    # Add company info and calculate progress
     result = []
     for inspection in inspections:
         company = await db.companies.find_one({"id": inspection['company_id']}, {"_id": 0})
         if company:
+            # Calculate progress if not stored
+            progress = inspection.get('progress', 0)
+            if not progress and inspection.get('responses'):
+                answered = len([r for r in inspection['responses'] if r.get('response')])
+                total = len(STANDARDS)
+                progress = (answered / total) * 100 if total > 0 else 0
+            
             result.append({
                 **inspection,
-                "company_name": company['company_name']
+                "company_name": company['company_name'],
+                "progress": progress,
+                "status": inspection.get('status', 'en_proceso')
             })
     
     return result
