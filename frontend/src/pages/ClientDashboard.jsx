@@ -11,7 +11,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { LoadingSpinner } from "@/components/ui/loading-spinner";
 import { toast } from "sonner";
-import { Shield, Plus, LogOut, FileText, Calendar, TrendingUp, Eye, Building2, MapPin, Users, Edit, X, Settings, BookOpen, Lock, Trash2, AlertTriangle } from "lucide-react";
+import { Shield, Plus, LogOut, FileText, Calendar, TrendingUp, Eye, Building2, MapPin, Users, Edit, X, Settings, BookOpen, Lock, Trash2, AlertTriangle, BarChart3 } from "lucide-react";
 import ConfiguracionAuditoriaWizard from "@/components/ConfiguracionAuditoriaWizard";
 import NormasEspecificasManager from "@/components/NormasEspecificasManager";
 
