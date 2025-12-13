@@ -89,7 +89,7 @@ const ResetPassword = () => {
         <Card className="w-full max-w-md shadow-2xl">
           <CardContent className="pt-6">
             <div className="flex flex-col items-center space-y-4">
-              <Loader2 className="h-8 w-8 animate-spin text-blue-600" />
+              <LoadingSpinner size="xl" className="text-blue-600" />
               <p className="text-gray-600">Verificando enlace...</p>
             </div>
           </CardContent>
@@ -221,7 +221,7 @@ const ResetPassword = () => {
             >
               {loading ? (
                 <>
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  <LoadingSpinner size="sm" className="mr-2" />
                   Restableciendo...
                 </>
               ) : (

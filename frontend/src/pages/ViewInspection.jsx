@@ -154,7 +154,7 @@ const ViewInspection = () => {
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center" data-testid="loading-screen">
-        <Loader2 className="h-8 w-8 animate-spin text-blue-600" />
+        <LoadingSpinner size="xl" className="text-blue-600" />
       </div>
     );
   }
@@ -364,7 +364,7 @@ const ViewInspection = () => {
                   >
                     {analyzing ? (
                       <>
-                        <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+                        <LoadingSpinner size="default" className="mr-2" />
                         Generando Análisis...
                       </>
                     ) : (
@@ -421,7 +421,7 @@ const ViewInspection = () => {
                           data-testid="download-pdf-button"
                         >
                           {downloading ? (
-                            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                            <LoadingSpinner size="sm" className="mr-2" />
                           ) : (
                             <Download className="mr-2 h-4 w-4" />
                           )}

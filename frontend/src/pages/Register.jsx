@@ -227,7 +227,7 @@ const Register = () => {
                     data-testid="logo-upload-label"
                   >
                     {uploadingLogo ? (
-                      <Loader2 className="w-6 h-6 animate-spin text-blue-500" />
+                      <LoadingSpinner size="lg" className="text-blue-500" />
                     ) : (
                       <Upload className="w-6 h-6 text-gray-400" />
                     )}
@@ -649,7 +649,7 @@ const Register = () => {
             >
               {loading ? (
                 <>
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  <LoadingSpinner size="sm" className="mr-2" />
                   Registrando...
                 </>
               ) : (

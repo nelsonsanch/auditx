@@ -342,7 +342,7 @@ const AuditoriaPage = () => {
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <Loader2 className="h-8 w-8 animate-spin text-blue-600" />
+        <LoadingSpinner size="xl" className="text-blue-600" />
       </div>
     );
   }
@@ -386,7 +386,7 @@ const AuditoriaPage = () => {
                   size="sm" 
                   className="bg-green-600 hover:bg-green-700 text-xs sm:text-sm"
                 >
-                  {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4 sm:mr-1" />}
+                  {saving ? <LoadingSpinner size="sm" /> : <Save className="h-4 w-4 sm:mr-1" />}
                   <span className="hidden sm:inline">Guardar</span>
                 </Button>
               )}
@@ -546,7 +546,7 @@ const AuditoriaPage = () => {
                               className="text-purple-600 border-purple-200 hover:bg-purple-50"
                             >
                               {aiLoading[standard.id] ? (
-                                <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                                <LoadingSpinner size="sm" className="mr-2" />
                               ) : (
                                 <Sparkles className="h-4 w-4 mr-2" />
                               )}
@@ -568,7 +568,7 @@ const AuditoriaPage = () => {
                               className="text-blue-600 border-blue-200 hover:bg-blue-50"
                             >
                               {imageLoading[standard.id] ? (
-                                <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                                <LoadingSpinner size="sm" className="mr-2" />
                               ) : (
                                 <Camera className="h-4 w-4 mr-2" />
                               )}
@@ -697,7 +697,7 @@ const AuditoriaPage = () => {
               >
                 {saving ? (
                   <>
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    <LoadingSpinner size="sm" className="mr-2" />
                     Guardando...
                   </>
                 ) : (

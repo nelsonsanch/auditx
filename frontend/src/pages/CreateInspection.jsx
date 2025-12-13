@@ -374,7 +374,7 @@ const CreateInspection = () => {
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center" data-testid="loading-screen">
-        <Loader2 className="h-8 w-8 animate-spin text-blue-600" />
+        <LoadingSpinner size="xl" className="text-blue-600" />
       </div>
     );
   }
@@ -555,7 +555,7 @@ const CreateInspection = () => {
                             className="text-purple-600 border-purple-200 hover:bg-purple-50"
                           >
                             {aiLoading[standard.id] ? (
-                              <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                              <LoadingSpinner size="sm" className="mr-2" />
                             ) : (
                               <Sparkles className="h-4 w-4 mr-2" />
                             )}
@@ -578,7 +578,7 @@ const CreateInspection = () => {
                             className="text-blue-600 border-blue-200 hover:bg-blue-50"
                           >
                             {imageLoading[standard.id] ? (
-                              <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                              <LoadingSpinner size="sm" className="mr-2" />
                             ) : (
                               <Camera className="h-4 w-4 mr-2" />
                             )}
@@ -698,7 +698,7 @@ const CreateInspection = () => {
             >
               {submitting ? (
                 <>
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  <LoadingSpinner size="sm" className="mr-2" />
                   Guardando...
                 </>
               ) : (
