@@ -6,9 +6,10 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Progress } from "@/components/ui/progress";
+import { LoadingSpinner } from "@/components/ui/loading-spinner";
 import { toast } from "sonner";
 import { 
-  Shield, ArrowLeft, Save, Loader2, CheckCircle2, XCircle, 
+  Shield, ArrowLeft, Save, CheckCircle2, XCircle, 
   Circle as CircleIcon, Sparkles, Camera, X, Image as ImageIcon,
   Info, Copy, ChevronDown, ChevronUp, Settings
 } from "lucide-react";
