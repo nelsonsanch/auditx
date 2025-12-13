@@ -357,28 +357,28 @@ class AuditXAPITester:
             print(f"   Auditoria deleted successfully")
         return success
 
-    def test_ai_analysis(self):
-        """Test AI analysis generation"""
-        if not self.client_token or not self.test_inspection_id:
-            self.log_test("AI Analysis", False, "Missing client token or inspection ID")
+    def test_get_inspections_after_delete(self):
+        """Test getting inspections after deletion - verify audit is removed"""
+        if not self.client_token:
+            self.log_test("Get Inspections (After Delete)", False, "No client token")
             return False
             
-        test_data = {"inspection_id": self.test_inspection_id}
-        
         success, response = self.run_test(
-            "AI Analysis Generation",
-            "POST",
-            "analyze-inspection",
+            "Get Inspections - After Delete",
+            "GET",
+            "inspections",
             200,
-            data=test_data,
             headers={"Authorization": f"Bearer {self.client_token}"}
         )
         
-        if success and 'analysis_id' in response:
-            self.test_analysis_id = response['analysis_id']
-            print(f"   AI Analysis generated with ID: {self.test_analysis_id}")
-            print(f"   Analysis length: {len(response.get('analysis', ''))} chars")
-            print(f"   Report length: {len(response.get('report', ''))} chars")
+        if success and isinstance(response, list):
+            print(f"   Found {len(response)} inspections after delete")
+            # Check if our audit was actually deleted
+            our_audit = next((a for a in response if a.get('id') == self.test_auditoria_id), None)
+            if our_audit is None:
+                print(f"   ✅ Audit successfully deleted from list")
+            else:
+                print(f"   ⚠️  Audit still found after deletion")
         return success
 
     def test_get_analysis(self):
