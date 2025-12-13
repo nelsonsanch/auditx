@@ -6,7 +6,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { toast } from "sonner";
-import { Building2, Loader2, Eye, EyeOff, Upload, X } from "lucide-react";
+import { Building2, Eye, EyeOff, Upload, X } from "lucide-react";
+import { LoadingSpinner } from "@/components/ui/loading-spinner";
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API = `${BACKEND_URL}/api`;

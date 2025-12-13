@@ -6,7 +6,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
-import { Shield, ArrowLeft, Download, Sparkles, Loader2, Edit3, Save, FileText, BarChart3 } from "lucide-react";
+import { Shield, ArrowLeft, Download, Sparkles, Edit3, Save, FileText, BarChart3 } from "lucide-react";
+import { LoadingSpinner } from "@/components/ui/loading-spinner";
 import ReactMarkdown from "react-markdown";
 import { Progress } from "@/components/ui/progress";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";

@@ -9,7 +9,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { toast } from "sonner";
-import { Shield, CheckCircle2, XCircle, LogOut, Users, AlertCircle, Key, Eye, EyeOff, Loader2, Trash2, BookOpen } from "lucide-react";
+import { Shield, CheckCircle2, XCircle, LogOut, Users, AlertCircle, Key, Eye, EyeOff, Trash2, BookOpen } from "lucide-react";
+import { LoadingSpinner } from "@/components/ui/loading-spinner";
 import NormasGeneralesManager from "@/components/NormasGeneralesManager";
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
