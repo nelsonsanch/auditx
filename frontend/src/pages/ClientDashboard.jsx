@@ -646,7 +646,7 @@ const ClientDashboard = () => {
                       />
                       {uploadingLogo && (
                         <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center rounded-lg">
-                          <Loader2 className="h-6 w-6 animate-spin text-white" />
+                          <LoadingSpinner size="lg" className="text-white" />
                         </div>
                       )}
                     </div>
@@ -671,8 +671,8 @@ const ClientDashboard = () => {
                   <p className="text-xs text-gray-500 mt-2">
                     {uploadingLogo ? (
                       <span className="flex items-center gap-1">
-                        <Loader2 className="h-3 w-3 animate-spin" />
-                        Subiendo logo...
+                        <LoadingSpinner size="xs" />
+                        <span>Subiendo logo...</span>
                       </span>
                     ) : (
                       "Formatos: JPG, PNG. Tamaño máximo: 5MB"
