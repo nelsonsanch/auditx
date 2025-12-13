@@ -8,14 +8,17 @@ class AuditXAPITester:
     def __init__(self, base_url="https://compliance-hub-196.preview.emergentagent.com"):
         self.base_url = base_url
         self.api_url = f"{base_url}/api"
-        self.superadmin_token = None
         self.client_token = None
         self.test_company_id = None
-        self.test_inspection_id = None
-        self.test_analysis_id = None
+        self.test_auditoria_id = None
+        self.test_config_id = None
         self.tests_run = 0
         self.tests_passed = 0
         self.test_results = []
+        
+        # Test credentials from review request
+        self.test_email = "Nelsonsr.1983@gmail.com"
+        self.test_password = "ELrey@28"
 
     def log_test(self, name, success, details=""):
         """Log test result"""
