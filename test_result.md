@@ -125,6 +125,66 @@ backend:
         agent: "main"
         comment: "API funcionando correctamente, devuelve 60 estándares"
 
+  - task: "API crear auditoría (POST /api/auditorias)"
+    implemented: true
+    working: "NA"
+    file: "/app/backend/server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Implementado endpoint para crear auditorías en estado 'en_proceso'. Necesita testing completo del flujo."
+
+  - task: "API listar auditorías (GET /api/inspections)"
+    implemented: true
+    working: "NA"
+    file: "/app/backend/server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Implementado endpoint para listar auditorías del usuario con información de empresa y progreso. Necesita testing."
+
+  - task: "API cerrar auditoría (PUT /api/inspections/{id}/close)"
+    implemented: true
+    working: "NA"
+    file: "/app/backend/server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Implementado endpoint para cerrar auditorías cambiando estado a 'cerrada'. Necesita testing."
+
+  - task: "API eliminar auditoría (DELETE /api/inspections/{id})"
+    implemented: true
+    working: "NA"
+    file: "/app/backend/server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Implementado endpoint para eliminar auditorías completamente. Necesita testing."
+
+  - task: "API guardar progreso (PUT /api/auditorias/{id}/save)"
+    implemented: true
+    working: "NA"
+    file: "/app/backend/server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Implementado endpoint para guardar progreso de auditorías sin cerrarlas. Calcula score y progreso. Necesita testing."
+
 frontend:
   - task: "Formulario de creación de inspección - Selección de respuestas"
     implemented: true
