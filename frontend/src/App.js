@@ -92,6 +92,15 @@ function App() {
               </ProtectedRoute>
             }
           />
+
+          <Route
+            path="/client/auditoria/:auditoriaId"
+            element={
+              <ProtectedRoute allowedRoles={["client"]}>
+                <AuditoriaPage />
+              </ProtectedRoute>
+            }
+          />
           </Routes>
         </BrowserRouter>
         <Toaster position="top-right" />
