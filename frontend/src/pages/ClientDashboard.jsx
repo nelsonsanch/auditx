@@ -966,10 +966,10 @@ const ClientDashboard = () => {
                 className="bg-gradient-to-r from-blue-600 to-purple-600"
               >
                 {saving ? (
-                  <>
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    Guardando...
-                  </>
+                  <span className="flex items-center">
+                    <LoadingSpinner size="sm" className="mr-2" />
+                    <span>Guardando...</span>
+                  </span>
                 ) : (
                   "Guardar Cambios"
                 )}
