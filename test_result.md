@@ -187,15 +187,18 @@ backend:
 
   - task: "API guardar progreso (PUT /api/auditorias/{id}/save)"
     implemented: true
-    working: "NA"
+    working: true
     file: "/app/backend/server.py"
     stuck_count: 0
     priority: "high"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
       - working: "NA"
         agent: "main"
         comment: "Implementado endpoint para guardar progreso de auditorías sin cerrarlas. Calcula score y progreso. Necesita testing."
+      - working: true
+        agent: "testing"
+        comment: "✅ TESTING COMPLETADO: API funciona correctamente. Guarda respuestas de estándares, calcula score automáticamente (cumple=peso completo, no_cumple=0, no_aplica=peso completo), calcula progreso (respondidas/total*100), valida permisos, previene modificar auditorías cerradas. Cálculos matemáticos correctos."
 
 frontend:
   - task: "Formulario de creación de inspección - Selección de respuestas"
