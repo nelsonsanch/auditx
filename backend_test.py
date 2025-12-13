@@ -121,25 +121,55 @@ class AuditXAPITester:
             return False
         return success
 
-    def test_get_pending_companies(self):
-        """Test getting pending companies"""
-        if not self.superadmin_token:
-            self.log_test("Get Pending Companies", False, "No superadmin token")
+    def test_create_audit_config(self):
+        """Test creating audit configuration (needed for auditorias)"""
+        if not self.client_token or not self.test_company_id:
+            self.log_test("Create Audit Config", False, "Missing client token or company ID")
             return False
             
+        config_data = {
+            "company_id": self.test_company_id,
+            "fecha_inicio": "2024-01-15",
+            "fecha_fin": "2024-01-30",
+            "alcance": "Evaluación completa del Sistema de Gestión SST",
+            "tipo_auditoria": "SST",
+            "areas_proceso": ["Administración", "Operaciones", "Mantenimiento"],
+            "equipo_auditor": [
+                {
+                    "nombre": "Auditor Principal",
+                    "identificacion": "12345678",
+                    "rol": "auditor_lider",
+                    "cargo": "Especialista SST",
+                    "email": "auditor@empresa.com"
+                }
+            ],
+            "equipo_auditado": [
+                {
+                    "nombre": "Responsable SST",
+                    "identificacion": "87654321",
+                    "rol": "coordinador_sst",
+                    "cargo": "Coordinador SST",
+                    "email": "sst@empresa.com"
+                }
+            ],
+            "normas_generales_ids": [],
+            "normas_especificas_ids": [],
+            "objetivos": "Verificar cumplimiento de la Resolución 0312 de 2019",
+            "criterios_adicionales": "Enfoque en prevención de riesgos laborales"
+        }
+        
         success, response = self.run_test(
-            "Get Pending Companies",
-            "GET",
-            "admin/pending-companies",
+            "Create Audit Configuration",
+            "POST",
+            "configuraciones-auditoria",
             200,
-            headers={"Authorization": f"Bearer {self.superadmin_token}"}
+            data=config_data,
+            headers={"Authorization": f"Bearer {self.client_token}"}
         )
         
-        if success and isinstance(response, list):
-            print(f"   Found {len(response)} pending companies")
-            if len(response) > 0:
-                self.test_company_id = response[0]['id']
-                print(f"   Test company ID: {self.test_company_id}")
+        if success and 'id' in response:
+            self.test_config_id = response['id']
+            print(f"   Audit config created with ID: {self.test_config_id}")
         return success
 
     def test_activate_company(self):
