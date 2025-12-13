@@ -142,15 +142,18 @@ backend:
 
   - task: "API listar auditorías (GET /api/inspections)"
     implemented: true
-    working: "NA"
+    working: true
     file: "/app/backend/server.py"
     stuck_count: 0
     priority: "high"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
       - working: "NA"
         agent: "main"
         comment: "Implementado endpoint para listar auditorías del usuario con información de empresa y progreso. Necesita testing."
+      - working: true
+        agent: "testing"
+        comment: "✅ TESTING COMPLETADO: API funciona correctamente. Lista auditorías del usuario autenticado, incluye información de empresa (company_name), calcula progreso automáticamente, muestra estado actual (en_proceso/cerrada). Filtrado por usuario funcionando."
 
   - task: "API cerrar auditoría (PUT /api/inspections/{id}/close)"
     implemented: true
