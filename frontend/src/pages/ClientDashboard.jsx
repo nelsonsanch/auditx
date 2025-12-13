@@ -10,7 +10,7 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, Di
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
-import { Shield, Plus, LogOut, FileText, Calendar, TrendingUp, Eye, Building2, MapPin, Users, Edit, X, Loader2, Settings, BookOpen } from "lucide-react";
+import { Shield, Plus, LogOut, FileText, Calendar, TrendingUp, Eye, Building2, MapPin, Users, Edit, X, Loader2, Settings, BookOpen, Lock, Trash2, AlertTriangle } from "lucide-react";
 import ConfiguracionAuditoriaWizard from "@/components/ConfiguracionAuditoriaWizard";
 import NormasEspecificasManager from "@/components/NormasEspecificasManager";
 
