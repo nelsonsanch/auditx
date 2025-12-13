@@ -2,8 +2,9 @@ import requests
 import sys
 import json
 from datetime import datetime
+import uuid
 
-class SecurityInspectionAPITester:
+class AuditXAPITester:
     def __init__(self, base_url="https://compliance-hub-196.preview.emergentagent.com"):
         self.base_url = base_url
         self.api_url = f"{base_url}/api"
