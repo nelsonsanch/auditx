@@ -6,8 +6,9 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { LoadingSpinner } from "@/components/ui/loading-spinner";
 import { toast } from "sonner";
-import { Shield, Loader2, Eye, EyeOff } from "lucide-react";
+import { Shield, Eye, EyeOff } from "lucide-react";
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API = `${BACKEND_URL}/api`;
@@ -164,10 +165,10 @@ const Login = () => {
                       data-testid="send-reset-link-button"
                     >
                       {sendingReset ? (
-                        <>
-                          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                          Enviando...
-                        </>
+                        <span className="flex items-center justify-center">
+                          <LoadingSpinner size="sm" className="mr-2" />
+                          <span>Enviando...</span>
+                        </span>
                       ) : (
                         "Enviar Enlace de Recuperación"
                       )}
@@ -184,10 +185,10 @@ const Login = () => {
               data-testid="login-button"
             >
               {loading ? (
-                <>
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Iniciando sesión...
-                </>
+                <span className="flex items-center justify-center">
+                  <LoadingSpinner size="sm" className="mr-2" />
+                  <span>Iniciando sesión...</span>
+                </span>
               ) : (
                 "Iniciar Sesión"
               )}
