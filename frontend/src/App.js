@@ -8,6 +8,7 @@ import SuperAdminDashboard from "@/pages/SuperAdminDashboard";
 import ClientDashboard from "@/pages/ClientDashboard";
 import CreateInspection from "@/pages/CreateInspection";
 import ViewInspection from "@/pages/ViewInspection";
+import AuditoriaPage from "@/pages/AuditoriaPage";
 import { Toaster } from "@/components/ui/sonner";
 import ErrorBoundary from "@/components/ErrorBoundary";
 
