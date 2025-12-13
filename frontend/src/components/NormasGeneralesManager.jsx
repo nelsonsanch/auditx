@@ -403,15 +403,15 @@ const NormasGeneralesManager = () => {
               </Button>
               <Button type="submit" disabled={saving} className="bg-purple-600 hover:bg-purple-700">
                 {saving ? (
-                  <>
-                    <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                    Guardando...
-                  </>
+                  <span className="flex items-center">
+                    <LoadingSpinner size="sm" className="mr-2" />
+                    <span>Guardando...</span>
+                  </span>
                 ) : (
-                  <>
+                  <span className="flex items-center">
                     <Save className="h-4 w-4 mr-2" />
-                    {editingNorma ? "Actualizar" : "Crear"} Norma
-                  </>
+                    <span>{editingNorma ? "Actualizar" : "Crear"} Norma</span>
+                  </span>
                 )}
               </Button>
             </DialogFooter>
