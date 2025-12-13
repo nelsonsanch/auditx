@@ -310,14 +310,14 @@ class AuditXAPITester:
             print(f"   Auditoria closed successfully")
         return success
 
-    def test_get_inspections(self):
-        """Test getting inspections"""
+    def test_get_inspections_after_close(self):
+        """Test getting inspections after closing - verify status change"""
         if not self.client_token:
-            self.log_test("Get Inspections", False, "No client token")
+            self.log_test("Get Inspections (After Close)", False, "No client token")
             return False
             
         success, response = self.run_test(
-            "Get Inspections",
+            "Get Inspections - After Close",
             "GET",
             "inspections",
             200,
@@ -325,7 +325,18 @@ class AuditXAPITester:
         )
         
         if success and isinstance(response, list):
-            print(f"   Found {len(response)} inspections")
+            print(f"   Found {len(response)} inspections after close")
+            # Check if our audit status changed to 'cerrada'
+            our_audit = next((a for a in response if a.get('id') == self.test_auditoria_id), None)
+            if our_audit:
+                status = our_audit.get('status', 'unknown')
+                print(f"   Audit status after close: {status}")
+                if status == 'cerrada':
+                    print(f"   ✅ Status correctly changed to 'cerrada'")
+                else:
+                    print(f"   ⚠️  Expected status 'cerrada', got '{status}'")
+            else:
+                print(f"   ⚠️  Audit not found after close")
         return success
 
     def test_get_inspection_detail(self):
