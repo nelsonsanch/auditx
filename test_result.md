@@ -127,15 +127,18 @@ backend:
 
   - task: "API crear auditoría (POST /api/auditorias)"
     implemented: true
-    working: "NA"
+    working: true
     file: "/app/backend/server.py"
     stuck_count: 0
     priority: "high"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
       - working: "NA"
         agent: "main"
         comment: "Implementado endpoint para crear auditorías en estado 'en_proceso'. Necesita testing completo del flujo."
+      - working: true
+        agent: "testing"
+        comment: "✅ TESTING COMPLETADO: API funciona correctamente. Crea auditorías con estado 'en_proceso', requiere company_id y config_id válidos. Retorna ID de auditoría creada. Autenticación y permisos funcionando."
 
   - task: "API listar auditorías (GET /api/inspections)"
     implemented: true
