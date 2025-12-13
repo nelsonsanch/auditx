@@ -362,6 +362,7 @@ const ClientDashboard = () => {
                       <TableRow>
                         <TableHead>Auditoría</TableHead>
                         <TableHead>Fecha</TableHead>
+                        <TableHead>Progreso</TableHead>
                         <TableHead>Estado</TableHead>
                         <TableHead>Puntaje</TableHead>
                         <TableHead className="text-right">Acciones</TableHead>
@@ -373,6 +374,17 @@ const ClientDashboard = () => {
                           <TableCell className="font-medium">{inspection.company_name}</TableCell>
                           <TableCell>{new Date(inspection.created_at).toLocaleDateString('es-ES')}</TableCell>
                           <TableCell>
+                            <div className="flex items-center gap-2">
+                              <div className="w-20 bg-gray-200 rounded-full h-2">
+                                <div 
+                                  className="bg-blue-600 h-2 rounded-full" 
+                                  style={{ width: `${inspection.progress || 0}%` }}
+                                ></div>
+                              </div>
+                              <span className="text-xs text-gray-500">{(inspection.progress || 0).toFixed(0)}%</span>
+                            </div>
+                          </TableCell>
+                          <TableCell>
                             {inspection.status === 'cerrada' ? (
                               <Badge variant="secondary" className="bg-gray-100">
                                 <Lock className="h-3 w-3 mr-1" />
@@ -380,7 +392,7 @@ const ClientDashboard = () => {
                               </Badge>
                             ) : (
                               <Badge className="bg-green-100 text-green-800">
-                                En Desarrollo
+                                En Proceso
                               </Badge>
                             )}
                           </TableCell>
