@@ -191,6 +191,10 @@ const ClientDashboard = () => {
     }
   };
   const handleCloseAudit = async (inspectionId) => {
+    if (!window.confirm("¿Estás seguro de que deseas cerrar esta auditoría? Una vez cerrada, no podrás modificar las respuestas.")) {
+      return;
+    }
+    
     try {
       const token = localStorage.getItem("token");
       await axios.put(
@@ -199,8 +203,12 @@ const ClientDashboard = () => {
         { headers: { Authorization: `Bearer ${token}` } }
       );
       
-      toast.success("Auditoría cerrada exitosamente");
-      fetchData(); // Refresh the data
+      toast.success("Auditoría cerrada exitosamente. Redirigiendo al resultado...");
+      
+      // Redirigir a la página de resultado
+      setTimeout(() => {
+        navigate(`/client/auditoria/${inspectionId}/resultado`);
+      }, 1000);
     } catch (error) {
       toast.error(error.response?.data?.detail || "Error al cerrar la auditoría");
     }
