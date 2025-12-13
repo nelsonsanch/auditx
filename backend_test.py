@@ -198,25 +198,40 @@ class AuditXAPITester:
             print(f"   Auditoria created with ID: {self.test_auditoria_id}")
         return success
 
-    def test_client_login(self):
-        """Test client login after activation"""
-        if not hasattr(self, 'test_client_email'):
-            self.log_test("Client Login", False, "No test client email")
+    def test_get_inspections_initial(self):
+        """Test getting inspections - initial count (GET /api/inspections)"""
+        if not self.client_token:
+            self.log_test("Get Inspections (Initial)", False, "No client token")
             return False
             
         success, response = self.run_test(
-            "Client Login",
-            "POST",
-            "auth/login",
+            "Get Inspections - Initial Count",
+            "GET",
+            "inspections",
             200,
-            data={"email": self.test_client_email, "password": self.test_client_password}
+            headers={"Authorization": f"Bearer {self.client_token}"}
         )
         
-        if success and 'token' in response:
-            self.client_token = response['token']
-            print(f"   Client token obtained")
-            return True
-        return False
+        if success and isinstance(response, list):
+            initial_count = len(response)
+            print(f"   Initial audit count: {initial_count}")
+            # Check if our created audit appears
+            found_audit = any(audit.get('id') == self.test_auditoria_id for audit in response)
+            if found_audit:
+                print(f"   ✅ Created audit found in list")
+                # Check status
+                our_audit = next((a for a in response if a.get('id') == self.test_auditoria_id), None)
+                if our_audit:
+                    status = our_audit.get('status', 'unknown')
+                    print(f"   Audit status: {status}")
+                    if status == 'en_proceso':
+                        print(f"   ✅ Correct initial status: en_proceso")
+                    else:
+                        print(f"   ⚠️  Expected status 'en_proceso', got '{status}'")
+            else:
+                self.log_test("Get Inspections (Initial)", False, "Created audit not found in list")
+                return False
+        return success
 
     def test_get_standards(self):
         """Test getting standards"""
