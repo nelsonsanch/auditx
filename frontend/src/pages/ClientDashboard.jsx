@@ -404,25 +404,37 @@ const ClientDashboard = () => {
                           </TableCell>
                           <TableCell className="text-right">
                             <div className="flex justify-end gap-2">
-                              <Button
-                                onClick={() => navigate(`/client/auditoria/${inspection.id}`)}
-                                size="sm"
-                                variant="outline"
-                                data-testid={`view-button-${inspection.id}`}
-                              >
-                                <Eye className="h-4 w-4 mr-1" />
-                                {inspection.status === 'cerrada' ? 'Ver' : 'Continuar'}
-                              </Button>
-                              {inspection.status !== 'cerrada' && (
+                              {inspection.status === 'cerrada' ? (
                                 <Button
-                                  onClick={() => handleCloseAudit(inspection.id)}
+                                  onClick={() => navigate(`/client/auditoria/${inspection.id}/resultado`)}
                                   size="sm"
-                                  variant="outline"
-                                  className="text-orange-600 border-orange-200 hover:bg-orange-50"
+                                  className="bg-blue-600 hover:bg-blue-700"
+                                  data-testid={`view-result-button-${inspection.id}`}
                                 >
-                                  <Lock className="h-4 w-4 mr-1" />
-                                  Cerrar
+                                  <BarChart3 className="h-4 w-4 mr-1" />
+                                  Ver Resultado
                                 </Button>
+                              ) : (
+                                <>
+                                  <Button
+                                    onClick={() => navigate(`/client/auditoria/${inspection.id}`)}
+                                    size="sm"
+                                    variant="outline"
+                                    data-testid={`continue-button-${inspection.id}`}
+                                  >
+                                    <Eye className="h-4 w-4 mr-1" />
+                                    Continuar
+                                  </Button>
+                                  <Button
+                                    onClick={() => handleCloseAudit(inspection.id)}
+                                    size="sm"
+                                    variant="outline"
+                                    className="text-green-600 border-green-200 hover:bg-green-50"
+                                  >
+                                    <Lock className="h-4 w-4 mr-1" />
+                                    Cerrar
+                                  </Button>
+                                </>
                               )}
                               <Button
                                 onClick={() => handleDeleteAudit(inspection.id)}
