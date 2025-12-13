@@ -226,12 +226,7 @@ metadata:
   run_ui: true
 
 test_plan:
-  current_focus:
-    - "API crear auditoría (POST /api/auditorias)"
-    - "API listar auditorías (GET /api/inspections)"
-    - "API cerrar auditoría (PUT /api/inspections/{id}/close)"
-    - "API eliminar auditoría (DELETE /api/inspections/{id})"
-    - "API guardar progreso (PUT /api/auditorias/{id}/save)"
+  current_focus: []
   stuck_tasks: []
   test_all: false
   test_priority: "high_first"
