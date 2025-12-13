@@ -416,26 +416,25 @@ class AuditXAPITester:
     # Removed old analysis and PDF tests - focusing on audit lifecycle
 
     def run_all_tests(self):
-        """Run all tests in sequence"""
-        print("🚀 Starting Security Inspection API Tests")
+        """Run all audit lifecycle tests in sequence"""
+        print("🚀 Starting AuditX Audit Lifecycle API Tests")
         print(f"Base URL: {self.base_url}")
+        print(f"Test User: {self.test_email}")
         print("="*60)
         
-        # Test sequence
+        # Test sequence for audit lifecycle
         tests = [
-            self.test_superadmin_login,
-            self.test_client_registration,
-            self.test_get_pending_companies,
-            self.test_activate_company,
             self.test_client_login,
+            self.test_get_my_companies,
             self.test_get_standards,
-            self.test_create_inspection,
-            self.test_get_inspections,
-            self.test_get_inspection_detail,
-            self.test_ai_analysis,
-            self.test_get_analysis,
-            self.test_update_analysis,
-            self.test_generate_pdf
+            self.test_create_audit_config,
+            self.test_create_auditoria,
+            self.test_get_inspections_initial,
+            self.test_save_auditoria_progress,
+            self.test_close_auditoria,
+            self.test_get_inspections_after_close,
+            self.test_delete_auditoria,
+            self.test_get_inspections_after_delete
         ]
         
         for test in tests:
