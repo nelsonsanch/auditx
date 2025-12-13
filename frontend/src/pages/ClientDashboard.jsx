@@ -981,11 +981,11 @@ const ClientDashboard = () => {
           {company && (
             <ConfiguracionAuditoriaWizard
               companyId={company.id}
-              onComplete={(configId) => {
+              onComplete={(auditoriaId) => {
                 setShowAuditWizard(false);
-                toast.success("Configuración guardada. Iniciando auditoría...");
-                // Navegar a crear auditoría con el config_id
-                navigate(`/client/inspection/create?config=${configId}`);
+                toast.success("Auditoría creada exitosamente");
+                // Navegar a la auditoría para continuar
+                navigate(`/client/auditoria/${auditoriaId}`);
               }}
               onCancel={() => setShowAuditWizard(false)}
             />
