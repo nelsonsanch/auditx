@@ -843,7 +843,7 @@ const ClientDashboard = () => {
                 
                 {editSedesAdicionales.length === 0 ? (
                   <p className="text-sm text-gray-500 text-center py-4">
-                    No hay sedes adicionales. Haz clic en "Agregar Sede" para añadir una.
+                    No hay sedes adicionales. Haz clic en &quot;Agregar Sede&quot; para añadir una.
                   </p>
                 ) : (
                   <div className="space-y-4">
