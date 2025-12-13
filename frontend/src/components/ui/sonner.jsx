@@ -1,15 +1,14 @@
-import { useTheme } from "next-themes"
 import { Toaster as Sonner, toast } from "sonner"
 
+// React 19 compatible Toaster without next-themes
 const Toaster = ({
   ...props
 }) => {
-  const { theme = "system" } = useTheme()
-
   return (
     <Sonner
-      theme={theme}
+      theme="light"
       className="toaster group"
+      position="top-right"
       toastOptions={{
         classNames: {
           toast:

@@ -1,7 +1,7 @@
 import * as React from "react"
-
 import { cn } from "@/lib/utils"
 
+// React 19 compatible Input using native HTML
 const Input = React.forwardRef(({ className, type, ...props }, ref) => {
   return (
     <input
@@ -11,8 +11,9 @@ const Input = React.forwardRef(({ className, type, ...props }, ref) => {
         className
       )}
       ref={ref}
-      {...props} />
-  );
+      {...props}
+    />
+  )
 })
 Input.displayName = "Input"
 
