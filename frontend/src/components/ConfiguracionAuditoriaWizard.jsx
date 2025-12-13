@@ -657,15 +657,15 @@ const ConfiguracionAuditoriaWizard = ({ companyId, onComplete, onCancel }) => {
             className="bg-green-600 hover:bg-green-700"
           >
             {saving ? (
-              <>
-                <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                Guardando...
-              </>
+              <span className="flex items-center">
+                <LoadingSpinner size="sm" className="mr-2" />
+                <span>Guardando...</span>
+              </span>
             ) : (
-              <>
+              <span className="flex items-center">
                 <Check className="h-4 w-4 mr-2" />
-                Iniciar Auditoría
-              </>
+                <span>Iniciar Auditoría</span>
+              </span>
             )}
           </Button>
         )}
