@@ -1095,6 +1095,44 @@ async def get_inspection(inspection_id: str, current_user: dict = Depends(get_cu
         "company": company
     }
 
+@api_router.put("/inspections/{inspection_id}/close")
+async def close_inspection(inspection_id: str, current_user: dict = Depends(get_current_user)):
+    """Cerrar una auditoría - ya no se puede modificar"""
+    inspection = await db.inspections.find_one({"id": inspection_id}, {"_id": 0})
+    if not inspection:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Auditoría no encontrada")
+    
+    if current_user['role'] == 'client' and inspection['user_id'] != current_user['id']:
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="No tiene permiso")
+    
+    if inspection.get('status') == 'cerrada':
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="La auditoría ya está cerrada")
+    
+    await db.inspections.update_one(
+        {"id": inspection_id},
+        {"$set": {"status": "cerrada", "closed_at": datetime.now(timezone.utc).isoformat()}}
+    )
+    
+    return {"message": "Auditoría cerrada exitosamente"}
+
+@api_router.delete("/inspections/{inspection_id}")
+async def delete_inspection(inspection_id: str, current_user: dict = Depends(get_current_user)):
+    """Eliminar una auditoría completamente"""
+    inspection = await db.inspections.find_one({"id": inspection_id}, {"_id": 0})
+    if not inspection:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Auditoría no encontrada")
+    
+    if current_user['role'] == 'client' and inspection['user_id'] != current_user['id']:
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="No tiene permiso")
+    
+    # Delete related AI analysis
+    await db.ai_analyses.delete_many({"inspection_id": inspection_id})
+    
+    # Delete the inspection
+    await db.inspections.delete_one({"id": inspection_id})
+    
+    return {"message": "Auditoría eliminada exitosamente"}
+
 # ====================
 # AI ANALYSIS ENDPOINTS
 # ====================
