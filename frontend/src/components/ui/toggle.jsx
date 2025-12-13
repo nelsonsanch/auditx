@@ -1,13 +1,9 @@
-"use client"
-
 import * as React from "react"
-import * as TogglePrimitive from "@radix-ui/react-toggle"
 import { cva } from "class-variance-authority";
-
 import { cn } from "@/lib/utils"
 
 const toggleVariants = cva(
-  "inline-flex items-center justify-center gap-2 rounded-md text-sm font-medium transition-colors hover:bg-muted hover:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 data-[state=on]:bg-accent data-[state=on]:text-accent-foreground [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
+  "inline-flex items-center justify-center gap-2 rounded-md text-sm font-medium transition-colors hover:bg-muted hover:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
   {
     variants: {
       variant: {
@@ -28,13 +24,44 @@ const toggleVariants = cva(
   }
 )
 
-const Toggle = React.forwardRef(({ className, variant, size, ...props }, ref) => (
-  <TogglePrimitive.Root
-    ref={ref}
-    className={cn(toggleVariants({ variant, size, className }))}
-    {...props} />
-))
+// React 19 compatible Toggle without Radix
+const Toggle = React.forwardRef(({ className, variant, size, pressed, defaultPressed, onPressedChange, disabled, children, ...props }, ref) => {
+  const [isPressed, setIsPressed] = React.useState(pressed ?? defaultPressed ?? false);
+  
+  React.useEffect(() => {
+    if (pressed !== undefined) {
+      setIsPressed(pressed);
+    }
+  }, [pressed]);
 
-Toggle.displayName = TogglePrimitive.Root.displayName
+  const handleClick = () => {
+    if (!disabled) {
+      const newPressed = !isPressed;
+      setIsPressed(newPressed);
+      onPressedChange?.(newPressed);
+    }
+  };
+
+  return (
+    <button
+      ref={ref}
+      type="button"
+      aria-pressed={isPressed}
+      data-state={isPressed ? "on" : "off"}
+      disabled={disabled}
+      onClick={handleClick}
+      className={cn(
+        toggleVariants({ variant, size }),
+        isPressed && "bg-accent text-accent-foreground",
+        className
+      )}
+      {...props}
+    >
+      {children}
+    </button>
+  );
+});
+
+Toggle.displayName = "Toggle"
 
 export { Toggle, toggleVariants }
