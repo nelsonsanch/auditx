@@ -1,23 +1,23 @@
 import * as React from "react"
-import * as SeparatorPrimitive from "@radix-ui/react-separator"
-
 import { cn } from "@/lib/utils"
 
+// React 19 compatible Separator using native HTML
 const Separator = React.forwardRef((
   { className, orientation = "horizontal", decorative = true, ...props },
   ref
 ) => (
-  <SeparatorPrimitive.Root
+  <div
     ref={ref}
-    decorative={decorative}
-    orientation={orientation}
+    role={decorative ? "none" : "separator"}
+    aria-orientation={orientation}
     className={cn(
       "shrink-0 bg-border",
       orientation === "horizontal" ? "h-[1px] w-full" : "h-full w-[1px]",
       className
     )}
-    {...props} />
+    {...props} 
+  />
 ))
-Separator.displayName = SeparatorPrimitive.Root.displayName
+Separator.displayName = "Separator"
 
 export { Separator }
