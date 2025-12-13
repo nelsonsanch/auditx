@@ -413,57 +413,7 @@ class AuditXAPITester:
                     print(f"   ⚠️  Missing fields in standard: {missing_fields}")
         return success
 
-    def test_update_analysis(self):
-        """Test updating analysis report"""
-        if not self.client_token or not self.test_analysis_id:
-            self.log_test("Update Analysis", False, "Missing client token or analysis ID")
-            return False
-            
-        updated_report = "Informe actualizado de prueba - " + datetime.now().isoformat()
-        
-        success, response = self.run_test(
-            "Update Analysis Report",
-            "PUT",
-            f"analysis/{self.test_analysis_id}",
-            200,
-            data=updated_report,
-            headers={"Authorization": f"Bearer {self.client_token}"}
-        )
-        return success
-
-    def test_generate_pdf(self):
-        """Test PDF generation"""
-        if not self.client_token or not self.test_inspection_id:
-            self.log_test("Generate PDF", False, "Missing client token or inspection ID")
-            return False
-            
-        # For PDF, we expect a different response type
-        url = f"{self.api_url}/generate-pdf/{self.test_inspection_id}"
-        headers = {"Authorization": f"Bearer {self.client_token}"}
-        
-        print(f"\n🔍 Testing Generate PDF...")
-        print(f"   URL: {url}")
-        
-        try:
-            response = requests.get(url, headers=headers)
-            print(f"   Status: {response.status_code}")
-            
-            if response.status_code == 200:
-                content_type = response.headers.get('content-type', '')
-                if 'pdf' in content_type.lower():
-                    self.log_test("Generate PDF", True)
-                    print(f"   PDF generated successfully, size: {len(response.content)} bytes")
-                    return True
-                else:
-                    self.log_test("Generate PDF", False, f"Wrong content type: {content_type}")
-                    return False
-            else:
-                self.log_test("Generate PDF", False, f"Status {response.status_code}")
-                return False
-                
-        except Exception as e:
-            self.log_test("Generate PDF", False, f"Exception: {str(e)}")
-            return False
+    # Removed old analysis and PDF tests - focusing on audit lifecycle
 
     def run_all_tests(self):
         """Run all tests in sequence"""
