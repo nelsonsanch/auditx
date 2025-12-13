@@ -381,19 +381,36 @@ class AuditXAPITester:
                 print(f"   ⚠️  Audit still found after deletion")
         return success
 
-    def test_get_analysis(self):
-        """Test getting analysis"""
-        if not self.client_token or not self.test_inspection_id:
-            self.log_test("Get Analysis", False, "Missing client token or inspection ID")
+    def test_get_standards(self):
+        """Test getting standards (needed for audit process)"""
+        if not self.client_token:
+            self.log_test("Get Standards", False, "No client token")
             return False
             
         success, response = self.run_test(
-            "Get Analysis",
+            "Get Standards",
             "GET",
-            f"analysis/{self.test_inspection_id}",
+            "standards",
             200,
             headers={"Authorization": f"Bearer {self.client_token}"}
         )
+        
+        if success and isinstance(response, list):
+            print(f"   Found {len(response)} standards")
+            if len(response) == 60:
+                print(f"   ✅ Correct number of standards (60)")
+            else:
+                print(f"   ⚠️  Expected 60 standards, found {len(response)}")
+                
+            # Check structure of first standard
+            if len(response) > 0:
+                first_std = response[0]
+                required_fields = ['id', 'title', 'description', 'category', 'weight']
+                missing_fields = [field for field in required_fields if field not in first_std]
+                if not missing_fields:
+                    print(f"   ✅ Standard structure is correct")
+                else:
+                    print(f"   ⚠️  Missing fields in standard: {missing_fields}")
         return success
 
     def test_update_analysis(self):
