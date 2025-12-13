@@ -189,6 +189,40 @@ const ClientDashboard = () => {
       setSaving(false);
     }
   };
+  const handleCloseAudit = async (inspectionId) => {
+    try {
+      const token = localStorage.getItem("token");
+      await axios.put(
+        `${API}/inspections/${inspectionId}/close`,
+        {},
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      
+      toast.success("Auditoría cerrada exitosamente");
+      fetchData(); // Refresh the data
+    } catch (error) {
+      toast.error(error.response?.data?.detail || "Error al cerrar la auditoría");
+    }
+  };
+
+  const handleDeleteAudit = async (inspectionId) => {
+    if (!window.confirm("¿Estás seguro de que deseas eliminar esta auditoría? Esta acción no se puede deshacer.")) {
+      return;
+    }
+
+    try {
+      const token = localStorage.getItem("token");
+      await axios.delete(
+        `${API}/inspections/${inspectionId}`,
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      
+      toast.success("Auditoría eliminada exitosamente");
+      fetchData(); // Refresh the data
+    } catch (error) {
+      toast.error(error.response?.data?.detail || "Error al eliminar la auditoría");
+    }
+  };
 
   const getScoreColor = (score) => {
     if (score >= 85) return "text-green-600";
