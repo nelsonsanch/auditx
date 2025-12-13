@@ -98,30 +98,27 @@ class AuditXAPITester:
             return True
         return False
 
-    def test_client_registration(self):
-        """Test client registration"""
-        timestamp = datetime.now().strftime('%H%M%S')
-        test_data = {
-            "email": f"test_client_{timestamp}@empresa.com",
-            "password": "TestPass123!",
-            "company_name": f"Empresa Test {timestamp}",
-            "admin_name": "Juan Pérez Test",
-            "address": "Calle 123 #45-67, Bogotá",
-            "phone": "+57 300 123 4567"
-        }
-        
+    def test_get_my_companies(self):
+        """Test getting user's companies"""
+        if not self.client_token:
+            self.log_test("Get My Companies", False, "No client token")
+            return False
+            
         success, response = self.run_test(
-            "Client Registration",
-            "POST",
-            "auth/register",
+            "Get My Companies",
+            "GET",
+            "my-companies",
             200,
-            data=test_data
+            headers={"Authorization": f"Bearer {self.client_token}"}
         )
         
-        if success:
-            self.test_client_email = test_data["email"]
-            self.test_client_password = test_data["password"]
-            print(f"   Test client registered: {self.test_client_email}")
+        if success and isinstance(response, list) and len(response) > 0:
+            self.test_company_id = response[0]['id']
+            print(f"   Found company: {response[0].get('company_name', 'N/A')} (ID: {self.test_company_id})")
+            return True
+        elif success and isinstance(response, list):
+            self.log_test("Get My Companies", False, "No companies found for user")
+            return False
         return success
 
     def test_get_pending_companies(self):
