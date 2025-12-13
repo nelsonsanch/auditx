@@ -6,9 +6,10 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
+import { LoadingSpinner } from "@/components/ui/loading-spinner";
 import { toast } from "sonner";
 import { 
-  BookOpen, Plus, Edit3, Trash2, Save, X, Loader2, Search,
+  BookOpen, Plus, Edit3, Trash2, Save, X, Search,
   Scale, Building2, Leaf, Users, FileText, ChevronDown, ChevronUp
 } from "lucide-react";
 import {
