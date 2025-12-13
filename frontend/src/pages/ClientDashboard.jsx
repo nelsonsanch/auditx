@@ -354,7 +354,7 @@ const ClientDashboard = () => {
                   <div className="text-center py-12" data-testid="no-inspections">
                     <FileText className="mx-auto h-12 w-12 text-gray-400 mb-4" />
                     <p className="text-gray-600 mb-4">Aún no has creado ninguna auditoría</p>
-                    <p className="text-sm text-gray-500">Usa el botón "Nueva Auditoría" en la barra superior para comenzar</p>
+                    <p className="text-sm text-gray-500">Usa el botón &quot;Nueva Auditoría&quot; en la barra superior para comenzar</p>
                   </div>
                 ) : (
                   <Table>
