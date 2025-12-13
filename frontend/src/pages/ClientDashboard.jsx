@@ -392,13 +392,13 @@ const ClientDashboard = () => {
                           <TableCell className="text-right">
                             <div className="flex justify-end gap-2">
                               <Button
-                                onClick={() => navigate(`/client/inspection/${inspection.id}`)}
+                                onClick={() => navigate(`/client/auditoria/${inspection.id}`)}
                                 size="sm"
                                 variant="outline"
                                 data-testid={`view-button-${inspection.id}`}
                               >
                                 <Eye className="h-4 w-4 mr-1" />
-                                Ver
+                                {inspection.status === 'cerrada' ? 'Ver' : 'Continuar'}
                               </Button>
                               {inspection.status !== 'cerrada' && (
                                 <Button
