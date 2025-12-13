@@ -130,8 +130,10 @@ class Inspection(BaseModel):
     user_id: str
     responses: List[Dict[str, Any]]
     total_score: float
-    status: str = "completed"
+    status: str = "en_desarrollo"  # en_desarrollo, cerrada
+    config_id: Optional[str] = None  # ID de la configuración de auditoría
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    closed_at: Optional[str] = None
 
 class AIAnalysisRequest(BaseModel):
     inspection_id: str
