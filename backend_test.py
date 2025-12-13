@@ -339,22 +339,22 @@ class AuditXAPITester:
                 print(f"   ⚠️  Audit not found after close")
         return success
 
-    def test_get_inspection_detail(self):
-        """Test getting inspection detail"""
-        if not self.client_token or not self.test_inspection_id:
-            self.log_test("Get Inspection Detail", False, "Missing client token or inspection ID")
+    def test_delete_auditoria(self):
+        """Test deleting an auditoria (DELETE /api/inspections/{id})"""
+        if not self.client_token or not self.test_auditoria_id:
+            self.log_test("Delete Auditoria", False, "Missing client token or auditoria ID")
             return False
             
         success, response = self.run_test(
-            "Get Inspection Detail",
-            "GET",
-            f"inspections/{self.test_inspection_id}",
+            "Delete Auditoria (DELETE /api/inspections/{id})",
+            "DELETE",
+            f"inspections/{self.test_auditoria_id}",
             200,
             headers={"Authorization": f"Bearer {self.client_token}"}
         )
         
         if success:
-            print(f"   Inspection details retrieved successfully")
+            print(f"   Auditoria deleted successfully")
         return success
 
     def test_ai_analysis(self):
