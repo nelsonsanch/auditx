@@ -172,20 +172,30 @@ class AuditXAPITester:
             print(f"   Audit config created with ID: {self.test_config_id}")
         return success
 
-    def test_activate_company(self):
-        """Test activating a company"""
-        if not self.superadmin_token or not self.test_company_id:
-            self.log_test("Activate Company", False, "Missing superadmin token or company ID")
+    def test_create_auditoria(self):
+        """Test creating a new auditoria (POST /api/auditorias)"""
+        if not self.client_token or not self.test_company_id or not self.test_config_id:
+            self.log_test("Create Auditoria", False, "Missing client token, company ID, or config ID")
             return False
             
+        auditoria_data = {
+            "company_id": self.test_company_id,
+            "config_id": self.test_config_id,
+            "responses": []  # Start with empty responses
+        }
+        
         success, response = self.run_test(
-            "Activate Company",
+            "Create Auditoria (POST /api/auditorias)",
             "POST",
-            f"admin/activate-company/{self.test_company_id}",
+            "auditorias",
             200,
-            data={},
-            headers={"Authorization": f"Bearer {self.superadmin_token}"}
+            data=auditoria_data,
+            headers={"Authorization": f"Bearer {self.client_token}"}
         )
+        
+        if success and 'id' in response:
+            self.test_auditoria_id = response['id']
+            print(f"   Auditoria created with ID: {self.test_auditoria_id}")
         return success
 
     def test_client_login(self):
