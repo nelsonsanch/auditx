@@ -171,21 +171,35 @@ const ConfiguracionAuditoriaWizard = ({ companyId, onComplete, onCancel }) => {
     setSaving(true);
     try {
       const token = localStorage.getItem("token");
-      const payload = {
+      
+      // Crear configuración
+      const configPayload = {
         company_id: companyId,
         ...config,
         equipo_auditor: config.equipo_auditor.filter(m => m.nombre.trim()),
         equipo_auditado: config.equipo_auditado.filter(m => m.nombre.trim())
       };
 
-      const response = await axios.post(`${API}/configuraciones-auditoria`, payload, {
+      const configResponse = await axios.post(`${API}/configuraciones-auditoria`, configPayload, {
         headers: { Authorization: `Bearer ${token}` }
       });
 
-      toast.success("Configuración de auditoría creada exitosamente");
-      onComplete(response.data.id);
+      // Crear auditoría vacía con estado en_proceso
+      const auditPayload = {
+        company_id: companyId,
+        config_id: configResponse.data.id,
+        responses: [] // Sin respuestas aún
+      };
+
+      const auditResponse = await axios.post(`${API}/auditorias`, auditPayload, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+
+      toast.success("Auditoría creada exitosamente");
+      onComplete(auditResponse.data.id);
     } catch (error) {
-      toast.error("Error al crear configuración");
+      console.error("Error:", error);
+      toast.error("Error al crear auditoría");
     } finally {
       setSaving(false);
     }
