@@ -161,7 +161,7 @@ const NormasEspecificasManager = ({ companyId }) => {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-32">
-        <Loader2 className="h-6 w-6 animate-spin text-blue-600" />
+        <LoadingSpinner size="lg" className="text-blue-600" />
       </div>
     );
   }
