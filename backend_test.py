@@ -291,40 +291,23 @@ class AuditXAPITester:
         
         return success
 
-    def test_create_inspection(self):
-        """Test creating an inspection"""
-        if not self.client_token or not self.test_company_id:
-            self.log_test("Create Inspection", False, "Missing client token or company ID")
+    def test_close_auditoria(self):
+        """Test closing an auditoria (PUT /api/inspections/{id}/close)"""
+        if not self.client_token or not self.test_auditoria_id:
+            self.log_test("Close Auditoria", False, "Missing client token or auditoria ID")
             return False
             
-        # Create sample responses for first 5 standards
-        sample_responses = []
-        for i in range(1, 6):
-            standard_id = f"1.1.{i}"
-            sample_responses.append({
-                "standard_id": standard_id,
-                "response": "cumple" if i % 2 == 0 else "cumple_parcial",
-                "observations": f"Observación de prueba para estándar {standard_id}"
-            })
-        
-        test_data = {
-            "company_id": self.test_company_id,
-            "responses": sample_responses
-        }
-        
         success, response = self.run_test(
-            "Create Inspection",
-            "POST",
-            "inspections",
+            "Close Auditoria (PUT /api/inspections/{id}/close)",
+            "PUT",
+            f"inspections/{self.test_auditoria_id}/close",
             200,
-            data=test_data,
+            data={},
             headers={"Authorization": f"Bearer {self.client_token}"}
         )
         
-        if success and 'inspection_id' in response:
-            self.test_inspection_id = response['inspection_id']
-            print(f"   Inspection created with ID: {self.test_inspection_id}")
-            print(f"   Total score: {response.get('total_score', 'N/A')}%")
+        if success:
+            print(f"   Auditoria closed successfully")
         return success
 
     def test_get_inspections(self):
