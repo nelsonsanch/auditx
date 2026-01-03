@@ -11,7 +11,7 @@ import { toast } from "sonner";
 import { 
   BookOpen, Plus, Edit3, Trash2, Save, X, Search,
   Scale, Building2, Leaf, Users, FileText, ChevronDown, ChevronUp
-} from "lucide-react";
+} from "@/components/SafeIcons";
 import {
   Dialog,
   DialogContent,
@@ -187,7 +187,7 @@ const NormasGeneralesManager = () => {
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
           <h2 className="text-2xl font-bold flex items-center gap-2">
-            <BookOpen className="h-6 w-6 text-purple-600" />
+            <IconBookOpen className="h-6 w-6 text-purple-600" />
             Repositorio Normativo General
           </h2>
           <p className="text-gray-600 mt-1">
@@ -195,7 +195,7 @@ const NormasGeneralesManager = () => {
           </p>
         </div>
         <Button onClick={openNewDialog} className="bg-purple-600 hover:bg-purple-700">
-          <Plus className="h-4 w-4 mr-2" />
+          <IconPlus className="h-4 w-4 mr-2" />
           Nueva Norma
         </Button>
       </div>
@@ -229,10 +229,10 @@ const NormasGeneralesManager = () => {
         {filteredNormas.length === 0 ? (
           <Card className="text-center py-12">
             <CardContent>
-              <BookOpen className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+              <IconBookOpen className="h-12 w-12 text-gray-400 mx-auto mb-4" />
               <p className="text-gray-600">No hay normas registradas</p>
               <Button onClick={openNewDialog} variant="outline" className="mt-4">
-                <Plus className="h-4 w-4 mr-2" />
+                <IconPlus className="h-4 w-4 mr-2" />
                 Agregar primera norma
               </Button>
             </CardContent>
@@ -263,11 +263,11 @@ const NormasGeneralesManager = () => {
                     </div>
                     <div className="flex gap-2">
                       <Button variant="ghost" size="sm" onClick={() => handleEdit(norma)}>
-                        <Edit3 className="h-4 w-4" />
+                        <IconEdit3 className="h-4 w-4" />
                       </Button>
                       {norma.vigente && (
                         <Button variant="ghost" size="sm" onClick={() => handleDelete(norma.id)} className="text-red-600 hover:text-red-700">
-                          <Trash2 className="h-4 w-4" />
+                          <IconTrash2 className="h-4 w-4" />
                         </Button>
                       )}
                     </div>
@@ -282,12 +282,12 @@ const NormasGeneralesManager = () => {
                   >
                     {expandedNorma === norma.id ? (
                       <>
-                        <ChevronUp className="h-4 w-4" />
+                        <IconChevronUp className="h-4 w-4" />
                         Ocultar contenido
                       </>
                     ) : (
                       <>
-                        <ChevronDown className="h-4 w-4" />
+                        <IconChevronDown className="h-4 w-4" />
                         Ver contenido completo ({norma.contenido.length.toLocaleString()} caracteres)
                       </>
                     )}
@@ -409,7 +409,7 @@ const NormasGeneralesManager = () => {
                   </span>
                 ) : (
                   <span className="flex items-center">
-                    <Save className="h-4 w-4 mr-2" />
+                    <IconSave className="h-4 w-4 mr-2" />
                     <span>{editingNorma ? "Actualizar" : "Crear"} Norma</span>
                   </span>
                 )}

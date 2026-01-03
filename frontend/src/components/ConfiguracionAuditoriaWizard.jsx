@@ -12,7 +12,7 @@ import { toast } from "sonner";
 import { 
   Settings, Plus, Trash2, Save, Calendar, Users, 
   Target, BookOpen, ArrowRight, ArrowLeft, Check, FileText
-} from "lucide-react";
+} from "@/components/SafeIcons";
 import {
   Select,
   SelectContent,
@@ -213,7 +213,7 @@ const ConfiguracionAuditoriaWizard = ({ companyId, onComplete, onCancel }) => {
           <div className="space-y-6">
             <div className="text-center mb-6">
               <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Calendar className="h-8 w-8 text-blue-600" />
+                <IconCalendar className="h-8 w-8 text-blue-600" />
               </div>
               <h3 className="text-xl font-bold">Información General</h3>
               <p className="text-gray-600">Configure los datos básicos de la auditoría</p>
@@ -279,7 +279,7 @@ const ConfiguracionAuditoriaWizard = ({ companyId, onComplete, onCancel }) => {
                     onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), addArea())}
                   />
                   <Button type="button" onClick={addArea} variant="outline">
-                    <Plus className="h-4 w-4" />
+                    <IconPlus className="h-4 w-4" />
                   </Button>
                 </div>
                 <div className="flex flex-wrap gap-2">
@@ -287,7 +287,7 @@ const ConfiguracionAuditoriaWizard = ({ companyId, onComplete, onCancel }) => {
                     <Badge key={index} variant="secondary" className="flex items-center gap-1 py-1">
                       {area}
                       <button onClick={() => removeArea(area)} className="ml-1 hover:text-red-600">
-                        <Trash2 className="h-3 w-3" />
+                        <IconTrash2 className="h-3 w-3" />
                       </button>
                     </Badge>
                   ))}
@@ -302,7 +302,7 @@ const ConfiguracionAuditoriaWizard = ({ companyId, onComplete, onCancel }) => {
           <div className="space-y-6">
             <div className="text-center mb-6">
               <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Users className="h-8 w-8 text-green-600" />
+                <IconUsers className="h-8 w-8 text-green-600" />
               </div>
               <h3 className="text-xl font-bold">Equipos de Auditoría</h3>
               <p className="text-gray-600">Configure el equipo auditor y auditado</p>
@@ -313,7 +313,7 @@ const ConfiguracionAuditoriaWizard = ({ companyId, onComplete, onCancel }) => {
               <div className="flex justify-between items-center">
                 <h4 className="font-semibold text-lg">Equipo Auditor</h4>
                 <Button type="button" onClick={() => addTeamMember("auditor")} variant="outline" size="sm">
-                  <Plus className="h-4 w-4 mr-1" /> Agregar Auditor
+                  <IconPlus className="h-4 w-4 mr-1" /> Agregar Auditor
                 </Button>
               </div>
               
@@ -370,7 +370,7 @@ const ConfiguracionAuditoriaWizard = ({ companyId, onComplete, onCancel }) => {
                           onClick={() => removeTeamMember("auditor", index)}
                           className="text-red-600"
                         >
-                          <Trash2 className="h-4 w-4" />
+                          <IconTrash2 className="h-4 w-4" />
                         </Button>
                       )}
                     </div>
@@ -384,7 +384,7 @@ const ConfiguracionAuditoriaWizard = ({ companyId, onComplete, onCancel }) => {
               <div className="flex justify-between items-center">
                 <h4 className="font-semibold text-lg">Equipo Auditado</h4>
                 <Button type="button" onClick={() => addTeamMember("auditado")} variant="outline" size="sm">
-                  <Plus className="h-4 w-4 mr-1" /> Agregar Persona
+                  <IconPlus className="h-4 w-4 mr-1" /> Agregar Persona
                 </Button>
               </div>
               
@@ -416,7 +416,7 @@ const ConfiguracionAuditoriaWizard = ({ companyId, onComplete, onCancel }) => {
                           onClick={() => removeTeamMember("auditado", index)}
                           className="text-red-600"
                         >
-                          <Trash2 className="h-4 w-4" />
+                          <IconTrash2 className="h-4 w-4" />
                         </Button>
                       )}
                     </div>
@@ -432,7 +432,7 @@ const ConfiguracionAuditoriaWizard = ({ companyId, onComplete, onCancel }) => {
           <div className="space-y-6">
             <div className="text-center mb-6">
               <div className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <BookOpen className="h-8 w-8 text-purple-600" />
+                <IconBookOpen className="h-8 w-8 text-purple-600" />
               </div>
               <h3 className="text-xl font-bold">Criterios Normativos</h3>
               <p className="text-gray-600">Seleccione las normas base para la auditoría</p>
@@ -522,7 +522,7 @@ const ConfiguracionAuditoriaWizard = ({ companyId, onComplete, onCancel }) => {
           <div className="space-y-6">
             <div className="text-center mb-6">
               <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Check className="h-8 w-8 text-green-600" />
+                <IconCheck className="h-8 w-8 text-green-600" />
               </div>
               <h3 className="text-xl font-bold">Confirmar Configuración</h3>
               <p className="text-gray-600">Revise la información antes de iniciar</p>
@@ -624,7 +624,7 @@ const ConfiguracionAuditoriaWizard = ({ companyId, onComplete, onCancel }) => {
               s < step ? 'bg-green-500 text-white' :
               'bg-gray-200 text-gray-500'
             }`}>
-              {s < step ? <Check className="h-4 w-4" /> : s}
+              {s < step ? <IconCheck className="h-4 w-4" /> : s}
             </div>
             {s < 4 && <div className={`w-12 h-1 mx-1 ${s < step ? 'bg-green-500' : 'bg-gray-200'}`} />}
           </div>
@@ -641,14 +641,14 @@ const ConfiguracionAuditoriaWizard = ({ companyId, onComplete, onCancel }) => {
           variant="outline"
           onClick={() => step === 1 ? onCancel() : setStep(step - 1)}
         >
-          <ArrowLeft className="h-4 w-4 mr-2" />
+          <IconArrowLeft className="h-4 w-4 mr-2" />
           {step === 1 ? 'Cancelar' : 'Anterior'}
         </Button>
 
         {step < 4 ? (
           <Button onClick={() => setStep(step + 1)}>
             Siguiente
-            <ArrowRight className="h-4 w-4 ml-2" />
+            <IconArrowRight className="h-4 w-4 ml-2" />
           </Button>
         ) : (
           <Button 
@@ -663,7 +663,7 @@ const ConfiguracionAuditoriaWizard = ({ companyId, onComplete, onCancel }) => {
               </span>
             ) : (
               <span className="flex items-center">
-                <Check className="h-4 w-4 mr-2" />
+                <IconCheck className="h-4 w-4 mr-2" />
                 <span>Iniciar Auditoría</span>
               </span>
             )}

@@ -10,7 +10,7 @@ import { LoadingSpinner } from "@/components/ui/loading-spinner";
 import { toast } from "sonner";
 import { 
   FileText, Plus, Edit3, Trash2, Save, ChevronDown, ChevronUp
-} from "lucide-react";
+} from "@/components/SafeIcons";
 import {
   Dialog,
   DialogContent,
@@ -171,7 +171,7 @@ const NormasEspecificasManager = ({ companyId }) => {
       <div className="flex justify-between items-center">
         <div>
           <h3 className="text-lg font-semibold flex items-center gap-2">
-            <FileText className="h-5 w-5 text-blue-600" />
+            <IconFileText className="h-5 w-5 text-blue-600" />
             Documentos Internos
           </h3>
           <p className="text-sm text-gray-600">
@@ -179,7 +179,7 @@ const NormasEspecificasManager = ({ companyId }) => {
           </p>
         </div>
         <Button onClick={openNewDialog} size="sm">
-          <Plus className="h-4 w-4 mr-1" />
+          <IconPlus className="h-4 w-4 mr-1" />
           Nuevo Documento
         </Button>
       </div>
@@ -187,10 +187,10 @@ const NormasEspecificasManager = ({ companyId }) => {
       {normas.length === 0 ? (
         <Card className="text-center py-8">
           <CardContent>
-            <FileText className="h-10 w-10 text-gray-400 mx-auto mb-3" />
+            <IconFileText className="h-10 w-10 text-gray-400 mx-auto mb-3" />
             <p className="text-gray-600 mb-3">No hay documentos internos registrados</p>
             <Button onClick={openNewDialog} variant="outline" size="sm">
-              <Plus className="h-4 w-4 mr-1" />
+              <IconPlus className="h-4 w-4 mr-1" />
               Agregar primer documento
             </Button>
           </CardContent>
@@ -202,7 +202,7 @@ const NormasEspecificasManager = ({ companyId }) => {
               <CardHeader className="py-3">
                 <div className="flex justify-between items-start">
                   <div className="flex items-start gap-3">
-                    <FileText className="h-5 w-5 text-blue-600 mt-0.5" />
+                    <IconFileText className="h-5 w-5 text-blue-600 mt-0.5" />
                     <div>
                       <CardTitle className="text-base">{norma.nombre}</CardTitle>
                       <div className="flex gap-2 mt-1">
@@ -213,10 +213,10 @@ const NormasEspecificasManager = ({ companyId }) => {
                   </div>
                   <div className="flex gap-1">
                     <Button variant="ghost" size="sm" onClick={() => handleEdit(norma)}>
-                      <Edit3 className="h-4 w-4" />
+                      <IconEdit3 className="h-4 w-4" />
                     </Button>
                     <Button variant="ghost" size="sm" onClick={() => handleDelete(norma.id)} className="text-red-600">
-                      <Trash2 className="h-4 w-4" />
+                      <IconTrash2 className="h-4 w-4" />
                     </Button>
                   </div>
                 </div>
@@ -231,12 +231,12 @@ const NormasEspecificasManager = ({ companyId }) => {
                 >
                   {expandedNorma === norma.id ? (
                     <>
-                      <ChevronUp className="h-4 w-4" />
+                      <IconChevronUp className="h-4 w-4" />
                       Ocultar contenido
                     </>
                   ) : (
                     <>
-                      <ChevronDown className="h-4 w-4" />
+                      <IconChevronDown className="h-4 w-4" />
                       Ver contenido
                     </>
                   )}
@@ -346,7 +346,7 @@ const NormasEspecificasManager = ({ companyId }) => {
                   </span>
                 ) : (
                   <span className="flex items-center">
-                    <Save className="h-4 w-4 mr-2" />
+                    <IconSave className="h-4 w-4 mr-2" />
                     <span>{editingNorma ? "Actualizar" : "Crear"}</span>
                   </span>
                 )}
