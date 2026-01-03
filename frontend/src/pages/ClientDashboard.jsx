@@ -11,7 +11,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { LoadingSpinner } from "@/components/ui/loading-spinner";
 import { toast } from "sonner";
-import { Shield, Plus, LogOut, FileText, Calendar, TrendingUp, Eye, Building2, MapPin, Users, Edit, X, Settings, BookOpen, Lock, Trash2, AlertTriangle, BarChart3 } from "lucide-react";
+import { IconShield, IconPlus, IconLogOut, IconFileText, IconCalendar, IconTrendingUp, IconEye, IconBuilding, IconMapPin, IconUsers, IconEdit, IconX, IconSettings, IconBookOpen, IconLock, IconTrash, IconAlertTriangle, IconBarChart } from "@/components/SafeIcons";
 import ConfiguracionAuditoriaWizard from "@/components/ConfiguracionAuditoriaWizard";
 import NormasEspecificasManager from "@/components/NormasEspecificasManager";
 
@@ -260,7 +260,7 @@ const ClientDashboard = () => {
                 />
               ) : (
                 <div className="w-8 h-8 sm:w-10 sm:h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center flex-shrink-0" data-testid="client-logo">
-                  <Shield className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
+                  <IconShield className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
                 </div>
               )}
               <h1 className="text-base sm:text-xl lg:text-2xl font-bold truncate" style={{ fontFamily: 'Space Grotesk' }}>
@@ -274,11 +274,11 @@ const ClientDashboard = () => {
                 size="sm"
                 data-testid="create-inspection-button"
               >
-                <Plus className="h-4 w-4 sm:mr-2" />
+                <IconPlus className="h-4 w-4 sm:mr-2" />
                 <span className="hidden sm:inline">Nueva Auditoría</span>
               </Button>
               <Button onClick={handleLogout} variant="outline" size="sm" data-testid="logout-button" className="text-xs sm:text-sm">
-                <LogOut className="h-4 w-4 sm:mr-2" />
+                <IconLogOut className="h-4 w-4 sm:mr-2" />
                 <span className="hidden sm:inline">Cerrar Sesión</span>
               </Button>
             </div>
@@ -291,7 +291,7 @@ const ClientDashboard = () => {
           <Card className="bg-gradient-to-br from-blue-50 to-blue-100 border-blue-200" data-testid="total-inspections-card">
             <CardHeader className="pb-3">
               <CardTitle className="text-sm font-medium text-blue-800 flex items-center">
-                <FileText className="mr-2 h-4 w-4" />
+                <IconFileText className="mr-2 h-4 w-4" />
                 Total Auditorías
               </CardTitle>
             </CardHeader>
@@ -303,7 +303,7 @@ const ClientDashboard = () => {
           <Card className="bg-gradient-to-br from-green-50 to-green-100 border-green-200" data-testid="average-score-card">
             <CardHeader className="pb-3">
               <CardTitle className="text-sm font-medium text-green-800 flex items-center">
-                <TrendingUp className="mr-2 h-4 w-4" />
+                <IconTrendingUp className="mr-2 h-4 w-4" />
                 Promedio de Cumplimiento
               </CardTitle>
             </CardHeader>
@@ -319,7 +319,7 @@ const ClientDashboard = () => {
           <Card className="bg-gradient-to-br from-purple-50 to-purple-100 border-purple-200" data-testid="last-inspection-card">
             <CardHeader className="pb-3">
               <CardTitle className="text-sm font-medium text-purple-800 flex items-center">
-                <Calendar className="mr-2 h-4 w-4" />
+                <IconCalendar className="mr-2 h-4 w-4" />
                 Última Auditoría
               </CardTitle>
             </CardHeader>
@@ -336,15 +336,15 @@ const ClientDashboard = () => {
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
           <TabsList className="grid w-full grid-cols-3 mb-6">
             <TabsTrigger value="inspections" className="flex items-center gap-2">
-              <FileText className="h-4 w-4" />
+              <IconFileText className="h-4 w-4" />
               Auditorías
             </TabsTrigger>
             <TabsTrigger value="documentos" className="flex items-center gap-2">
-              <BookOpen className="h-4 w-4" />
+              <IconBookOpen className="h-4 w-4" />
               Documentos Internos
             </TabsTrigger>
             <TabsTrigger value="caracterizacion" className="flex items-center gap-2">
-              <Building2 className="h-4 w-4" />
+              <IconBuilding className="h-4 w-4" />
               Caracterización
             </TabsTrigger>
           </TabsList>
@@ -361,7 +361,7 @@ const ClientDashboard = () => {
                   <div className="text-center py-8" data-testid="loading-indicator">Cargando...</div>
                 ) : inspections.length === 0 ? (
                   <div className="text-center py-12" data-testid="no-inspections">
-                    <FileText className="mx-auto h-12 w-12 text-gray-400 mb-4" />
+                    <IconFileText className="mx-auto h-12 w-12 text-gray-400 mb-4" />
                     <p className="text-gray-600 mb-4">Aún no has creado ninguna auditoría</p>
                     <p className="text-sm text-gray-500">Usa el botón &quot;Nueva Auditoría&quot; en la barra superior para comenzar</p>
                   </div>
@@ -396,7 +396,7 @@ const ClientDashboard = () => {
                           <TableCell>
                             {inspection.status === 'cerrada' ? (
                               <Badge variant="secondary" className="bg-gray-100">
-                                <Lock className="h-3 w-3 mr-1" />
+                                <IconLock className="h-3 w-3 mr-1" />
                                 Cerrada
                               </Badge>
                             ) : (
@@ -419,7 +419,7 @@ const ClientDashboard = () => {
                                   className="bg-blue-600 hover:bg-blue-700"
                                   data-testid={`view-result-button-${inspection.id}`}
                                 >
-                                  <BarChart3 className="h-4 w-4 mr-1" />
+                                  <IconBarChart className="h-4 w-4 mr-1" />
                                   Ver Resultado
                                 </Button>
                               ) : (
@@ -430,7 +430,7 @@ const ClientDashboard = () => {
                                     variant="outline"
                                     data-testid={`continue-button-${inspection.id}`}
                                   >
-                                    <Eye className="h-4 w-4 mr-1" />
+                                    <IconEye className="h-4 w-4 mr-1" />
                                     Continuar
                                   </Button>
                                   <Button
@@ -439,7 +439,7 @@ const ClientDashboard = () => {
                                     variant="outline"
                                     className="text-green-600 border-green-200 hover:bg-green-50"
                                   >
-                                    <Lock className="h-4 w-4 mr-1" />
+                                    <IconLock className="h-4 w-4 mr-1" />
                                     Cerrar
                                   </Button>
                                 </>
@@ -450,7 +450,7 @@ const ClientDashboard = () => {
                                 variant="outline"
                                 className="text-red-600 border-red-200 hover:bg-red-50"
                               >
-                                <Trash2 className="h-4 w-4" />
+                                <IconTrash className="h-4 w-4" />
                               </Button>
                             </div>
                           </TableCell>
@@ -468,7 +468,7 @@ const ClientDashboard = () => {
             <Card className="shadow-xl">
               <CardHeader>
                 <CardTitle className="text-2xl flex items-center gap-2" style={{ fontFamily: 'Space Grotesk' }}>
-                  <BookOpen className="h-6 w-6 text-blue-600" />
+                  <IconBookOpen className="h-6 w-6 text-blue-600" />
                   Documentos Internos
                 </CardTitle>
                 <CardDescription>
@@ -488,7 +488,7 @@ const ClientDashboard = () => {
                 <div className="flex justify-between items-start">
                   <div>
                     <CardTitle className="text-2xl flex items-center gap-2" style={{ fontFamily: 'Space Grotesk' }}>
-                      <Building2 className="h-6 w-6" />
+                      <IconBuilding className="h-6 w-6" />
                       Caracterización de la Empresa
                     </CardTitle>
                     <CardDescription>Información detallada de la empresa según Resolución 0312 de 2019</CardDescription>
@@ -500,7 +500,7 @@ const ClientDashboard = () => {
                       size="sm"
                       className="flex items-center gap-2"
                     >
-                      <Edit className="h-4 w-4" />
+                      <IconEdit className="h-4 w-4" />
                       Editar Información
                     </Button>
                   )}
@@ -518,7 +518,7 @@ const ClientDashboard = () => {
                     {/* Información General */}
                     <div className="border-b pb-4">
                       <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
-                        <Building2 className="h-5 w-5 text-blue-600" />
+                        <IconBuilding className="h-5 w-5 text-blue-600" />
                         Información General
                       </h3>
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -552,7 +552,7 @@ const ClientDashboard = () => {
                     {/* Actividad Económica */}
                     <div className="border-b pb-4">
                       <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
-                        <TrendingUp className="h-5 w-5 text-green-600" />
+                        <IconTrendingUp className="h-5 w-5 text-green-600" />
                         Actividad Económica (Decreto 768/2022)
                       </h3>
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -575,7 +575,7 @@ const ClientDashboard = () => {
                     {/* Información Laboral */}
                     <div className="border-b pb-4">
                       <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
-                        <Users className="h-5 w-5 text-purple-600" />
+                        <IconUsers className="h-5 w-5 text-purple-600" />
                         Información Laboral
                       </h3>
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -594,7 +594,7 @@ const ClientDashboard = () => {
                     {company.sedes_adicionales && company.sedes_adicionales.length > 0 && (
                       <div>
                         <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
-                          <MapPin className="h-5 w-5 text-red-600" />
+                          <IconMapPin className="h-5 w-5 text-red-600" />
                           Sedes Adicionales
                         </h3>
                         <div className="space-y-4">
@@ -643,7 +643,7 @@ const ClientDashboard = () => {
         <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2">
-              <Edit className="h-5 w-5" />
+              <IconEdit className="h-5 w-5" />
               Editar Caracterización de la Empresa
             </DialogTitle>
             <DialogDescription>
@@ -672,7 +672,7 @@ const ClientDashboard = () => {
                     </div>
                   ) : (
                     <div className="w-24 h-24 rounded-lg border-2 border-dashed border-gray-300 flex items-center justify-center bg-gray-50">
-                      <Building2 className="h-10 w-10 text-gray-400" />
+                      <IconBuilding className="h-10 w-10 text-gray-400" />
                     </div>
                   )}
                 </div>
@@ -869,7 +869,7 @@ const ClientDashboard = () => {
                     size="sm"
                     onClick={handleAddEditSede}
                   >
-                    <Plus className="h-4 w-4 mr-1" />
+                    <IconPlus className="h-4 w-4 mr-1" />
                     Agregar Sede
                   </Button>
                 </div>
@@ -887,7 +887,7 @@ const ClientDashboard = () => {
                           onClick={() => handleRemoveEditSede(index)}
                           className="absolute top-2 right-2 text-red-500 hover:text-red-700"
                         >
-                          <X className="w-4 h-4" />
+                          <IconX className="w-4 h-4" />
                         </button>
                         
                         <CardHeader className="pb-3">
@@ -1004,7 +1004,7 @@ const ClientDashboard = () => {
         <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2">
-              <Settings className="h-5 w-5 text-blue-600" />
+              <IconSettings className="h-5 w-5 text-blue-600" />
               Configurar Nueva Auditoría
             </DialogTitle>
             <DialogDescription>
