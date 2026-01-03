@@ -357,7 +357,7 @@ const AuditoriaPage = () => {
           <div className="flex justify-between items-center h-16 gap-2">
             <div className="flex items-center space-x-2 min-w-0">
               <div className="w-8 h-8 sm:w-10 sm:h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center flex-shrink-0">
-                <Shield className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
+                <IconShield className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
               </div>
               <div>
                 <h1 className="text-base sm:text-xl font-bold truncate" style={{ fontFamily: 'Space Grotesk' }}>
@@ -371,7 +371,7 @@ const AuditoriaPage = () => {
             <div className="flex items-center space-x-1 sm:space-x-2 flex-shrink-0">
               {isClosed && (
                 <Badge variant="secondary" className="bg-gray-200">
-                  <Lock className="h-3 w-3 mr-1" />
+                  <IconLock className="h-3 w-3 mr-1" />
                   Cerrada
                 </Badge>
               )}
@@ -386,12 +386,12 @@ const AuditoriaPage = () => {
                   size="sm" 
                   className="bg-green-600 hover:bg-green-700 text-xs sm:text-sm"
                 >
-                  {saving ? <LoadingSpinner size="sm" /> : <Save className="h-4 w-4 sm:mr-1" />}
+                  {saving ? <LoadingSpinner size="sm" /> : <IconSave className="h-4 w-4 sm:mr-1" />}
                   <span className="hidden sm:inline">Guardar</span>
                 </Button>
               )}
               <Button onClick={() => navigate("/client/dashboard")} variant="outline" size="sm" className="text-xs sm:text-sm">
-                <ArrowLeft className="h-4 w-4 sm:mr-1" />
+                <IconArrowLeft className="h-4 w-4 sm:mr-1" />
                 <span className="hidden sm:inline">Volver</span>
               </Button>
             </div>
@@ -405,7 +405,7 @@ const AuditoriaPage = () => {
           <Card className="mb-6 bg-blue-50 border-blue-200">
             <CardHeader className="py-3">
               <CardTitle className="text-base flex items-center gap-2">
-                <Info className="h-4 w-4 text-blue-600" />
+                <IconInfo className="h-4 w-4 text-blue-600" />
                 Configuración de Auditoría
               </CardTitle>
             </CardHeader>
@@ -482,7 +482,7 @@ const AuditoriaPage = () => {
                           <Popover>
                             <PopoverTrigger asChild>
                               <Button variant="ghost" size="sm" className="text-blue-600">
-                                <Info className="h-4 w-4 mr-1" />
+                                <IconInfo className="h-4 w-4 mr-1" />
                                 Ver guía
                               </Button>
                             </PopoverTrigger>
@@ -565,7 +565,7 @@ const AuditoriaPage = () => {
                               {aiLoading[standard.id] ? (
                                 <LoadingSpinner size="sm" className="mr-2" />
                               ) : (
-                                <Sparkles className="h-4 w-4 mr-2" />
+                                <IconSparkles className="h-4 w-4 mr-2" />
                               )}
                               Recomendación IA
                             </Button>
@@ -587,7 +587,7 @@ const AuditoriaPage = () => {
                               {imageLoading[standard.id] ? (
                                 <LoadingSpinner size="sm" className="mr-2" />
                               ) : (
-                                <Camera className="h-4 w-4 mr-2" />
+                                <IconCamera className="h-4 w-4 mr-2" />
                               )}
                               Subir Evidencia ({(evidenceImages[standard.id]?.length || 0)}/2)
                             </Button>
@@ -599,7 +599,7 @@ const AuditoriaPage = () => {
                           <div className="bg-purple-50 rounded-lg p-4 border border-purple-200">
                             <div className="flex items-center justify-between mb-2">
                               <div className="flex items-center gap-2">
-                                <Sparkles className="h-4 w-4 text-purple-600" />
+                                <IconSparkles className="h-4 w-4 text-purple-600" />
                                 <span className="font-semibold text-purple-800">Recomendación IA</span>
                               </div>
                               <div className="flex gap-2">
@@ -610,7 +610,7 @@ const AuditoriaPage = () => {
                                     onClick={() => copyToObservations(standard.id, aiRecommendations[standard.id])}
                                     className="text-purple-600 h-8"
                                   >
-                                    <Copy className="h-3 w-3 mr-1" />
+                                    <IconCopy className="h-3 w-3 mr-1" />
                                     Copiar
                                   </Button>
                                 )}
@@ -624,9 +624,9 @@ const AuditoriaPage = () => {
                                   className="text-purple-600 h-8"
                                 >
                                   {expandedRecommendations[standard.id] ? (
-                                    <ChevronUp className="h-4 w-4" />
+                                    <IconChevronUp className="h-4 w-4" />
                                   ) : (
-                                    <ChevronDown className="h-4 w-4" />
+                                    <IconChevronDown className="h-4 w-4" />
                                   )}
                                 </Button>
                               </div>
@@ -643,7 +643,7 @@ const AuditoriaPage = () => {
                         {evidenceImages[standard.id]?.length > 0 && (
                           <div className="space-y-3">
                             <div className="flex items-center gap-2">
-                              <ImageIcon className="h-4 w-4 text-blue-600" />
+                              <IconImage className="h-4 w-4 text-blue-600" />
                               <span className="font-semibold text-blue-800">Evidencias Fotográficas</span>
                             </div>
                             <div className="grid grid-cols-2 gap-3">
@@ -663,7 +663,7 @@ const AuditoriaPage = () => {
                                       }}
                                       className="absolute top-1 right-1 bg-red-500 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity"
                                     >
-                                      <X className="h-3 w-3" />
+                                      <IconX className="h-3 w-3" />
                                     </button>
                                   )}
                                   <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-2 rounded-b-lg">
@@ -720,7 +720,7 @@ const AuditoriaPage = () => {
                   </>
                 ) : (
                   <>
-                    <Save className="mr-2 h-4 w-4" />
+                    <IconSave className="mr-2 h-4 w-4" />
                     Guardar Progreso
                   </>
                 )}
@@ -735,7 +735,7 @@ const AuditoriaPage = () => {
         <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2">
-              <ImageIcon className="h-5 w-5 text-blue-600" />
+              <IconImage className="h-5 w-5 text-blue-600" />
               Análisis de Evidencia
             </DialogTitle>
             <DialogDescription>
@@ -751,7 +751,7 @@ const AuditoriaPage = () => {
               />
               <div className="bg-blue-50 rounded-lg p-4 border border-blue-200">
                 <div className="flex items-center gap-2 mb-2">
-                  <Sparkles className="h-4 w-4 text-blue-600" />
+                  <IconSparkles className="h-4 w-4 text-blue-600" />
                   <span className="font-semibold text-blue-800">Análisis de IA</span>
                 </div>
                 <div className="text-sm text-blue-900 whitespace-pre-wrap">
