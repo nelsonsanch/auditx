@@ -6,7 +6,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
-import { Shield, ArrowLeft, Download, Sparkles, Edit3, Save, FileText, BarChart3 } from "lucide-react";
+import { Shield, ArrowLeft, Download, Sparkles, Edit3, Save, FileText, BarChart3 } from "@/components/SafeIcons";
 import { LoadingSpinner } from "@/components/ui/loading-spinner";
 import ReactMarkdown from "react-markdown";
 import { Progress } from "@/components/ui/progress";
@@ -176,7 +176,7 @@ const ViewInspection = () => {
                 />
               ) : (
                 <div className="w-8 h-8 sm:w-10 sm:h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center flex-shrink-0" data-testid="view-inspection-logo">
-                  <Shield className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
+                  <IconShield className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
                 </div>
               )}
               <h1 className="text-base sm:text-xl lg:text-2xl font-bold truncate" style={{ fontFamily: 'Space Grotesk' }}>
@@ -184,7 +184,7 @@ const ViewInspection = () => {
               </h1>
             </div>
             <Button onClick={() => navigate("/client/dashboard")} variant="outline" size="sm" data-testid="back-button" className="text-xs sm:text-sm flex-shrink-0">
-              <ArrowLeft className="h-4 w-4 sm:mr-2" />
+              <IconArrowLeft className="h-4 w-4 sm:mr-2" />
               <span className="hidden sm:inline">Volver</span>
             </Button>
           </div>
@@ -349,7 +349,7 @@ const ViewInspection = () => {
             {!analysis ? (
               <Card className="text-center py-12" data-testid="no-analysis-card">
                 <CardContent>
-                  <Sparkles className="mx-auto h-16 w-16 text-purple-500 mb-4" />
+                  <IconSparkles className="mx-auto h-16 w-16 text-purple-500 mb-4" />
                   <h3 className="text-2xl font-bold mb-2" style={{ fontFamily: 'Space Grotesk' }}>
                     Generar Análisis con IA
                   </h3>
@@ -369,7 +369,7 @@ const ViewInspection = () => {
                       </>
                     ) : (
                       <>
-                        <Sparkles className="mr-2 h-5 w-5" />
+                        <IconSparkles className="mr-2 h-5 w-5" />
                         Generar Análisis con IA
                       </>
                     )}
@@ -382,7 +382,7 @@ const ViewInspection = () => {
                   <CardHeader>
                     <div className="flex justify-between items-center">
                       <CardTitle className="flex items-center gap-2">
-                        <Sparkles className="h-5 w-5 text-purple-600" />
+                        <IconSparkles className="h-5 w-5 text-purple-600" />
                         Análisis Detallado
                       </CardTitle>
                     </div>
@@ -398,18 +398,18 @@ const ViewInspection = () => {
                   <CardHeader>
                     <div className="flex justify-between items-center">
                       <CardTitle className="flex items-center gap-2">
-                        <FileText className="h-5 w-5 text-blue-600" />
+                        <IconFileText className="h-5 w-5 text-blue-600" />
                         Informe Ejecutivo
                       </CardTitle>
                       <div className="flex gap-2">
                         {editMode ? (
                           <Button onClick={handleSaveReport} size="sm" data-testid="save-report-button">
-                            <Save className="mr-2 h-4 w-4" />
+                            <IconSave className="mr-2 h-4 w-4" />
                             Guardar
                           </Button>
                         ) : (
                           <Button onClick={() => setEditMode(true)} size="sm" variant="outline" data-testid="edit-report-button">
-                            <Edit3 className="mr-2 h-4 w-4" />
+                            <IconEdit3 className="mr-2 h-4 w-4" />
                             Editar
                           </Button>
                         )}
@@ -423,7 +423,7 @@ const ViewInspection = () => {
                           {downloading ? (
                             <LoadingSpinner size="sm" className="mr-2" />
                           ) : (
-                            <Download className="mr-2 h-4 w-4" />
+                            <IconDownload className="mr-2 h-4 w-4" />
                           )}
                           Descargar PDF
                         </Button>
