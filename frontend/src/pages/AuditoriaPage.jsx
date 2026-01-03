@@ -457,16 +457,26 @@ const AuditoriaPage = () => {
               </AccordionTrigger>
               <AccordionContent className="px-6 pb-6">
                 <div className="space-y-6 mt-4">
-                  {categoryStandards.map((standard) => (
+                  {categoryStandards.map((standard) => {
+                    const currentResponse = responses[standard.id]?.response;
+                    return (
                     <Card key={standard.id} className={`border-l-4 ${isClosed ? 'border-l-gray-400 bg-gray-50' : 'border-l-blue-500'}`}>
                       <CardHeader>
                         <div className="flex items-start justify-between">
                           <div className="flex-1">
                             <CardTitle className="text-base flex items-center gap-2">
-                              {responses[standard.id]?.response === "cumple" && <CheckCircle2 className="h-5 w-5 text-green-600" />}
-                              {responses[standard.id]?.response === "no_aplica" && <CircleIcon className="h-5 w-5 text-gray-600" />}
-                              {responses[standard.id]?.response === "no_cumple" && <XCircle className="h-5 w-5 text-red-600" />}
-                              {standard.id}. {standard.title}
+                              <span className="flex-shrink-0">
+                                {currentResponse === "cumple" ? (
+                                  <svg className="h-5 w-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                                ) : currentResponse === "no_cumple" ? (
+                                  <svg className="h-5 w-5 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                                ) : currentResponse === "no_aplica" ? (
+                                  <svg className="h-5 w-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" strokeWidth={2} /></svg>
+                                ) : (
+                                  <svg className="h-5 w-5 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" strokeWidth={2} /></svg>
+                                )}
+                              </span>
+                              <span>{standard.id}. {standard.title}</span>
                             </CardTitle>
                             <CardDescription className="mt-2">{standard.description}</CardDescription>
                           </div>
