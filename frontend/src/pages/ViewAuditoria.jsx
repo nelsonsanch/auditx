@@ -14,7 +14,7 @@ import {
   BarChart3, CheckCircle2, XCircle, AlertTriangle, Target,
   TrendingUp, TrendingDown, Minus, Calendar, Users, FileCheck,
   FileSpreadsheet, Filter
-} from "lucide-react";
+} from "@/components/SafeIcons";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import ReactMarkdown from "react-markdown";
 import {
@@ -351,7 +351,7 @@ const ViewAuditoria = () => {
                 <img src={company.logo_url} alt="Logo" className="w-10 h-10 rounded-xl object-cover" />
               ) : (
                 <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center">
-                  <Shield className="w-6 h-6 text-white" />
+                  <IconShield className="w-6 h-6 text-white" />
                 </div>
               )}
               <div>
@@ -362,7 +362,7 @@ const ViewAuditoria = () => {
               </div>
             </div>
             <Button onClick={() => navigate("/client/dashboard")} variant="outline" size="sm">
-              <ArrowLeft className="h-4 w-4 mr-2" />
+              <IconArrowLeft className="h-4 w-4 mr-2" />
               Volver
             </Button>
           </div>
@@ -416,7 +416,7 @@ const ViewAuditoria = () => {
           <Card className="mb-8">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <FileCheck className="h-5 w-5 text-blue-600" />
+                <IconFileCheck className="h-5 w-5 text-blue-600" />
                 Configuración de la Auditoría
               </CardTitle>
             </CardHeader>
@@ -447,15 +447,15 @@ const ViewAuditoria = () => {
         <Tabs defaultValue="dashboard" className="space-y-6">
           <TabsList className="grid w-full grid-cols-3">
             <TabsTrigger value="dashboard">
-              <BarChart3 className="mr-2 h-4 w-4" />
+              <IconBarChart3 className="mr-2 h-4 w-4" />
               Dashboard
             </TabsTrigger>
             <TabsTrigger value="hallazgos">
-              <AlertTriangle className="mr-2 h-4 w-4" />
+              <IconAlertTriangle className="mr-2 h-4 w-4" />
               Hallazgos ({stats?.noCumple || 0})
             </TabsTrigger>
             <TabsTrigger value="report">
-              <FileText className="mr-2 h-4 w-4" />
+              <IconFileText className="mr-2 h-4 w-4" />
               Informe IA
             </TabsTrigger>
           </TabsList>
@@ -547,7 +547,7 @@ const ViewAuditoria = () => {
                 <div className="flex flex-wrap items-center justify-between gap-4">
                   {/* Filtros */}
                   <div className="flex items-center gap-2">
-                    <Filter className="h-4 w-4 text-gray-500" />
+                    <IconFilter className="h-4 w-4 text-gray-500" />
                     <span className="text-sm font-medium">Filtrar:</span>
                     <div className="flex gap-2">
                       {[
@@ -571,7 +571,7 @@ const ViewAuditoria = () => {
                   
                   {/* Botón Exportar */}
                   <Button onClick={handleExportExcel} variant="outline" className="text-green-600 border-green-200 hover:bg-green-50">
-                    <FileSpreadsheet className="h-4 w-4 mr-2" />
+                    <IconFileSpreadsheet className="h-4 w-4 mr-2" />
                     Exportar a Excel
                   </Button>
                 </div>
@@ -582,7 +582,7 @@ const ViewAuditoria = () => {
             {getFilteredItems().length === 0 ? (
               <Card className="text-center py-12">
                 <CardContent>
-                  <CheckCircle2 className="mx-auto h-16 w-16 text-green-500 mb-4" />
+                  <IconCheckCircle2 className="mx-auto h-16 w-16 text-green-500 mb-4" />
                   <h3 className="text-xl font-bold mb-2">Sin resultados</h3>
                   <p className="text-gray-600">No hay elementos con el filtro seleccionado.</p>
                 </CardContent>
@@ -662,7 +662,7 @@ const ViewAuditoria = () => {
             {!analysis ? (
               <Card className="text-center py-12">
                 <CardContent>
-                  <Sparkles className="mx-auto h-16 w-16 text-purple-500 mb-4" />
+                  <IconSparkles className="mx-auto h-16 w-16 text-purple-500 mb-4" />
                   <h3 className="text-2xl font-bold mb-2">Generar Informe con IA</h3>
                   <p className="text-gray-600 mb-6 max-w-md mx-auto">
                     Obtén un análisis detallado con fortalezas, debilidades, planes de mejora y recomendaciones.
@@ -680,7 +680,7 @@ const ViewAuditoria = () => {
                       </span>
                     ) : (
                       <span className="flex items-center">
-                        <Sparkles className="mr-2 h-5 w-5" />
+                        <IconSparkles className="mr-2 h-5 w-5" />
                         <span>Generar Informe</span>
                       </span>
                     )}
@@ -692,7 +692,7 @@ const ViewAuditoria = () => {
                 <Card>
                   <CardHeader>
                     <CardTitle className="flex items-center gap-2">
-                      <Sparkles className="h-5 w-5 text-purple-600" />
+                      <IconSparkles className="h-5 w-5 text-purple-600" />
                       Análisis de la Auditoría
                     </CardTitle>
                   </CardHeader>
@@ -707,23 +707,23 @@ const ViewAuditoria = () => {
                   <CardHeader>
                     <div className="flex justify-between items-center flex-wrap gap-2">
                       <CardTitle className="flex items-center gap-2">
-                        <FileText className="h-5 w-5 text-blue-600" />
+                        <IconFileText className="h-5 w-5 text-blue-600" />
                         Informe Ejecutivo
                       </CardTitle>
                       <div className="flex gap-2">
                         {editMode ? (
                           <Button onClick={handleSaveReport} size="sm">
-                            <Save className="mr-2 h-4 w-4" />
+                            <IconSave className="mr-2 h-4 w-4" />
                             Guardar
                           </Button>
                         ) : (
                           <Button onClick={() => setEditMode(true)} size="sm" variant="outline">
-                            <Edit3 className="mr-2 h-4 w-4" />
+                            <IconEdit3 className="mr-2 h-4 w-4" />
                             Editar
                           </Button>
                         )}
                         <Button onClick={handleDownloadPDF} disabled={downloading} size="sm" className="bg-red-600 hover:bg-red-700">
-                          {downloading ? <LoadingSpinner size="sm" className="mr-2" /> : <Download className="mr-2 h-4 w-4" />}
+                          {downloading ? <LoadingSpinner size="sm" className="mr-2" /> : <IconDownload className="mr-2 h-4 w-4" />}
                           PDF
                         </Button>
                       </div>
