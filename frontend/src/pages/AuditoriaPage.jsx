@@ -519,6 +519,7 @@ const AuditoriaPage = () => {
                                       : option === "no_cumple" ? "hover:bg-red-50"
                                       : "hover:bg-gray-50"
                                 } ${isClosed ? 'pointer-events-none opacity-70' : ''}`}
+                                data-testid={`response-${option}-${standard.id}`}
                               >
                                 <input
                                   type="radio"
@@ -534,9 +535,15 @@ const AuditoriaPage = () => {
                                   }`}
                                 />
                                 <div className="flex items-center gap-2 flex-1">
-                                  {option === "cumple" && <CheckCircle2 className="h-4 w-4 text-green-600" />}
-                                  {option === "no_cumple" && <XCircle className="h-4 w-4 text-red-600" />}
-                                  {option === "no_aplica" && <CircleIcon className="h-4 w-4 text-gray-600" />}
+                                  <span className="flex-shrink-0">
+                                    {option === "cumple" ? (
+                                      <svg className="h-4 w-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                                    ) : option === "no_cumple" ? (
+                                      <svg className="h-4 w-4 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                                    ) : (
+                                      <svg className="h-4 w-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" strokeWidth={2} /></svg>
+                                    )}
+                                  </span>
                                   <span className="font-medium">
                                     {option === "cumple" ? "CUMPLE" : option === "no_cumple" ? "NO CUMPLE" : "NO APLICA"}
                                   </span>
