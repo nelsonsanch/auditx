@@ -691,7 +691,8 @@ const AuditoriaPage = () => {
                         </div>
                       </CardContent>
                     </Card>
-                  ))}
+                  );
+                  })}
                 </div>
               </AccordionContent>
             </AccordionItem>
