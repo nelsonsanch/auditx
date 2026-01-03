@@ -10,8 +10,7 @@ import { Badge } from "@/components/ui/badge";
 import { LoadingSpinner } from "@/components/ui/loading-spinner";
 import { toast } from "sonner";
 import { 
-  Shield, ArrowLeft, Save, CheckCircle2, XCircle, 
-  Circle as CircleIcon, Sparkles, Camera, X, Image as ImageIcon,
+  Shield, ArrowLeft, Save, Sparkles, Camera, X, Image as ImageIcon,
   Info, Copy, ChevronDown, ChevronUp, Lock
 } from "lucide-react";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
