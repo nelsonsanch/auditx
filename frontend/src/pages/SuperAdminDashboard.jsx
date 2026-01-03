@@ -9,7 +9,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { toast } from "sonner";
-import { Shield, CheckCircle2, XCircle, LogOut, Users, AlertCircle, Key, Eye, EyeOff, Trash2, BookOpen } from "lucide-react";
+import { IconShield, IconCheckCircle2, IconXCircle, IconLogOut, IconUsers, AlertCircle, Key, Eye, EyeOff, IconTrash, IconBookOpen } from "@/components/SafeIcons";
 import { LoadingSpinner } from "@/components/ui/loading-spinner";
 import NormasGeneralesManager from "@/components/NormasGeneralesManager";
 
@@ -156,7 +156,7 @@ const SuperAdminDashboard = () => {
           <div className="flex justify-between items-center h-16 gap-2">
             <div className="flex items-center space-x-2 min-w-0">
               <div className="w-8 h-8 sm:w-10 sm:h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center flex-shrink-0" data-testid="admin-logo">
-                <Shield className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
+                <IconShield className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
               </div>
               <h1 className="text-base sm:text-xl lg:text-2xl font-bold truncate" style={{ fontFamily: 'Space Grotesk' }}>Panel Admin</h1>
             </div>
@@ -193,7 +193,7 @@ const SuperAdminDashboard = () => {
                           onClick={() => setShowCurrentPassword(!showCurrentPassword)}
                           className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
                         >
-                          {showCurrentPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                          {showCurrentPassword ? <EyeOff className="w-5 h-5" /> : <IconEye className="w-5 h-5" />}
                         </button>
                       </div>
                     </div>
@@ -216,7 +216,7 @@ const SuperAdminDashboard = () => {
                           onClick={() => setShowNewPassword(!showNewPassword)}
                           className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
                         >
-                          {showNewPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                          {showNewPassword ? <EyeOff className="w-5 h-5" /> : <IconEye className="w-5 h-5" />}
                         </button>
                       </div>
                       <p className="text-xs text-gray-500">Mínimo 8 caracteres</p>
@@ -240,7 +240,7 @@ const SuperAdminDashboard = () => {
                           onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                           className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
                         >
-                          {showConfirmPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                          {showConfirmPassword ? <EyeOff className="w-5 h-5" /> : <IconEye className="w-5 h-5" />}
                         </button>
                       </div>
                       {passwordData.confirm_password && passwordData.new_password !== passwordData.confirm_password && (
@@ -268,7 +268,7 @@ const SuperAdminDashboard = () => {
               </Dialog>
 
               <Button onClick={handleLogout} variant="outline" size="sm" data-testid="logout-button" className="text-xs sm:text-sm">
-                <LogOut className="h-4 w-4 sm:mr-2" />
+                <IconLogOut className="h-4 w-4 sm:mr-2" />
                 <span className="hidden sm:inline">Cerrar Sesión</span>
               </Button>
             </div>
@@ -293,7 +293,7 @@ const SuperAdminDashboard = () => {
           <Card className="bg-gradient-to-br from-green-50 to-green-100 border-green-200" data-testid="active-count-card">
             <CardHeader className="pb-3">
               <CardTitle className="text-sm font-medium text-green-800 flex items-center">
-                <CheckCircle2 className="mr-2 h-4 w-4" />
+                <IconCheckCircle2 className="mr-2 h-4 w-4" />
                 Empresas Activas
               </CardTitle>
             </CardHeader>
@@ -305,7 +305,7 @@ const SuperAdminDashboard = () => {
           <Card className="bg-gradient-to-br from-blue-50 to-blue-100 border-blue-200" data-testid="total-count-card">
             <CardHeader className="pb-3">
               <CardTitle className="text-sm font-medium text-blue-800 flex items-center">
-                <Users className="mr-2 h-4 w-4" />
+                <IconUsers className="mr-2 h-4 w-4" />
                 Total de Empresas
               </CardTitle>
             </CardHeader>
@@ -349,7 +349,7 @@ const SuperAdminDashboard = () => {
                 }`}
                 data-testid="normas-tab"
               >
-                <BookOpen className="h-4 w-4" />
+                <IconBookOpen className="h-4 w-4" />
                 Repositorio Normativo
               </button>
             </div>
@@ -381,7 +381,7 @@ const SuperAdminDashboard = () => {
                       <TableCell>
                         {company.is_active ? (
                           <Badge className="bg-green-100 text-green-800 hover:bg-green-200" data-testid={`status-active-${company.id}`}>
-                            <CheckCircle2 className="mr-1 h-3 w-3" />
+                            <IconCheckCircle2 className="mr-1 h-3 w-3" />
                             Activo
                           </Badge>
                         ) : (
@@ -401,7 +401,7 @@ const SuperAdminDashboard = () => {
                               className="text-red-600 hover:text-red-800"
                               data-testid={`deactivate-button-${company.id}`}
                             >
-                              <XCircle className="mr-1 h-4 w-4" />
+                              <IconXCircle className="mr-1 h-4 w-4" />
                               Desactivar
                             </Button>
                           ) : (
@@ -412,7 +412,7 @@ const SuperAdminDashboard = () => {
                                 className="bg-green-600 hover:bg-green-700"
                                 data-testid={`activate-button-${company.id}`}
                               >
-                                <CheckCircle2 className="mr-1 h-4 w-4" />
+                                <IconCheckCircle2 className="mr-1 h-4 w-4" />
                                 Activar
                               </Button>
                               <Button
@@ -422,7 +422,7 @@ const SuperAdminDashboard = () => {
                                 className="text-red-600 hover:text-red-800 hover:bg-red-50"
                                 data-testid={`delete-button-${company.id}`}
                               >
-                                <Trash2 className="h-4 w-4" />
+                                <IconTrash className="h-4 w-4" />
                               </Button>
                             </>
                           )}
